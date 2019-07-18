@@ -1,24 +1,59 @@
 .headerWrapper {
   background-color: black;
   color: white;
+  // text-align: start;
+ 
+ 
   ul {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
     li {
       list-style: none;
-      min-width: 120px;
-      padding-bottom: 20px;
-      }
+      padding-left: 10px;
+      padding-right: 10px;
+       }
   }
 
   .login {
       display: flex;
       justify-content: flex-end;
-      padding: 30px;
+      padding: 20px;
+      margin-right: 100px;
         }
     a {
       text-decoration: none;
-      color: white;
+      color: white;      
     }
+
+    span {
+       width: 0;
+       display: block;
+       height: 1px;
+       background: white;
+       margin-top: 5px;
+    }
+
+    .selected {
+      span {
+        width: 100%;
+        transition:  width 0.5s;
+      }
+        
+    }
+
+    .chartsLinks {
+      height: 100px;
+      display: flex;
+      justify-content: space-around;
+      flex-direction: column;
+      ul {
+        opacity: 0;
+      }
+      &:hover ul {
+        opacity: 1
+      }
+    }
+
+   
 }

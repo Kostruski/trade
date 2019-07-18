@@ -1,18 +1,28 @@
 import React from 'react';
 import { HashRouter as Router,NavLink } from "react-router-dom";
 
+
+// const navLinkStyle = {
+//     borderBottom: "1px solid white"}
+
+
 export default function header() {
     return (
         <div className="headerWrapper">
-            <span className="login">Login</span>
+            <div className="login">Login</div>
             <Router>
             <ul>
-                 <NavLink exact to="/"><li>main page</li></NavLink>
-                 <NavLink to="section1"> <li>section 1</li></NavLink>
-                 <NavLink to="section2"> <li>section 2</li></NavLink>
-                 <NavLink to="section3"> <li>section 3</li></NavLink>
-                 <NavLink to="section4"> <li>section 4</li></NavLink>
-                 <NavLink to="contact"> <li>contact</li></NavLink>                  
+                 <NavLink activeClassName="selected" exact to="/"><li>main page</li><span></span></NavLink>
+                 <li className="chartsLinks">charts
+                     <ul >
+                         <NavLink activeClassName="selected" exact to="/section1"><li>section 1</li><span></span></NavLink>
+                         <NavLink activeClassName="selected" to="/section2"> <li>section 2</li><span></span></NavLink>
+                         <NavLink activeClassName="selected" to="/section3"> <li>section 3</li><span></span></NavLink>
+                         <NavLink activeClassName="selected" to="/section4"> <li>section 4</li><span></span></NavLink>
+                     </ul>
+                 </li>
+                
+                 <NavLink activeClassName="selected" to="/contact"> <li>contact</li><span></span></NavLink>                  
             </ul> 
 
             </Router>
