@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { dataSource1, dataSource2, dataSource3 } from "./jsonFileTest.js";
+import { dataSource1, dataSource2, dataSource3, dataSource4 } from "./jsonFileTest.js";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./App.scss";
 import Header from "./components/header";
 import Section1 from "./components/section1.js";
+import Section2 from "./components/section2.js";
+import Section3 from "./components/section3.js";
+import Section4 from "./components/section4.js";
 import StartPage from "./components/startPage.js";
 import Footer from "./components/footer.js";
 import Contact from "./components/contact.js";
@@ -19,7 +22,8 @@ export default class App extends Component {
   state = {
     data1: dataSource1,
     data2: dataSource2,
-    data3: dataSource3
+    data3: dataSource3,
+    data4: dataSource4 
   };
 
   render() {
@@ -45,7 +49,7 @@ export default class App extends Component {
                 <Route
                   path="/section2"
                   render={() => (
-                    <Section1
+                    <Section2
                       data={this.state}
                       handleClick={this.handleClick}
                     />
@@ -55,7 +59,7 @@ export default class App extends Component {
                 <Route
                   path="/section3"
                   render={() => (
-                    <Section1
+                    <Section3
                       data={this.state}
                       handleClick={this.handleClick}
                     />
@@ -65,7 +69,7 @@ export default class App extends Component {
                 <Route
                   path="/section4"
                   render={() => (
-                    <Section1
+                    <Section4
                       data={this.state}
                       handleClick={this.handleClick}
                     />
@@ -90,7 +94,7 @@ export default class App extends Component {
                 />
                 <Route
                   path="/chart5"
-                  render={() => <Chart5 data={this.state.data1} isBig={true} />}
+                  render={() => <Chart5 data={this.state.data4} isBig={true} />}
                 />
                 <Route
                   path="/chart6"

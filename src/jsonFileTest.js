@@ -13,12 +13,14 @@ const fetchData = [{"date":1405699200,"high":0.0045388,"low":0.00403001,"open":0
 const dataSource1 = fetchData.map((el, i) => ({date: i, open: Math.round(el.open*10000)}))
 const dataSource2 = fetchData.map((el, i) => ({date: i, open: Math.round(el.open*10000*Math.random())}))
 const dataSource3 = fetchData.map((el, i) => ({date: i, high: Math.floor(el.high*10000), low: Math.floor(el.low*10000)}))
+const dataSource4 = fetchData.map((el, i) => ({x: i, open: Math.floor(el.open*10000), close: Math.floor(el.close*10000), high: Math.floor(el.close*10000), low: Math.floor(el.low*10000) }))
 
 // console.log(Date(1405699200), Date(1563264000) )
 
 export { dataSource1 };
 export { dataSource2 };
 export { dataSource3 };
+export { dataSource4 };
 
 
 

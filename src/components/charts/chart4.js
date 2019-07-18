@@ -10,7 +10,7 @@ import {
 
 export default class Chart4 extends Component {
   render() {
-    console.log(this.props);
+    
 
     const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
     if (this.props.isBig) {
