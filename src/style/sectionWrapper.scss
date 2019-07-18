@@ -1,0 +1,16 @@
+.sectionWrapper
+ {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  padding: 20px;
+  width: 100%;
+  h1 {
+      letter-spacing: 5px;
+      color: white;
+      font-size: 20px;
+    }
+
+
+   }

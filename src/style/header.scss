@@ -1,0 +1,24 @@
+.headerWrapper {
+  background-color: black;
+  color: white;
+  ul {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    li {
+      list-style: none;
+      min-width: 120px;
+      padding-bottom: 20px;
+      }
+  }
+
+  .login {
+      display: flex;
+      justify-content: flex-end;
+      padding: 30px;
+        }
+    a {
+      text-decoration: none;
+      color: white;
+    }
+}

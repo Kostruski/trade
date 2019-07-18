@@ -1,0 +1,58 @@
+
+@import "./style/chartBoxBigWrapper.scss";
+@import "./style/mainPage.scss";
+@import "./style/sectionWrapper.scss";
+@import "./style/contact.scss";
+@import "./style/header.scss";
+@import "./style/footer.scss";
+
+
+.appWrapper {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+body {
+  background-color: black;
+  color: white;
+}
+
+.main {
+  width: 100%;
+  }
+
+.chartBox {
+  min-width: 400px;
+  height: auto;
+   text-align: center;
+  padding: 10px;
+  margin: 10px;
+
+ }
+
+ tspan {
+   fill: white!important;
+   font-family: 'Montserrat'!important, sans-serif!important;
+   font-size: 12px!important;
+ }
+ 
+
+ .chartsRow {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
+   flex-wrap: wrap;
+   border-bottom: 1px solid black;
+ }
+
+ a {
+   text-decoration: none;
+ }
+
+
+
+
+
