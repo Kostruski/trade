@@ -17,7 +17,11 @@ export default class Chart3 extends Component {
       return (
         <div className="chartBoxBigWrapper">
           <div className="chartBox">
-            <h1>Chart 3</h1>
+            <div className="legend">
+           <div className="colorBox"><span></span><div>stock value index</div></div>
+           <p>Lorem ipsum dolor sit amet consectetur adipisicing. </p>         
+
+            </div>
 
             <VictoryChart
             domain={{x: [0, 80], y: [0, 100]}}
@@ -25,15 +29,13 @@ export default class Chart3 extends Component {
                 <VictoryZoomVoronoiContainer 
                  />
               }>
-             
-              <VictoryLine 
+             <VictoryLine 
               data={this.props.data}
               x="date"
               y="open"
               labels={(d) => `open: ${d.open}`}
-              labelComponent={<VictoryTooltip   flyoutStyle={{ fill: "black" }}/>}
-              size={(datum, active) => active ? 5 : 3}
-              style={{data: {stroke: "cyan", strokeWidth: 3, fillOpacity: 0.4} }}    
+              labelComponent={<VictoryTooltip   flyoutStyle={{ fill: "black", fillOpacity: 0.4  }}/>}
+              style={{data: {stroke: "violet", strokeWidth: 3, fillOpacity: 0.4} }}    
               />
             </VictoryChart>
           </div>

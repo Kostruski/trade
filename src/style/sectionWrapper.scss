@@ -11,6 +11,33 @@
       color: white;
       font-size: 20px;
     }
+    .chartBox {    
+     width: 100%;
+     height: auto;
+     text-align: center;
+     background-color: #24344D;  
+     position: relative; 
+    
+    }
 
+    a {
+      margin: 10px;
+    }
+    
+
+     @media (max-width: 1300px) {
+      a {
+       flex: 1 1 1200px;
+      }  };
+
+      @media (min-width: 1200px) {
+      a {
+       flex: 1 1 550px;
+      }  }
+      
+      
+
+    
 
    }
+

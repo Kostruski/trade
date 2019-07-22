@@ -1,59 +1,47 @@
 .headerWrapper {
-  background-color: black;
+  background-color:#192231;
   color: white;
-  // text-align: start;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  padding: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid white;
+  
  
- 
-  ul {
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    li {
-      list-style: none;
-      padding-left: 10px;
-      padding-right: 10px;
-       }
-  }
 
-  .login {
-      display: flex;
-      justify-content: flex-end;
-      padding: 20px;
+  .login {      
       margin-right: 100px;
-        }
-    a {
-      text-decoration: none;
-      color: white;      
-    }
-
-    span {
-       width: 0;
-       display: block;
-       height: 1px;
-       background: white;
-       margin-top: 5px;
-    }
-
-    .selected {
-      span {
-        width: 100%;
-        transition:  width 0.5s;
       }
-        
-    }
 
-    .chartsLinks {
-      height: 100px;
+    .burger {
+      width: 30px;
+      height: 40px;
       display: flex;
-      justify-content: space-around;
       flex-direction: column;
-      ul {
-        opacity: 0;
-      }
-      &:hover ul {
-        opacity: 1
+      justify-content: space-evenly;
+      opacity: 0;
+      cursor: pointer;
+
+      span {
+        height: 3px;
+        border-radius: 2px;
+        width: 100%;
+        background: white;
+        margin-top: 1px;
+        margin-bottom: 1px;
+        display: inline-block;
       }
     }
 
+    @media (max-width: 900px) {
+      .burger {
+        opacity: 1;
+        transition: 0.5s opacity;
+      }
+    }
+   
    
 }
+
