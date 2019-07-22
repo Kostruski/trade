@@ -11,36 +11,7 @@
         width: 100%;
         flex-grow: 1;
         flex-shrink: 1;
-        .legend {
-          position: absolute;
-          z-index: 20;
-          top: 20%;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 50%;
-          border-radius: 2px;
-          border: 1px solid white;
-          padding: 5px;
-          display: flex;
-          flex-direction: column;
-          background-color: #192231;
-          .colorBox {
-             
-              display: flex;
-              align-items: center;
-            
-            
-              span {
-                  margin-right: 10px;
-                 height: 5px;   
-                 width: 30px;        
-                background: violet;
-                 
-              }
-          }
-
-
-        } 
+       
     }
     .moreTextBigChart {
         padding: 30px;
@@ -48,3 +19,37 @@
         flex-shrink: 1;
     }
 }
+
+.legend {
+  position: absolute;
+  z-index: 20;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  border-radius: 2px;
+  border: 1px solid white;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  background-color: #192231;
+  .colorBox {
+
+      display: flex;
+      align-items: center;
+      color: white;
+
+
+      span {
+          margin-right: 10px;
+         height: 5px;   
+         width: 30px;        
+        background: violet;
+
+      }
+
+     
+  }
+
+
+} 
