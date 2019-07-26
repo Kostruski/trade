@@ -11,7 +11,8 @@
       color: white;
       font-size: 20px;
     }
-    .chartBox {    
+    .chartBox {  
+     position: relative ; 
      width: 100%;
      height: auto;
      text-align: center;
@@ -34,6 +35,10 @@
       a {
        flex: 1 1 550px;
       }  }
+
+      .legend {
+       top: 0;
+      }
       
       
 

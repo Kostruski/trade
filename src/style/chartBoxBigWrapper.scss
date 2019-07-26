@@ -5,6 +5,7 @@
     width: 100%; 
     text-align: left;
     position: fixed;
+    touch-action: none;
     
  
     @media (max-width:1300px) {
@@ -37,10 +38,6 @@
 .legend {
 
   z-index: 20;
-//   left: 50%;
-//   transform: translateX(-50%);
-//   border-radius: 2px;
-//   border: 1px solid white;
   padding: 5px;
   display: flex;
   flex-direction: row;

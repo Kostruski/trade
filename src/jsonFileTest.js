@@ -50,13 +50,19 @@ function Chart (
     (this.isLiked = isLiked);
 };
 
-// const addValuesToChart = (dataSourecArr, chart, yValue) => {
-//   dataSourecArr.forEach((el) => {
-//    chart.values.push({ x:el.Date.substr(0,10), y: el[yValue]*10000 });
-//   });
-// };
+
 
 const wykres1 = new Chart("chart1", "green", "linia wykresu chart1", "wykres chart1", "dodatkowy opis chart 1" ) 
+
+const wykres2 = new Chart("chart2", "tomato", "SPX", "wykres SPX", "dodatkowy opis chart 1" ) 
+
+const wykres3 = new Chart("chart3", "pink", "Long Term", "wykres Long Term", "dodatkowy opis chart 1")
+
+const wykres4 = new Chart("chart4", "green", "Mid Term", "wykres Mid Term", "dodatkowy opis chart 1")
+
+const wykres5 = new Chart("chart5", "green", "Mid Term", "wykres Mid Term", "dodatkowy opis chart 1")
+
+const chartsArr = [wykres2, wykres2, wykres3, wykres4, wykres5]
 
 const spx = [];
 const long = [];
@@ -65,59 +71,43 @@ let spxMax = 0;
 let longMax =0;
 let midMax = 0;
 
-const addValuesToChart = () => {
- 
-
+const addValuesToChart3 = () => {
   fetchData.forEach(el => {
-    if(el["SPX"]>spxMax) spxMax = el["SPX"]
-    if(el["Long Term"]>longMax) longMax = el["Long Term"]
-    if(el["Mid Term"]>midMax) midMax = el["Mid Term"]
-  })
-
- 
-
-
-  // fetchData.forEach((el) => {
-  //  spx.push({ x:el.Date.substr(0,10), y: el["SPX"]/spxMax });
-  //  long.push({ x:el.Date.substr(0,10), y: el["Long Term"]/longMax });
-  //  mid.push({ x:el.Date.substr(0,10), y: el["Mid Term"]/midMax });
-
-  // });
-
-  fetchData.forEach((el, i) => {
-   spx.push({ x:i, y: el["SPX"]/spxMax });
-   long.push({ x:i, y: el["Long Term"]/longMax });
-   mid.push({ x:i, y: el["Mid Term"]/midMax });
-
+    if (el["SPX"] > spxMax) spxMax = el["SPX"];
+    if (el["Long Term"] > longMax) longMax = el["Long Term"];
+    if (el["Mid Term"] > midMax) midMax = el["Mid Term"];
   });
 
- 
-  console.log(spxMax, longMax, midMax)
+  fetchData.forEach((el, i) => {
+    spx.push({ x: i, y: el["SPX"] / spxMax });
+    long.push({ x: i, y: el["Long Term"] / longMax });
+    mid.push({ x: i, y: el["Mid Term"] / midMax });
+  });
 
- 
+  wykres1.values.push(long, mid, spx)
 };
 
 
-
-addValuesToChart()
-
-wykres1.values.push(spx, long, mid)
-
-// addValuesToChart(fetchData, wykres1, "Long Term")
+addValuesToChart3()
 
 
+const addValuesToChart = (chart, valY) => {  
+  
+  fetchData.forEach((el, i) => {
+    chart.values.push({ x: i, y: el[valY] });
+    });
+};
 
-
-
-
-
-// fetchData.forEach((el, i) => {
-//     wykres2.values.push({x:i, y: Math.round(el.close*10000)})
-    
-// })
+addValuesToChart(wykres2, "SPX" )
+addValuesToChart(wykres3, "Long Term" )
+addValuesToChart(wykres4, "Mid Term" )
+addValuesToChart(wykres5, "Mid Term" )
 
 
 
+
+
+export {chartsArr};
 export {wykres1};
 
 
