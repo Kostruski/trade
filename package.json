@@ -1,7 +1,7 @@
 {
   "name": "trading",
   "version": "0.1.0",
-  "homepage": ".", 
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "lightweight-charts": "^1.0.1",
@@ -35,5 +35,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   }
 }
