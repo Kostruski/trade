@@ -4,18 +4,27 @@
     flex: 0 0 180px;
     padding: 30px;
     text-align: left;
+    position: relative;
+    left: 0;
+    z-index: 300;
   
 
     &.hidden {
-        flex: 0 0 10px;   
+        flex: 0 0 10px;  
+        z-index: 300;
+        h2 {
+          padding: 0;
+        }  
     }
 
     &.mobile {
-        position: absolute;
+        position:fixed;
         z-index: 20;
         display: block;
         left: 0;
-        top: 150px;       
+        top: 81px; 
+        z-index: 300;  
+        
         
     }
 
