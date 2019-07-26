@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { wykres1 } from "./jsonFileTest.js";
+import { chartsArr, wykres1 } from "./jsonFileTest.js";
+import ChartBig3 from "./components/charts/chartBig3.js"
 import ChartBig from "./components/charts/chartBig.js"
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -15,9 +16,11 @@ import Contact from "./components/contact.js";
 import Chart from "./components/charts/chart.js";
 
 
+
 export default class App extends Component {
   state = {
     data1: wykres1,
+    data2: chartsArr,
     mobileSideOn: false,
     sideVisible: true
   };
@@ -34,11 +37,7 @@ export default class App extends Component {
       this.setState((prev) => ({sideVisible: !prev.sideVisible}))
   }
 
-  // componentDidMount() {
-  //   fetch('http://104.211.19.171/serverout/master_spx_1.json')
-  //   .then(response => response.json())
-  //   .then(data => { console.log(data)});
-  // }
+ 
 
 
   render() {
@@ -96,27 +95,27 @@ export default class App extends Component {
 
               <Route
                 path={`/${this.state.data1.id}`}
-                render={() => <ChartBig data={this.state.data1} />}
+                render={() => <ChartBig3 data={this.state.data1} />}
               />
               <Route
-                path="/chart2"
-                render={() => <ChartBig data={this.state.data1} />}
+               path={`/${this.state.data2[0].id}`}
+                render={() => <ChartBig data={this.state.data2[0]} />}
               />
               <Route
-                path="/chart3"
-                render={() => <ChartBig data={this.state.data1} />}
+                 path={`/${this.state.data2[1].id}`}
+                render={() => <ChartBig data={this.state.data2[1]} />}
               />
               <Route
-                path="/chart4"
-                render={() => <ChartBig data={this.state.data1} />}
+                 path={`/${this.state.data2[2].id}`}
+                render={() => <ChartBig data={this.state.data2[2]} />}
               />
               <Route
-                path="/chart5"
-                render={() => <ChartBig data={this.state.data1} />}
+                path={`/${this.state.data2[3].id}`}
+                render={() => <ChartBig data={this.state.data2[3]} />}
               />
               <Route
-                path="/chart6"
-                render={() => <Chart data={this.state.data1} />}
+                 path={`/${this.state.data2[4].id}`}
+                render={() => <Chart data={this.state.data2[4]} />}
               />
             </Switch>
           </>
