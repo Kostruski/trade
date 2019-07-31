@@ -26,8 +26,7 @@ export default class Section1 extends Component {
           </NavLink>
           <NavLink to={`/${this.props.data.data2[4].id}`}>
             <Chart data={this.props.data.data2[4]} />
-          </NavLink>  
-                        
+          </NavLink>                         
         </Router>
       </div>
     );
