@@ -51,6 +51,9 @@
    };
 
    .chartBox {
-    touch-action: pan-x pinch-zoom;
+     svg {
+      touch-action: pan-x pinch-zoom;
+     }
+   
    }
 
