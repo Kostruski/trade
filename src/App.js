@@ -43,95 +43,97 @@ export default class App extends Component {
   render() {
     return (
       <div className="appWrapper">       
-        <div className="sideAndMain">
-       
-        <Side mobileSideOn={this.state.mobileSideOn} sideVisible={this.state.sideVisible} toggleSide={this.toggleSide}  />
-           <div className="main"  >
-              <Header toggleMobileSideOn={this.toggleMobileSideOn} /> 
-        <Router>
-          <>
-            <Switch>
-              <Route exact path="/" render={() => <StartPage />} />
-              <Route exact path="/contact" render={() => <Contact />} />
-              <Route
-                path="/section1"
-                render={() => (
-                  <Section1
-                    data={this.state}
-                    handleClick={this.handleClick}
-                  />
-                )}
-              />
+      <div className="sideAndMain">
 
-              <Route
-                path="/section2"
-                render={() => (
-                  <Section2
-                    data={this.state}
-                    handleClick={this.handleClick}
-                  />
-                )}
-              />
+      {/* <Side mobileSideOn={this.state.mobileSideOn} sideVisible={this.state.sideVisible} toggleSide={this.toggleSide}  /> */}
+         <div className="main"  >
+      <Header /> 
+      <Router>
+        <>
+          <Switch>
+            <Route exact path="/" render={() => <StartPage />} />
+            <Route exact path="/contact" render={() => <Contact />} />
+            <Route
+              path="/section1"
+              render={() => (
+                <Section1
+                  data={this.state}
+                  handleClick={this.handleClick}
+                />
+              )}
+            />
 
-              <Route
-                path="/section3"
-                render={() => (
-                  <Section3
-                    data={this.state}
-                    handleClick={this.handleClick}
-                  />
-                )}
-              />
+            <Route
+              path="/section2"
+              render={() => (
+                <Section2
+                  data={this.state}
+                  handleClick={this.handleClick}
+                />
+              )}
+            />
 
-              <Route
-                path="/section4"
-                render={() => (
-                  <Section4
-                    data={this.state}
-                    handleClick={this.handleClick}
-                  />
-                )}
-              />
+            <Route
+              path="/section3"
+              render={() => (
+                <Section3
+                  data={this.state}
+                  handleClick={this.handleClick}
+                />
+              )}
+            />
 
-              <Route
-                path={`/${this.state.data1.id}`}
-                render={() => <ChartBig3 data={this.state.data1} />}
-              />
-              <Route
-               path={`/${this.state.data2[0].id}`}
-                render={() => <ChartBig data={this.state.data2[0]} />}
-              />
-              <Route
-                 path={`/${this.state.data2[1].id}`}
-                render={() => <ChartBig data={this.state.data2[1]} />}
-              />
-              <Route
-                 path={`/${this.state.data2[2].id}`}
-                render={() => <ChartBig data={this.state.data2[2]} />}
-              />
-              <Route
-                path={`/${this.state.data2[3].id}`}
-                render={() => <ChartBig data={this.state.data2[3]} />}
-              />
-              <Route
-                 path={`/${this.state.data2[4].id}`}
-                render={() => <Chart data={this.state.data2[4]} />}
-              />
-            </Switch>
-          </>
-        </Router>
-      
-        </div>
-        </div>
+            <Route
+              path="/section4"
+              render={() => (
+                <Section4
+                  data={this.state}
+                  handleClick={this.handleClick}
+                />
+              )}
+            />
 
+            <Route
+              path={`/${this.state.data1.id}`}
+              render={() => <ChartBig3 data={this.state.data1} />}
+            />
+            <Route
+             path={`/${this.state.data2[0].id}`}
+              render={() => <ChartBig data={this.state.data2[0]} />}
+            />
+            <Route
+               path={`/${this.state.data2[1].id}`}
+              render={() => <ChartBig data={this.state.data2[1]} />}
+            />
+            <Route
+               path={`/${this.state.data2[2].id}`}
+              render={() => <ChartBig data={this.state.data2[2]} />}
+            />
+            <Route
+              path={`/${this.state.data2[3].id}`}
+              render={() => <ChartBig data={this.state.data2[3]} />}
+            />
+            <Route
+               path={`/${this.state.data2[4].id}`}
+              render={() => <Chart data={this.state.data2[4]} />}
+            />
+          </Switch>
+        </>
+      </Router>
 
-     
-        
-     
       </div>
+      </div>      
+
+      </div> 
+  
     );
   }
 }
+
+
+
+
+
 
 
 
