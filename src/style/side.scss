@@ -1,89 +1,89 @@
-// .side {
-//     background-color: #131C29;
-//     color: white;
-//     flex: 0 0 180px;
-//     padding: 30px;
-//     text-align: left;
-//     position: relative;
-//     left: 0;
-//     z-index: 300;
+.side {
+    background-color: #131C29;
+    color: white;
+    flex: 0 0 180px;
+    padding: 30px;
+    text-align: left;
+    position: relative;
+    left: 0;
+    z-index: 300;
   
 
-//     &.hidden {
-//         flex: 0 0 10px;  
-//         z-index: 300;
-//         h2 {
-//           padding: 0;
-//         }  
-//     }
+    &.hidden {
+        flex: 0 0 10px;  
+        z-index: 300;
+        h2 {
+          padding: 0;
+        }  
+    }
 
-//     &.mobile {
-//         position:fixed;
-//         z-index: 20;
-//         display: block;
-//         left: 0;
-//         top: 81px; 
-//         z-index: 300;  
+    &.mobile {
+        position:fixed;
+        z-index: 20;
+        display: block;
+        left: 0;
+        top: 81px; 
+        z-index: 300;  
         
         
-//     }
+    }
 
     
    
 
 
-//     ul {
-//       display: flex;
-//       justify-content: flex-start;
-//       flex-wrap: wrap;
-//       flex-direction: column;
-//       li {
-//         list-style: none;
-//         margin-left: auto;
-//         margin-right: auto;      
+    ul {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      flex-direction: column;
+      li {
+        list-style: none;
+        margin-left: auto;
+        margin-right: auto;      
 
-//          }
-//     }
+         }
+    }
 
-//     h2 {
-//         padding-bottom: 50px;
-//         cursor: pointer;
-//     }
+    h2 {
+        padding-bottom: 50px;
+        cursor: pointer;
+    }
 
    
-//       a {
-//         text-decoration: none;
-//         color: white;      
-//       }
+      a {
+        text-decoration: none;
+        color: white;      
+      }
 
-//       span {
-//          width: 0;
-//          display: block;
-//          height: 1px;
-//          background: white;
-//          margin-top: 5px;
-//          margin-bottom: 30px;
-//       }
+      span {
+         width: 0;
+         display: block;
+         height: 1px;
+         background: white;
+         margin-top: 5px;
+         margin-bottom: 30px;
+      }
 
-//       .selected {
-//         span {
-//           width: 80%;
-//           transition:  width 0.5s;
-//           margin-right: 20%;
+      .selected {
+        span {
+          width: 80%;
+          transition:  width 0.5s;
+          margin-right: 20%;
 
-//         }
+        }
 
-//       }
-
-
+      }
 
 
-// }
-// @media (max-width: 900px) {
-//   .side {
-//     display: none;
-//     h2 {
-//         display: none;  
-//     }
-//   }
-// }
+
+
+}
+@media (max-width: 900px) {
+  .side {
+    display: none;
+    h2 {
+        display: none;  
+    }
+  }
+}

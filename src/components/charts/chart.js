@@ -76,14 +76,15 @@ export default class Chart extends Component {
  
  {
 
+  console.log(this.entireDomain)
 
      const data = this.props.data.values; 
      const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
      return (
       
          <div className="chartBox" 
-        //  onMouseOut={() => this.enableScroll()}
-        //  onMouseOver={() => this.preventScroll()}
+         onMouseOut={() => this.enableScroll()}
+         onMouseOver={() => this.preventScroll()}
          >
            <div className="legend">
              <div className="colorBox">
