@@ -13,7 +13,7 @@ const spxMax = 3013.00
 const longMax = 0.92
 const midMax = 2.31
 
-export default class Chart3 extends Component {
+export default class ChartBig extends Component {
   constructor(props) {
       super();
       this.entireDomain = this.getEntireDomain(props);
@@ -64,6 +64,7 @@ export default class Chart3 extends Component {
         x: [ data[0].x, _.last(data).x ]
       };
 
+
       return temp
     }
 
@@ -81,7 +82,7 @@ export default class Chart3 extends Component {
         const data = this.props.data.values; 
         const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
         return (
-          
+          <div className="chartBoxBigWrapper">
             <div className="chartBox" 
             // onMouseOut={() => this.enableScroll()}
             // onMouseOver={() => this.preventScroll()}
@@ -130,7 +131,7 @@ export default class Chart3 extends Component {
                   tickCount={10}
                   offsetY={50}
                   style={{
-                    tickLabels: { fontSize: 7, padding: 5 }
+                    tickLabels: { fontSize: 5, padding: 5 }
                   }}
                 />
 
@@ -140,7 +141,7 @@ export default class Chart3 extends Component {
                   tickFormat={x => `${(x * spxMax).toFixed(2)}`}
                   tickCount={10}
                   style={{
-                    tickLabels: { fontSize: 7, padding: 5 }
+                    tickLabels: { fontSize: 5, padding: 5 }
                   }}
                   crossAxis={false}
                 />
@@ -160,7 +161,7 @@ export default class Chart3 extends Component {
                       stroke: `${this.props.data.color}`,
                       strokeWidth: 1
                     },
-                    labels: { fontSize: 7 }
+                    labels: { fontSize: 5 }
                   }}
                 />
 
@@ -170,7 +171,7 @@ export default class Chart3 extends Component {
                     tickFormat={z => `${(z * longMax).toFixed(2)}`}
                     tickCount={10}
                     style={{
-                      tickLabels: { fontSize: 7, padding: 5 }
+                      tickLabels: { fontSize: 5, padding: 5 }
                     }}
                     crossAxis={false}
                   />
@@ -189,7 +190,7 @@ export default class Chart3 extends Component {
                   }
                   style={{
                     data: { stroke: "pink", strokeWidth: 1 },
-                    labels: { fontSize: 7 }
+                    labels: { fontSize: 5 }
                   }}
                 />
 
@@ -208,14 +209,14 @@ export default class Chart3 extends Component {
                   }
                   style={{
                     data: { stroke: "yellow", strokeWidth: 1 },
-                    labels: { fontSize: 7 }
+                    labels: { fontSize: 5 }
                   }}
                 />
             
               </VictoryChart>
             </div>
           
-        
+          </div>
         );
     }
 }

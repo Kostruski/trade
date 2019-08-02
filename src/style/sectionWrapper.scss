@@ -6,17 +6,22 @@
   flex-wrap: wrap;
   padding: 20px;
   width: 100%;
+  @media (max-width: 1200px) {
+    padding: 20px 0;
+    
+   }
   h1 {
       letter-spacing: 5px;
       color: white;
       font-size: 20px;
     }
-    .chartBox {    
+    .chartBox {  
+     position: relative ; 
      width: 100%;
      height: auto;
      text-align: center;
-     background-color: #24344D;  
-     position: relative; 
+     background-color: #24344D; 
+     
     
     }
 
@@ -34,10 +39,21 @@
       a {
        flex: 1 1 550px;
       }  }
+
+      .legend {
+       top: 0;
+      }
       
       
 
     
 
+   };
+
+   .chartBox {
+     svg {
+      touch-action: pan-x pinch-zoom;
+     }
+   
    }
 

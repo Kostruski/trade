@@ -9,19 +9,16 @@ import {
   VictoryAxis,
 } from "victory";
 
-const spxMax = 3013.00
-const longMax = 0.92
-const midMax = 2.31
 
-export default class Chart3 extends Component {
+
+export default class ChartBig extends Component {
   constructor(props) {
       super();
       this.entireDomain = this.getEntireDomain(props);
       this.state = {
         zoomedXDomain:   this.entireDomain.x,
-        spx: props.data.values[0],
-        longTerm: props.data.values[1],
-        midTerm: props.data.values[2],
+        data: props.data.values, 
+        entireDomain: this.entireDomain 
       };
     }
 
@@ -58,9 +55,9 @@ export default class Chart3 extends Component {
     }
 
     getEntireDomain(props) {
-     const  data  = props.data.values[1];
+     const  data  = props.data.values;
       const temp = {
-        y: [(_.minBy(data, d => d.y).y)*1.1, (_.maxBy(data, d => d.y).y)*1.1],
+        y: [(_.minBy(data, d => d.y).y)*0.9, (_.maxBy(data, d => d.y).y)*1.1],
         x: [ data[0].x, _.last(data).x ]
       };
 
@@ -78,10 +75,14 @@ export default class Chart3 extends Component {
  
     
     {
+
+      // console.log(this.state.entireDomain)
+   
+
         const data = this.props.data.values; 
         const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
         return (
-          
+          <div className="chartBoxBigWrapper">
             <div className="chartBox" 
             // onMouseOut={() => this.enableScroll()}
             // onMouseOver={() => this.preventScroll()}
@@ -93,24 +94,9 @@ export default class Chart3 extends Component {
                       backgroundColor: `${this.props.data.color}`
                     }}
                   />
-                  <div>SPX</div>
-                </div>
-                <div className="colorBox">
-                  <span
-                    style={{
-                      backgroundColor: "pink"
-                    }}
-                  />
-                  <div>Long term</div>
-                </div>
-                <div className="colorBox">
-                  <span
-                    style={{
-                      backgroundColor: "yellow"
-                    }}
-                  />
-                  <div>Mid term</div>
-                </div>
+                  <div>{`${this.props.data.yValue}`}</div>
+                </div>             
+             
               </div>
 
               <VictoryChart
@@ -130,25 +116,26 @@ export default class Chart3 extends Component {
                   tickCount={10}
                   offsetY={50}
                   style={{
-                    tickLabels: { fontSize: 7, padding: 5 }
+                    tickLabels: { fontSize: 5, padding: 5 }
                   }}
                 />
 
                 <VictoryAxis            
                   orientation="right"
                   dependentAxis
-                  tickFormat={x => `${(x * spxMax).toFixed(2)}`}
+                  tickFormat={x => `${(x).toFixed(2)}`}
                   tickCount={10}
                   style={{
-                    tickLabels: { fontSize: 7, padding: 5 }
+                    tickLabels: { fontSize: 5, padding: 5 }
                   }}
                   crossAxis={false}
                 />
 
+
                 <VictoryLine                
-                  data={ this.getData(data[0]) }
+                  data={ this.getData(data) }
                   labels={d =>
-                    `spx: ${d.y * spxMax.toFixed(2)} date: ${d.x}`
+                    `${this.props.data.yValue} : ${(d.y).toFixed(2)}, date: ${d.x}`
                   }
                   labelComponent={
                     <VictoryTooltip
@@ -160,62 +147,20 @@ export default class Chart3 extends Component {
                       stroke: `${this.props.data.color}`,
                       strokeWidth: 1
                     },
-                    labels: { fontSize: 7 }
+                    labels: { fontSize: 5 }
                   }}
                 />
 
-                  <VictoryAxis                  
-                    dependentAxis
-                    orientation="left"
-                    tickFormat={z => `${(z * longMax).toFixed(2)}`}
-                    tickCount={10}
-                    style={{
-                      tickLabels: { fontSize: 7, padding: 5 }
-                    }}
-                    crossAxis={false}
-                  />
+          
            
-                <VictoryLine                 
-                 data={ this.getData(data[1]) }
-                  labels={d =>
-                    `Long term: ${(d.y * longMax).toFixed(2)} date: ${
-                      d.x
-                    }`
-                  }
-                  labelComponent={
-                    <VictoryTooltip
-                      flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
-                    />
-                  }
-                  style={{
-                    data: { stroke: "pink", strokeWidth: 1 },
-                    labels: { fontSize: 7 }
-                  }}
-                />
+               
 
-                <VictoryLine
-                 
-                     data={ this.getData(data[2]) }
-                  labels={d =>
-                    `Mid term: ${(d.y * longMax).toFixed(2)} date: ${
-                      d.x
-                    }`
-                  }
-                  labelComponent={
-                    <VictoryTooltip
-                      flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
-                    />
-                  }
-                  style={{
-                    data: { stroke: "yellow", strokeWidth: 1 },
-                    labels: { fontSize: 7 }
-                  }}
-                />
+            
             
               </VictoryChart>
             </div>
           
-        
+          </div>
         );
     }
 }

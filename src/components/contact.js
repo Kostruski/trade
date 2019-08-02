@@ -1,9 +1,14 @@
-import React from 'react'
+import React from 'react';
+import Footer from "./footer.js";
 
 export default function Contact() {
     return (
-        <div className="contactWrapper">
-            <h1>Contact</h1>
+        <div>
+            <div className="contactWrapper">
+                <h1>Contact</h1>
+            </div>
+            <Footer />
         </div>
+        
     )
 }

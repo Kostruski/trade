@@ -15,13 +15,15 @@
 }
 
 
+
+
 .appWrapper {
   text-align: center;
   width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  
+   
 }
 
 body {
@@ -40,7 +42,7 @@ body {
  tspan {
    fill: white!important;
    font-family: 'Montserrat'!important, sans-serif!important;
-   font-size: 12px!important;
+  //  font-size: 12px!important;
  }
 
  line {
