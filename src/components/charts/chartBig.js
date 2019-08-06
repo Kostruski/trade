@@ -76,7 +76,7 @@ export default class ChartBig extends Component {
     
     {
 
-      // console.log(this.state.entireDomain)
+
    
 
         const data = this.props.data.values; 
