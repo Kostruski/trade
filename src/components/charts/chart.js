@@ -56,7 +56,9 @@ export default class Chart extends Component {
  }
 
  getEntireDomain(props) {
+  
   const  data  = props.data.values;
+
    const temp = {
      y: [(_.minBy(data, d => d.y).y)*0.9, (_.maxBy(data, d => d.y).y)*1.1],
      x: [ data[0].x, _.last(data).x ]

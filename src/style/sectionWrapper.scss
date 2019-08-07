@@ -21,13 +21,20 @@
      height: auto;
      text-align: center;
      background-color: #24344D; 
-     
+     margin: 10px;
+     @media (max-width: 1300px) {
+    & {
+     flex: 1 1 1200px;
+    }  };
+
+    @media (min-width: 1200px) {
+    & {
+     flex: 1 1 550px;
+    }  }
     
     }
 
-    a {
-      margin: 10px;
-    }
+   
     
 
      @media (max-width: 1300px) {
@@ -42,18 +49,15 @@
 
       .legend {
        top: 0;
-      }
-      
-      
-
-    
+         svg {
+           width: 24px;
+           height: 24px;
+         }
+          
+      }  
 
    };
 
-   .chartBox {
-     svg {
-      touch-action: pan-x pinch-zoom;
-     }
-   
-   }
+  
 
+ 
