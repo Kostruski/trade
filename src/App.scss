@@ -5,13 +5,13 @@
 @import "./style/contact.scss";
 @import "./style/header.scss";
 @import "./style/footer.scss";
-@import "./style/side.scss";
 @import "./style/main.scss";
 
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+ 
 }
 
 
@@ -66,6 +66,10 @@ body {
  .sideAndMain {
    display: flex;
    justify-content: center;
+ }
+
+ .VictoryContainer {
+  touch-action: pinch-zoom!important;
  }
 
 

@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
+import _ from 'lodash';
+
 const fetchData = [
   {"Date":"2017-02-12T23:00:00.000Z","SPX":2328.25,"Long Term":0.1299999999999999,"Mid Term":0.3500000000000001},{"Date":"2017-02-13T23:00:00.000Z","SPX":2337.58,"Long Term":0.15999999999999992,"Mid Term":0.5800000000000001},{"Date":"2017-02-14T23:00:00.000Z","SPX":2349.25,"Long Term":0.16999999999999993,"Mid Term":0.44999999999999996},{"Date":"2017-02-15T23:00:00.000Z","SPX":2347.22,"Long Term":0.07000000000000006,"Mid Term":0.22999999999999998},{"Date":"2017-02-16T23:00:00.000Z","SPX":2351.16,"Long Term":0.030000000000000027,"Mid Term":0.10157416020362686},{"Date":"2017-02-20T23:00:00.000Z","SPX":2365.38,"Long Term":0.030000000000000027,"Mid Term":0.03269729453523995},{"Date":"2017-02-21T23:00:00.000Z","SPX":2362.82,"Long Term":0.050000000000000044,"Mid Term":-0.020826908122784094},{"Date":"2017-02-22T23:00:00.000Z","SPX":2363.81,"Long Term":0.08000000000000007,"Mid Term":0.02204469966785383},{"Date":"2017-02-23T23:00:00.000Z","SPX":2367.34,"Long Term":0.10000000000000009,"Mid Term":0.11929133214513477},{"Date":"2017-02-26T23:00:00.000Z","SPX":2369.75,"Long Term":0.1200000000000001,"Mid Term":0.24732448154891418},{"Date":"2017-02-27T23:00:00.000Z","SPX":2363.64,"Long Term":0.1200000000000001,"Mid Term":0.29467640043588594},{"Date":"2017-02-28T23:00:00.000Z","SPX":2395.96,"Long Term":0.06000000000000005,"Mid Term":-0.04476575609317046},{"Date":"2017-03-01T23:00:00.000Z","SPX":2381.92,"Long Term":0.06000000000000005,"Mid Term":-0.21682778427511873},{"Date":"2017-03-02T23:00:00.000Z","SPX":2383.12,"Long Term":0.050000000000000044,"Mid Term":-0.4301320838091236},{"Date":"2017-03-05T23:00:00.000Z","SPX":2375.31,"Long Term":0.06000000000000005,"Mid Term":-0.42770474352428023},{"Date":"2017-03-06T23:00:00.000Z","SPX":2368.39,"Long Term":0.07000000000000006,"Mid Term":-0.3719262861835526},{"Date":"2017-03-07T23:00:00.000Z","SPX":2362.98,"Long Term":0.09000000000000008,"Mid Term":-0.0025962195399682475},{"Date":"2017-03-08T23:00:00.000Z","SPX":2364.87,"Long Term":0.06000000000000005,"Mid Term":0.08143612955441304},{"Date":"2017-03-09T23:00:00.000Z","SPX":2372.6,"Long Term":0.06000000000000005,"Mid Term":0.23684999250711813},{"Date":"2017-03-12T23:00:00.000Z","SPX":2373.47,"Long Term":0.06000000000000005,"Mid Term":0.2543521731459155},{"Date":"2017-03-13T23:00:00.000Z","SPX":2365.45,"Long Term":0.06000000000000005,"Mid Term":0.24919358177664197},{"Date":"2017-03-14T23:00:00.000Z","SPX":2385.26,"Long Term":0.010000000000000009,"Mid Term":0.13965526692927588},{"Date":"2017-03-15T23:00:00.000Z","SPX":2381.38,"Long Term":-0.040000000000000036,"Mid Term":-0.07446696035242284},{"Date":"2017-03-16T23:00:00.000Z","SPX":2378.25,"Long Term":-0.010000000000000009,"Mid Term":-0.10408762816397199},{"Date":"2017-03-19T23:00:00.000Z","SPX":2373.47,"Long Term":0,"Mid Term":-0.15141174947254576},
   {"Date":"2017-03-20T23:00:00.000Z","SPX":2344.02,"Long Term":0,"Mid Term":-0.22173522476325935},
@@ -71,37 +73,60 @@ let spxMax = 0;
 let longMax =0;
 let midMax = 0;
 
-const addValuesToChart3 = () => {
-  fetchData.forEach(el => {
-    if (el["SPX"] > spxMax) spxMax = el["SPX"];
-    if (el["Long Term"] > longMax) longMax = el["Long Term"];
-    if (el["Mid Term"] > midMax) midMax = el["Mid Term"];
-  });
+// const addValuesToChart3 = () => {
+//   fetchData.forEach(el => {
+//     if (el["SPX"] > spxMax) spxMax = el["SPX"];
+//     if (el["Long Term"] > longMax) longMax = el["Long Term"];
+//     if (el["Mid Term"] > midMax) midMax = el["Mid Term"];
+//   });
 
-  fetchData.forEach((el, i) => {
-    spx.push({ x: i, y: el["SPX"] / spxMax });
-    long.push({ x: i, y: el["Long Term"] / longMax });
-    mid.push({ x: i, y: el["Mid Term"] / midMax });
-  });
+//   fetchData.forEach((el, i) => {
+//     spx.push({ x: i, y: el["SPX"] / spxMax });
+//     long.push({ x: i, y: el["Long Term"] / longMax });
+//     mid.push({ x: i, y: el["Mid Term"] / midMax });
+//   });
 
-  wykres1.values.push(long, mid, spx)
-};
-
-
-addValuesToChart3()
+//   wykres1.values.push(long, mid, spx)
+// };
 
 
-const addValuesToChart = (chart, valY) => {  
+// addValuesToChart3()
+
+const x = _.maxBy(fetchData, "Mid Term")
+const y = _.maxBy(fetchData, "Long Term")
+const z = _.maxBy(fetchData, "SPX")
+
+console.log("max Mid", x["Mid Term"])
+
+console.log("max Long", y["Long Term"])
+
+console.log("SPX", z["SPX"])
+
+
+const addValuesToChart3 = (chart, val1, val2, val3) => {  
   
   fetchData.forEach((el, i) => {
-    chart.values.push({ x: i, y: el[valY] });
+    chart.values.push({ x: el["Date"].slice(0,10), [val1]: el[val1]/_.maxBy(fetchData, val1)[val1], [val2]: el[val2]/_.maxBy(fetchData, val3)[val3], [val3]: el[val3]/_.maxBy(fetchData, val3)[val3] });
     });
 };
 
+
+const addValuesToChart = (chart, val1) => {  
+  
+  fetchData.forEach((el, i) => {
+    chart.values.push({ x: el["Date"].slice(0,10), y: el[val1]  });
+    });
+};
+
+
+
+addValuesToChart3(wykres1, "SPX","Long Term", "Mid Term"  )
 addValuesToChart(wykres2, "SPX" )
 addValuesToChart(wykres3, "Long Term" )
 addValuesToChart(wykres4, "Mid Term" )
 addValuesToChart(wykres5, "Mid Term" )
+
+
 
 
 

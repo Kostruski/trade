@@ -1,4 +1,3 @@
-
 import Chart from "./charts/chart.js";
 import React, { Component } from "react";
 import { HashRouter as Router, NavLink, Switch, Route } from "react-router-dom";
@@ -8,33 +7,17 @@ export default class Section4 extends Component {
   render() {
     return (
       <div className="sectionWrapper">
-      <Router>     
+        <Chart data={this.props.data.data2[1]} />
 
-        <NavLink to={`/${this.props.data.data2[1].id}`}>
-          <Chart data={this.props.data.data2[1]} />
-        </NavLink>
-        <NavLink to={`/${this.props.data.data2[2].id}`}>
-          <Chart data={this.props.data.data2[2]} />
-        </NavLink>
+        <Chart data={this.props.data.data2[2]} />
 
-        <NavLink to={`/${this.props.data.data2[0].id}`}>
-          <Chart data={this.props.data.data2[0]} />
-        </NavLink>
+        <Chart data={this.props.data.data2[0]} />
 
-        <NavLink to={`/${this.props.data.data2[4].id}`}>
-          <Chart data={this.props.data.data2[4]} />
-        </NavLink>  
-       
+        <Chart data={this.props.data.data2[4]} />
 
-        <NavLink to={`/${this.props.data.data2[3].id}`}>
-          <Chart data={this.props.data.data2[3]} />
-        </NavLink>
+        <Chart data={this.props.data.data2[3]} />
 
-        <NavLink to={`/${this.props.data.data1.id}`}>
-          <Chart3 data={this.props.data.data1}  />
-        </NavLink>
-
-      </Router>
+        <Chart3 data={this.props.data.data1} />
       </div>
     );
   }
