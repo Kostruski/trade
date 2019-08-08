@@ -79,6 +79,11 @@ export default class Chart extends Component {
     );
   };
 
+  resetChart = () => {
+    console.log("gra")
+    if(this.state.currZoom !== this.state.initZoom) this.setState({currZoom: this.state.initZoom})
+  }
+
   updateRange = () => {
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
@@ -118,17 +123,21 @@ export default class Chart extends Component {
               panLeft={this.panLeft}
               panRight={this.panRight}
               id={this.props.data.id}
+              resetChart={this.resetChart}
             />
           </div>
 
-          <VictoryChart containerComponent={<VictoryVoronoiContainer />}>
+          <VictoryChart           
+            // containerComponent={<VictoryVoronoiContainer />}            
+            >
             <VictoryAxis
               scale="time"
               orientation="bottom"
-              tickCount={14}
+              // tickCount={14}
+              fixLabelOverlap={true}
               offsetY={50}
               style={{
-                tickLabels: { fontSize: 10, padding: 20, angle: 60 }
+                tickLabels: { fontSize: 10, padding: 5 }
               }}
             />
 
@@ -136,9 +145,10 @@ export default class Chart extends Component {
               orientation="right"
               dependentAxis
               tickFormat={x => `${x.toFixed(2)}`}
-              tickCount={15}
+              // tickCount={15}
+              fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSize: 10, padding: 5 }
+                tickLabels: {fontSize: 10, padding: 5}
               }}
               crossAxis={false}
             />

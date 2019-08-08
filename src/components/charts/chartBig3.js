@@ -23,13 +23,30 @@ export default class ChartBig3 extends Component {
       data: props.data.values,
       initZoom: initZoom,
       currZoom: initZoom,
-      zoomValue: 0
+      zoomValue: 0,
+      chartWidth: 450, 
+      chartHeight: 300
     };
   }
 
-  zoomMinus = () => {
-    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+  changeChartDimmensions = () => {
+    const tempWidth = window.innerWidth
+    const tempHeight = window.innerHeight-100
+    if(Math.abs(this.state.chartWidth-tempWidth ) || Math.abs(this.state.chartHeight-tempHeight ) >10 )  this.setState({chartWidth: tempWidth, chartHeight: tempHeight})     
+    }
 
+  componentDidMount() {
+    this.changeChartDimmensions();
+    window.addEventListener("resize", () => this.changeChartDimmensions());  
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", () => this.changeChartDimmensions());
+  }
+
+
+  zoomMinus = () => {    
+    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     if (leftIndex === 0) return;
     this.setState({ zoomValue: 1 }, () => {
       this.updateRange();
@@ -43,6 +60,10 @@ export default class ChartBig3 extends Component {
     });
   };
 
+  resetChart = () => {
+    if(this.state.currZoom !== this.state.initZoom) this.setState({currZoom: this.state.initZoom})
+  }
+
   panLeft = () => {
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
@@ -53,14 +74,7 @@ export default class ChartBig3 extends Component {
         i >= leftIndex - Math.round(length / 10) &&
         i <= rightIndex - Math.round(length / 10)
     );
-    this.setState({ currZoom: zoomed }, () =>
-      console.log(
-        "left",
-        this.state.data.indexOf(_.head(this.state.currZoom)),
-        this.state.data.indexOf(_.last(this.state.currZoom)),
-        this.state.currZoom.length
-      )
-    );
+    this.setState({ currZoom: zoomed });
   };
 
   panRight = () => {
@@ -73,14 +87,7 @@ export default class ChartBig3 extends Component {
         i >= leftIndex + Math.round(length / 10) &&
         i <= rightIndex + Math.round(length / 10)
     );
-    this.setState({ currZoom: zoomed }, () =>
-      console.log(
-        "right",
-        this.state.data.indexOf(_.head(this.state.currZoom)),
-        this.state.data.indexOf(_.last(this.state.currZoom)),
-        this.state.currZoom.length
-      )
-    );
+    this.setState({ currZoom: zoomed });
   };
 
   updateRange = () => {
@@ -93,14 +100,7 @@ export default class ChartBig3 extends Component {
           leftIndex - (this.state.currZoom.length / 5) * this.state.zoomValue &&
         i <= rightIndex
     );
-    this.setState({ currZoom: zoomed }, () =>
-      console.log(
-        this.state.zoomValue,
-        this.state.data.indexOf(_.head(this.state.currZoom)),
-        this.state.data.indexOf(_.last(this.state.currZoom)),
-        this.state.currZoom.length
-      )
-    );
+    this.setState({ currZoom: zoomed });
   };
 
   render() {
@@ -134,17 +134,21 @@ export default class ChartBig3 extends Component {
             />
             <div>Mid term</div>
           </div>
-          <Tools id={this.props.data.id} zoomPlus={this.zoomPlus} zoomMinus={this.zoomMinus} panLeft={this.panLeft} panRight={this.panRight}/>
+          <Tools resetChart={this.resetChart} id={this.props.data.id} zoomPlus={this.zoomPlus} zoomMinus={this.zoomMinus} panLeft={this.panLeft} panRight={this.panRight}/>
         </div>
 
-        <VictoryChart containerComponent={<VictoryVoronoiContainer />}>
+        <VictoryChart containerComponent={<VictoryVoronoiContainer />}
+        width={this.state.chartWidth}
+        height={this.state.chartHeight}
+        >
           <VictoryAxis
             scale="time"
             orientation="bottom"
-            tickCount={14}
+            // tickCount={14}
+            fixLabelOverlap={true}
             offsetY={50}
             style={{
-              tickLabels: { fontSize: 7, padding: 20, angle: 60 }
+              tickLabels: { fontSize: 20, padding: 5 }
             }}
           />
 
@@ -152,9 +156,10 @@ export default class ChartBig3 extends Component {
             orientation="right"
             dependentAxis
             tickFormat={x => `${(x * spxMax).toFixed(2)}`}
-            tickCount={10}
+            // tickCount={10}
+            fixLabelOverlap={true}
             style={{
-              tickLabels: { fontSize: 7, padding: 5 }
+              tickLabels: { fontSize: 20, padding: 5 }
             }}
             crossAxis={false}
           />
@@ -174,7 +179,7 @@ export default class ChartBig3 extends Component {
                 stroke: `${this.props.data.color}`,
                 strokeWidth: 1
               },
-              labels: { fontSize: 7 }
+              labels: { fontSize: 20 }
             }}
           />
 
@@ -182,9 +187,10 @@ export default class ChartBig3 extends Component {
             dependentAxis
             orientation="left"
             tickFormat={z => `${(z * midMax).toFixed(2)}`}
-            tickCount={10}
+            // tickCount={10}
+            fixLabelOverlap={true}
             style={{
-              tickLabels: { fontSize: 7, padding: 5 }
+              tickLabels: { fontSize: 20, padding: 5 }
             }}
             crossAxis={false}
           />
@@ -203,7 +209,7 @@ export default class ChartBig3 extends Component {
             }
             style={{
               data: { stroke: "pink", strokeWidth: 1 },
-              labels: { fontSize: 7 }
+              labels: { fontSize: 20 }
             }}
           />
 
@@ -221,7 +227,7 @@ export default class ChartBig3 extends Component {
             }
             style={{
               data: { stroke: "yellow", strokeWidth: 1 },
-              labels: { fontSize: 7 }
+              labels: { fontSize: 20 }
             }}
           />
         </VictoryChart>

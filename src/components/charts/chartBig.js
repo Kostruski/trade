@@ -19,8 +19,25 @@ export default class ChartBig extends Component {
       data: props.data.values,
       initZoom: initZoom,
       currZoom: initZoom,
-      zoomValue: 0
+      zoomValue: 0,
+      chartWidth: 450, 
+      chartHeight: 300,
     };
+  }
+
+  changeChartDimmensions = () => {
+    const tempWidth = window.innerWidth
+    const tempHeight = window.innerHeight
+    if(Math.abs(this.state.chartWidth-tempWidth ) || Math.abs(this.state.chartHeight-tempHeight ) >10 )  this.setState({chartWidth: tempWidth, chartHeight: tempHeight}, () => console.log(this.state.chartWidth, this.state.chartHeight))     
+    }
+
+  componentDidMount() {
+    this.changeChartDimmensions();
+    window.addEventListener("resize", () => this.changeChartDimmensions());  
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", () => this.changeChartDimmensions());
   }
 
   zoomMinus = () => {
@@ -58,6 +75,11 @@ export default class ChartBig extends Component {
       )
     );
   };
+
+  resetChart = () => {
+    console.log("gra")
+    if(this.state.currZoom !== this.state.initZoom) this.setState({currZoom: this.state.initZoom})
+  }
 
   panRight = () => {
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
@@ -117,17 +139,22 @@ export default class ChartBig extends Component {
               zoomMinus={this.zoomMinus}
               panLeft={this.panLeft}
               panRight={this.panRight}
+              resetChart={this.resetChart}
             />
           </div>
 
-          <VictoryChart containerComponent={<VictoryVoronoiContainer />}>
+          <VictoryChart
+          width={this.state.chartWidth}
+          height={this.state.chartHeight}
+          containerComponent={<VictoryVoronoiContainer />}>
             <VictoryAxis
               scale="time"
               orientation="bottom"
-              tickCount={14}
+              fixLabelOverlap={true}
+              // tickCount={14}
               offsetY={50}
               style={{
-                tickLabels: { fontSize: 10, padding: 20, angle: 60 }
+                tickLabels: { fontSize: 20, padding: 5}
               }}
             />
 
@@ -135,9 +162,10 @@ export default class ChartBig extends Component {
               orientation="right"
               dependentAxis
               tickFormat={x => `${x.toFixed(2)}`}
-              tickCount={15}
+              fixLabelOverlap={true}
+              // tickCount={15}
               style={{
-                tickLabels: { fontSize: 10, padding: 5 }
+                tickLabels: { fontSize: 20, padding: 5 }
               }}
               crossAxis={false}
             />
@@ -155,7 +183,7 @@ export default class ChartBig extends Component {
                   stroke: `${this.props.data.color}`,
                   strokeWidth: 1
                 },
-                labels: { fontSize: 10 }
+                labels: { fontSize: 20 }
               }}
             />
           </VictoryChart>
