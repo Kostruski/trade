@@ -96,17 +96,17 @@ const x = _.maxBy(fetchData, "Mid Term")
 const y = _.maxBy(fetchData, "Long Term")
 const z = _.maxBy(fetchData, "SPX")
 
-console.log("max Mid", x["Mid Term"])
+// console.log("max Mid", x["Mid Term"])
 
-console.log("max Long", y["Long Term"])
+// console.log("max Long", y["Long Term"])
 
-console.log("SPX", z["SPX"])
+// console.log("SPX", z["SPX"])
 
 
 const addValuesToChart3 = (chart, val1, val2, val3) => {  
   
   fetchData.forEach((el, i) => {
-    chart.values.push({ x: el["Date"].slice(0,10), [val1]: el[val1]/_.maxBy(fetchData, val1)[val1], [val2]: el[val2]/_.maxBy(fetchData, val3)[val3], [val3]: el[val3]/_.maxBy(fetchData, val3)[val3] });
+    chart.values.push({ x: el["Date"].slice(2,10), [val1]: el[val1]/_.maxBy(fetchData, val1)[val1], [val2]: el[val2]/_.maxBy(fetchData, val3)[val3], [val3]: el[val3]/_.maxBy(fetchData, val3)[val3] });
     });
 };
 
@@ -114,7 +114,7 @@ const addValuesToChart3 = (chart, val1, val2, val3) => {
 const addValuesToChart = (chart, val1) => {  
   
   fetchData.forEach((el, i) => {
-    chart.values.push({ x: el["Date"].slice(0,10), y: el[val1]  });
+    chart.values.push({ x: el["Date"].slice(2,10), y: el[val1]  });
     });
 };
 

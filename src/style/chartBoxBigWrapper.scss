@@ -6,6 +6,7 @@
     position: relative;
     // touch-action: none;
     
+    
  
    
 
@@ -21,16 +22,10 @@
         width:100%;
       }
 
-     
-    }
+         }
    
  
-    // .moreTextBigChart {
-    //     padding: 30px;
-    //     flex-grow: 1;
-    //     flex-shrink: 1;
-    // }
-   
+  
 }
 
 .legend {
@@ -40,10 +35,12 @@
   z-index: 200;
   width: 100%;
   padding: 5px;
+  padding-top: 20px; 
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
+
 //   background-color: #192231;
   position: absolute;
   // top: 81px;
@@ -76,4 +73,9 @@
 
 
 } 
+
+.VictoryContainer    
+{
+padding-top: 50px;
+}
 

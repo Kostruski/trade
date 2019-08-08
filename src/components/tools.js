@@ -1,7 +1,7 @@
 import React from 'react'
 import Toolbar from '@material-ui/core/Toolbar';
 import { IconButton } from "@material-ui/core";
-import { NavigateNext, NavigateBefore, ZoomIn, ZoomOut, Fullscreen, FullscreenExit } from "@material-ui/icons";
+import { NavigateNext, NavigateBefore, ZoomIn, ZoomOut, Fullscreen, FullscreenExit, Refresh } from "@material-ui/icons";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { HashRouter as Router, NavLink, Switch, Route } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
 
   menuBut: {
-    marginRight: theme.spacing(2),
+    padding: "6px"
     // backgroundColor: fade(theme.palette.common.white, 0.15),
     //  '&:hover': {
     //    backgroundColor: fade(theme.palette.common.white, 0.25)
@@ -29,9 +29,9 @@ const Tools = withRouter(({ history, ...props }) => {
   const classes = useStyles();
 
   const screenIcon = history.location.pathname.includes("chart") ? (
-    <IconButton className={classes.menuBut}>
+    <IconButton className={classes.menuBut}  onClick={() => history.goBack()}>
       <FullscreenExit
-        onClick={() => history.goBack()}
+       
         className={classes.icon}
       />
     </IconButton>
@@ -52,6 +52,9 @@ const Tools = withRouter(({ history, ...props }) => {
         </IconButton>
         <IconButton onClick={props.panRight} className={classes.menuBut}>
           <NavigateNext className={classes.icon} />
+        </IconButton>
+        <IconButton onClick={props.resetChart} className={classes.menuBut}>
+          <Refresh className={classes.icon} />
         </IconButton>
         <IconButton onClick={props.zoomPlus} className={classes.menuBut}>
           <ZoomIn className={classes.icon} />
