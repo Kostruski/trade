@@ -22,6 +22,10 @@ export default class ChartBig extends Component {
       zoomValue: 0,
       chartWidth: 450, 
       chartHeight: 300,
+      zoomMinusActive: true,
+      zoomPlusActive: true,
+      panLeftActive: true,
+      panRightActive: true
     };
   }
 
@@ -40,66 +44,57 @@ export default class ChartBig extends Component {
     window.removeEventListener("resize", () => this.changeChartDimmensions());
   }
 
-  zoomMinus = () => {
-    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+  
+    zoomMinus = () => {
+      if(!this.setState.zoomPlusActive) this.setState({zoomPlusActive: true})
+      const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+      if (leftIndex === 0) {this.setState({zoomMinusActive: false}); return;}
+      this.setState({ zoomValue: 1 }, () => {
+        this.updateRange();
+      });
+    };
 
-    if (leftIndex === 0) return;
-    this.setState({ zoomValue: 1 }, () => {
-      this.updateRange();
-    });
-  };
-
-  zoomPlus = () => {
-    if (this.state.currZoom.length < 30) return;
-    this.setState({ zoomValue: -1 }, () => {
-      this.updateRange();
-    });
-  };
-
-  panLeft = () => {
-    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
-    const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
-    const length = this.state.currZoom.length;
-    if (leftIndex < 60 && length < 60) return;
-    const zoomed = this.state.data.filter(
-      (el, i) =>
-        i >= leftIndex - Math.round(length / 10) &&
-        i <= rightIndex - Math.round(length / 10)
-    );
-    this.setState({ currZoom: zoomed }, () =>
-      console.log(
-        "left",
-        this.state.data.indexOf(_.head(this.state.currZoom)),
-        this.state.data.indexOf(_.last(this.state.currZoom)),
-        this.state.currZoom.length
-      )
-    );
-  };
+    zoomPlus = () => {
+      if(!this.setState.zoomMinusActive) this.setState({zoomMinusActive: true})
+      if (this.state.currZoom.length < 30) {this.setState({zoomPlusActive: false}); return;}
+      this.setState({ zoomValue: -1 }, () => {
+        this.updateRange();
+      });
+    };
 
   resetChart = () => {
-    console.log("gra")
-    if(this.state.currZoom !== this.state.initZoom) this.setState({currZoom: this.state.initZoom})
-  }
-
-  panRight = () => {
-    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
-    const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
-    const length = this.state.currZoom.length;
-    if (rightIndex > this.state.data.length - 2 && length < 60) return;
-    const zoomed = this.state.data.filter(
-      (el, i) =>
-        i >= leftIndex + Math.round(length / 10) &&
-        i <= rightIndex + Math.round(length / 10)
-    );
-    this.setState({ currZoom: zoomed }, () =>
-      console.log(
-        "right",
-        this.state.data.indexOf(_.head(this.state.currZoom)),
-        this.state.data.indexOf(_.last(this.state.currZoom)),
-        this.state.currZoom.length
-      )
-    );
+    if (this.state.currZoom !== this.state.initZoom)
+      this.setState({ currZoom: this.state.initZoom, zoomPlusActive: true, zoomMinusActive: true, panLeftActive: true, panRightActive: true });
   };
+
+
+    panLeft = () => {
+      if(!this.setState.panRightActive) this.setState({panRightActive: true})
+      const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+      const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
+      const length = this.state.currZoom.length;
+      if (leftIndex < 60 && length < 60) {this.setState({panLeftActive: false}); return;}
+      const zoomed = this.state.data.filter(
+        (el, i) =>
+          i >= leftIndex - Math.round(length / 10) &&
+          i <= rightIndex - Math.round(length / 10)
+      );
+      this.setState({ currZoom: zoomed });
+    };
+
+    panRight = () => {
+      if(!this.setState.panLeftActive) this.setState({panLeftActive: true})
+      const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+      const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
+      const length = this.state.currZoom.length;
+      if (rightIndex > this.state.data.length - 2 && length < 60) {this.setState({panRightActive: false}); return;}
+      const zoomed = this.state.data.filter(
+        (el, i) =>
+          i >= leftIndex + Math.round(length / 10) &&
+          i <= rightIndex + Math.round(length / 10)
+      );
+      this.setState({ currZoom: zoomed });
+    };
 
   updateRange = () => {
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
@@ -140,6 +135,10 @@ export default class ChartBig extends Component {
               panLeft={this.panLeft}
               panRight={this.panRight}
               resetChart={this.resetChart}
+              zoomMinusActive={this.state.zoomMinusActive}
+              zoomPlusActive={this.state.zoomPlusActive}
+              panLeftActive={this.state.panLeftActive}
+              panRightActive={this.state.panRightActive}
             />
           </div>
 
@@ -151,10 +150,9 @@ export default class ChartBig extends Component {
               scale="time"
               orientation="bottom"
               fixLabelOverlap={true}
-              // tickCount={14}
               offsetY={50}
               style={{
-                tickLabels: { fontSize: 20, padding: 5}
+                tickLabels: { fontSize: 17, padding: 5}
               }}
             />
 
@@ -163,19 +161,22 @@ export default class ChartBig extends Component {
               dependentAxis
               tickFormat={x => `${x.toFixed(2)}`}
               fixLabelOverlap={true}
-              // tickCount={15}
               style={{
-                tickLabels: { fontSize: 20, padding: 5 }
+                tickLabels: { fontSize: 17, padding: 5 }
               }}
               crossAxis={false}
             />
 
             <VictoryLine
-              data={this.state.currZoom}
-              labels={d => ` SPX ${d.y} ${d.x} `}
+              data={this.state.currZoom}              
+              labels={d => `${d.y.toFixed(2)}
+              ${d.x} `}
               labelComponent={
                 <VictoryTooltip
-                  flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
+                  flyoutStyle={{ fill: "black"}}
+                  dy={-55}
+                  width={150}
+                  horizontal={true}
                 />
               }
               style={{
@@ -183,7 +184,7 @@ export default class ChartBig extends Component {
                   stroke: `${this.props.data.color}`,
                   strokeWidth: 1
                 },
-                labels: { fontSize: 20 }
+                labels: { fontSize: 17 }
               }}
             />
           </VictoryChart>

@@ -2,24 +2,30 @@ import React from 'react'
 import Toolbar from '@material-ui/core/Toolbar';
 import { IconButton } from "@material-ui/core";
 import { NavigateNext, NavigateBefore, ZoomIn, ZoomOut, Fullscreen, FullscreenExit, Refresh } from "@material-ui/icons";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { HashRouter as Router, NavLink, Switch, Route } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
 
   menuBut: {
-    padding: "6px"
-    // backgroundColor: fade(theme.palette.common.white, 0.15),
-    //  '&:hover': {
-    //    backgroundColor: fade(theme.palette.common.white, 0.25)
-    // }
+    padding: "6px"  
+    
     },
+
+    disabled: {
+      backgroundColor: "red"
+    },
+
+   
+
   icon: {
    color: "white",
-   fontSize: "35px",  
+   fontSize: "35px", 
+ 
+},
 
-}
+
  
 
 
@@ -30,8 +36,7 @@ const Tools = withRouter(({ history, ...props }) => {
 
   const screenIcon = history.location.pathname.includes("chart") ? (
     <IconButton className={classes.menuBut}  onClick={() => history.goBack()}>
-      <FullscreenExit
-       
+      <FullscreenExit       
         className={classes.icon}
       />
     </IconButton>
@@ -42,24 +47,25 @@ const Tools = withRouter(({ history, ...props }) => {
       </IconButton>
     </NavLink>
   );
-
+ 
+  console.log(props.zoomMinusActive)
 
   return (
     <div className="tools">
       <Toolbar>
-        <IconButton onClick={props.panLeft} className={classes.menuBut}>
+        <IconButton onClick={props.panLeft} className={classes.menuBut} disabled={!props.panLeftActive}>
           <NavigateBefore className={classes.icon} />
         </IconButton>
-        <IconButton onClick={props.panRight} className={classes.menuBut}>
+        <IconButton onClick={props.panRight} className={classes.menuBut} disabled={!props.panRightActive}>
           <NavigateNext className={classes.icon} />
         </IconButton>
         <IconButton onClick={props.resetChart} className={classes.menuBut}>
           <Refresh className={classes.icon} />
         </IconButton>
-        <IconButton onClick={props.zoomPlus} className={classes.menuBut}>
+        <IconButton onClick={props.zoomPlus} className={classes.menuBut} disabled={!props.zoomPlusActive}>
           <ZoomIn className={classes.icon} />
         </IconButton>
-        <IconButton onClick={props.zoomMinus} className={classes.menuBut}>
+        <IconButton onClick={props.zoomMinus} disabled={!props.zoomMinusActive} className={classes.menuBut} >
           <ZoomOut className={classes.icon} />
         </IconButton>
         <Router>{screenIcon}</Router>
