@@ -18,6 +18,7 @@ export default class ChartBig3 extends Component {
     const initZoom = props.data.values.filter(
       (el, i) => i > props.data.values.length * 0.9
     );
+    
     super(props);
     this.state = {
       data: props.data.values,
@@ -27,7 +28,10 @@ export default class ChartBig3 extends Component {
       chartWidth: 450, 
       chartHeight: 300
     };
-  }
+
+   }
+
+
 
   changeChartDimmensions = () => {
     const tempWidth = window.innerWidth
@@ -35,7 +39,7 @@ export default class ChartBig3 extends Component {
     if(Math.abs(this.state.chartWidth-tempWidth ) || Math.abs(this.state.chartHeight-tempHeight ) >10 )  this.setState({chartWidth: tempWidth, chartHeight: tempHeight})     
     }
 
-  componentDidMount() {
+  componentWillMount() {
     this.changeChartDimmensions();
     window.addEventListener("resize", () => this.changeChartDimmensions());  
   }
@@ -44,7 +48,7 @@ export default class ChartBig3 extends Component {
     window.removeEventListener("resize", () => this.changeChartDimmensions());
   }
 
-
+ 
   zoomMinus = () => {    
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     if (leftIndex === 0) return;
