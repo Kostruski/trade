@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Tools from "../tools.js"
+import Tools from "../tools.js";
 import _ from "lodash";
 import {
   VictoryChart,
@@ -18,61 +18,70 @@ export default class ChartBig3 extends Component {
     const initZoom = props.data.values.filter(
       (el, i) => i > props.data.values.length * 0.9
     );
-    
+
     super(props);
     this.state = {
       data: props.data.values,
       initZoom: initZoom,
       currZoom: initZoom,
       zoomValue: 0,
-      chartWidth: 450, 
-      chartHeight: 300
+      chartWidth: 450,
+      chartHeight: 300,
+      zoomMinusActive: true,
+      zoomPlusActive: true,
+      panLeftActive: true,
+      panRightActive: true
     };
-
-   }
-
-
+  }
 
   changeChartDimmensions = () => {
-    const tempWidth = window.innerWidth
-    const tempHeight = window.innerHeight-100
-    if(Math.abs(this.state.chartWidth-tempWidth ) || Math.abs(this.state.chartHeight-tempHeight ) >10 )  this.setState({chartWidth: tempWidth, chartHeight: tempHeight})     
-    }
+    const tempWidth = window.innerWidth - 60;
+    const tempHeight = window.innerHeight - 100;
+    if (
+      Math.abs(this.state.chartWidth - tempWidth) ||
+      Math.abs(this.state.chartHeight - tempHeight) > 10
+    )
+      this.setState({ chartWidth: tempWidth, chartHeight: tempHeight });
+  };
 
   componentWillMount() {
     this.changeChartDimmensions();
-    window.addEventListener("resize", () => this.changeChartDimmensions());  
+    window.addEventListener("resize", () => this.changeChartDimmensions());
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", () => this.changeChartDimmensions());
   }
 
- 
-  zoomMinus = () => {    
+  zoomMinus = () => {
+    if(!this.setState.zoomPlusActive) this.setState({zoomPlusActive: true})
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
-    if (leftIndex === 0) return;
+    if (leftIndex === 0) {this.setState({zoomMinusActive: false}); return;}
     this.setState({ zoomValue: 1 }, () => {
       this.updateRange();
     });
   };
 
   zoomPlus = () => {
-    if (this.state.currZoom.length < 30) return;
+    if(!this.setState.zoomMinusActive) this.setState({zoomMinusActive: true})
+    if (this.state.currZoom.length < 30) {this.setState({zoomPlusActive: false}); return;}
     this.setState({ zoomValue: -1 }, () => {
       this.updateRange();
     });
   };
 
-  resetChart = () => {
-    if(this.state.currZoom !== this.state.initZoom) this.setState({currZoom: this.state.initZoom})
-  }
+resetChart = () => {
+  if (this.state.currZoom !== this.state.initZoom)
+    this.setState({ currZoom: this.state.initZoom, zoomPlusActive: true, zoomMinusActive: true, panLeftActive: true, panRightActive: true });
+};
+
 
   panLeft = () => {
+    if(!this.setState.panRightActive) this.setState({panRightActive: true})
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
     const length = this.state.currZoom.length;
-    if (leftIndex < 60 && length < 60) return;
+    if (leftIndex < 60 && length < 60) {this.setState({panLeftActive: false}); return;}
     const zoomed = this.state.data.filter(
       (el, i) =>
         i >= leftIndex - Math.round(length / 10) &&
@@ -82,10 +91,11 @@ export default class ChartBig3 extends Component {
   };
 
   panRight = () => {
+    if(!this.setState.panLeftActive) this.setState({panLeftActive: true})
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
     const length = this.state.currZoom.length;
-    if (rightIndex > this.state.data.length - 2 && length < 60) return;
+    if (rightIndex > this.state.data.length - 2 && length < 60) {this.setState({panRightActive: false}); return;}
     const zoomed = this.state.data.filter(
       (el, i) =>
         i >= leftIndex + Math.round(length / 10) &&
@@ -97,7 +107,6 @@ export default class ChartBig3 extends Component {
   updateRange = () => {
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
-    let length = this.state.data.length;
     const zoomed = this.state.data.filter(
       (el, i) =>
         i >=
@@ -112,130 +121,151 @@ export default class ChartBig3 extends Component {
 
     return (
       <div className="chartBoxBigWrapper">
-      <div className="chartBox">
-        <div className="legend">
-          <div className="colorBox">
-            <span
+        <div className="chartBox">
+          <div className="legend">
+            <div className="colorBox">
+              <span
+                style={{
+                  backgroundColor: `${this.props.data.color}`
+                }}
+              />
+              <div>SPX</div>
+            </div>
+            <div className="colorBox">
+              <span
+                style={{
+                  backgroundColor: "pink"
+                }}
+              />
+              <div>Long term</div>
+            </div>
+            <div className="colorBox">
+              <span
+                style={{
+                  backgroundColor: "yellow"
+                }}
+              />
+              <div>Mid term</div>
+            </div>
+            <Tools
+              resetChart={this.resetChart}
+              id={this.props.data.id}
+              zoomPlus={this.zoomPlus}
+              zoomMinus={this.zoomMinus}
+              panLeft={this.panLeft}
+              panRight={this.panRight}
+              zoomMinusActive={this.state.zoomMinusActive}
+              zoomPlusActive={this.state.zoomPlusActive}
+              panLeftActive={this.state.panLeftActive}
+              panRightActive={this.state.panRightActive}
+            />
+          </div>
+
+          <VictoryChart
+            containerComponent={<VictoryVoronoiContainer />}
+            width={this.state.chartWidth}
+            height={this.state.chartHeight}
+          >
+            <VictoryAxis
+              scale="time"
+              orientation="bottom"
+              fixLabelOverlap={true}
+              offsetY={50}
               style={{
-                backgroundColor: `${this.props.data.color}`
+                tickLabels: { fontSize: 17, padding: 5 }
               }}
             />
-            <div>SPX</div>
-          </div>
-          <div className="colorBox">
-            <span
+
+            <VictoryAxis
+              orientation="right"
+              dependentAxis
+              tickFormat={x => `${(x * spxMax).toFixed(0)}`}
+              fixLabelOverlap={true}
               style={{
-                backgroundColor: "pink"
+                tickLabels: { fontSize: 17, padding: 5 }
+              }}
+              crossAxis={false}
+            />
+
+            <VictoryLine
+              data={this.state.currZoom}
+              x={"x"}
+              y={"SPX"}
+              labels={d => `spx: ${d["SPX"] * spxMax.toFixed(2)}
+            date: ${d.x}`}
+              labelComponent={
+                <VictoryTooltip
+                  flyoutStyle={{ fill: "black" }}
+                  dy={-55}
+                  width={200}
+                  horizontal={true}
+                />
+              }
+              style={{
+                data: {
+                  stroke: `${this.props.data.color}`,
+                  strokeWidth: 1
+                },
+                labels: { fontSize: 17 }
               }}
             />
-            <div>Long term</div>
-          </div>
-          <div className="colorBox">
-            <span
+
+            <VictoryAxis
+              dependentAxis
+              orientation="left"
+              tickFormat={z => `${(z * midMax).toFixed(2)}`}
+               fixLabelOverlap={true}
               style={{
-                backgroundColor: "yellow"
+                tickLabels: { fontSize: 17, padding: 5 }
+              }}
+              crossAxis={false}
+            />
+
+            <VictoryLine
+              data={this.state.currZoom}
+              x={"x"}
+              y={"Long Term"}
+              labels={d =>
+                `Long term: ${(d["Long Term"] * midMax).toFixed(2)}
+              date: ${d.x}`
+              }
+              labelComponent={
+                <VictoryTooltip
+                  flyoutStyle={{ fill: "black" }}
+                  dy={-50}
+                  width={200}
+                  horizontal={true}
+                />
+              }
+              style={{
+                data: { stroke: "pink", strokeWidth: 1 },
+                labels: { fontSize: 17 }
               }}
             />
-            <div>Mid term</div>
-          </div>
-          <Tools resetChart={this.resetChart} id={this.props.data.id} zoomPlus={this.zoomPlus} zoomMinus={this.zoomMinus} panLeft={this.panLeft} panRight={this.panRight}/>
+
+            <VictoryLine
+              data={this.state.currZoom}
+              x={"x"}
+              y={"Mid Term"}
+              labels={d =>
+                `Mid term: ${(d["Mid Term"] * midMax).toFixed(2)}
+              date: ${d.x}`
+              }
+              labelComponent={
+                <VictoryTooltip
+                  flyoutStyle={{ fill: "black" }}
+                  dy={-50}
+                  width={200}
+                  horizontal={true}
+                />
+              }
+              style={{
+                data: { stroke: "yellow", strokeWidth: 1 },
+                labels: { fontSize: 17 }
+              }}
+            />
+          </VictoryChart>
         </div>
-
-        <VictoryChart containerComponent={<VictoryVoronoiContainer />}
-        width={this.state.chartWidth}
-        height={this.state.chartHeight}
-        >
-          <VictoryAxis
-            scale="time"
-            orientation="bottom"
-            // tickCount={14}
-            fixLabelOverlap={true}
-            offsetY={50}
-            style={{
-              tickLabels: { fontSize: 20, padding: 5 }
-            }}
-          />
-
-          <VictoryAxis
-            orientation="right"
-            dependentAxis
-            tickFormat={x => `${(x * spxMax).toFixed(2)}`}
-            // tickCount={10}
-            fixLabelOverlap={true}
-            style={{
-              tickLabels: { fontSize: 20, padding: 5 }
-            }}
-            crossAxis={false}
-          />
-
-          <VictoryLine
-            data={this.state.currZoom}
-            x={"x"}
-            y={"SPX"}
-            labels={d => `spx: ${d["SPX"] * spxMax.toFixed(2)} date: ${d.x}`}
-            labelComponent={
-              <VictoryTooltip
-                flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
-              />
-            }
-            style={{
-              data: {
-                stroke: `${this.props.data.color}`,
-                strokeWidth: 1
-              },
-              labels: { fontSize: 20 }
-            }}
-          />
-
-          <VictoryAxis
-            dependentAxis
-            orientation="left"
-            tickFormat={z => `${(z * midMax).toFixed(2)}`}
-            // tickCount={10}
-            fixLabelOverlap={true}
-            style={{
-              tickLabels: { fontSize: 20, padding: 5 }
-            }}
-            crossAxis={false}
-          />
-
-          <VictoryLine
-            data={this.state.currZoom}
-            x={"x"}
-            y={"Long Term"}
-            labels={d =>
-              `Long term: ${(d["Long Term"] * midMax).toFixed(2)} date: ${d.x}`
-            }
-            labelComponent={
-              <VictoryTooltip
-                flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
-              />
-            }
-            style={{
-              data: { stroke: "pink", strokeWidth: 1 },
-              labels: { fontSize: 20 }
-            }}
-          />
-
-          <VictoryLine
-            data={this.state.currZoom}
-            x={"x"}
-            y={"Mid Term"}
-            labels={d =>
-              `Mid term: ${(d["Mid Term"] * midMax).toFixed(2)} date: ${d.x}`
-            }
-            labelComponent={
-              <VictoryTooltip
-                flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
-              />
-            }
-            style={{
-              data: { stroke: "yellow", strokeWidth: 1 },
-              labels: { fontSize: 20 }
-            }}
-          />
-        </VictoryChart>
-      </div>
       </div>
     );
   }

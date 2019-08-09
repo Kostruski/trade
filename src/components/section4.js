@@ -1,6 +1,5 @@
 import Chart from "./charts/chart.js";
 import React, { Component } from "react";
-import { HashRouter as Router, NavLink, Switch, Route } from "react-router-dom";
 import Chart3 from "./charts/chart3.js";
 
 export default class Section4 extends Component {

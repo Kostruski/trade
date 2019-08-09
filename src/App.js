@@ -115,7 +115,7 @@ export default class App extends Component {
             />
             <Route
                path={`/${this.state.data2[4].id}`}
-              render={() => <Chart data={this.state.data2[4]} />}
+              render={() => <ChartBig data={this.state.data2[4]} />}
             />
           </Switch>
         </>

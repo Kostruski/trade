@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Tools from "../tools.js"
+import Tools from "../tools.js";
 import _ from "lodash";
 import {
   VictoryChart,
@@ -23,31 +23,58 @@ export default class Chart3 extends Component {
       data: props.data.values,
       initZoom: initZoom,
       currZoom: initZoom,
-      zoomValue: 0
+      zoomValue: 0,
+      zoomMinusActive: true,
+      zoomPlusActive: true,
+      panLeftActive: true,
+      panRightActive: true
     };
   }
 
   zoomMinus = () => {
+    if (!this.setState.zoomPlusActive) this.setState({ zoomPlusActive: true });
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
-
-    if (leftIndex === 0) return;
+    if (leftIndex === 0) {
+      this.setState({ zoomMinusActive: false });
+      return;
+    }
     this.setState({ zoomValue: 1 }, () => {
       this.updateRange();
     });
   };
 
   zoomPlus = () => {
-    if (this.state.currZoom.length < 30) return;
+    if (!this.setState.zoomMinusActive)
+      this.setState({ zoomMinusActive: true });
+    if (this.state.currZoom.length < 30) {
+      this.setState({ zoomPlusActive: false });
+      return;
+    }
     this.setState({ zoomValue: -1 }, () => {
       this.updateRange();
     });
   };
 
+  resetChart = () => {
+    if (this.state.currZoom !== this.state.initZoom)
+      this.setState({
+        currZoom: this.state.initZoom,
+        zoomPlusActive: true,
+        zoomMinusActive: true,
+        panLeftActive: true,
+        panRightActive: true
+      });
+  };
+
   panLeft = () => {
+    if (!this.setState.panRightActive) this.setState({ panRightActive: true });
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
     const length = this.state.currZoom.length;
-    if (leftIndex < 60 && length < 60) return;
+    if (leftIndex < 60 && length < 60) {
+      this.setState({ panLeftActive: false });
+      return;
+    }
     const zoomed = this.state.data.filter(
       (el, i) =>
         i >= leftIndex - Math.round(length / 10) &&
@@ -57,16 +84,20 @@ export default class Chart3 extends Component {
   };
 
   panRight = () => {
+    if (!this.setState.panLeftActive) this.setState({ panLeftActive: true });
     const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
     const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
     const length = this.state.currZoom.length;
-    if (rightIndex > this.state.data.length - 2 && length < 60) return;
+    if (rightIndex > this.state.data.length - 2 && length < 60) {
+      this.setState({ panRightActive: false });
+      return;
+    }
     const zoomed = this.state.data.filter(
       (el, i) =>
         i >= leftIndex + Math.round(length / 10) &&
         i <= rightIndex + Math.round(length / 10)
     );
-    this.setState({ currZoom: zoomed } );
+    this.setState({ currZoom: zoomed });
   };
 
   updateRange = () => {
@@ -79,19 +110,8 @@ export default class Chart3 extends Component {
           leftIndex - (this.state.currZoom.length / 5) * this.state.zoomValue &&
         i <= rightIndex
     );
-    this.setState({ currZoom: zoomed }, () =>
-      console.log(
-        this.state.zoomValue,
-        this.state.data.indexOf(_.head(this.state.currZoom)),
-        this.state.data.indexOf(_.last(this.state.currZoom)),
-        this.state.currZoom.length
-      )
-    );
+    this.setState({ currZoom: zoomed });
   };
-
-  resetChart = () => {
-     if(this.state.currZoom !== this.state.initZoom) this.setState({currZoom: this.state.initZoom})
-  }
 
   render() {
     const data = this.state.data;
@@ -123,17 +143,24 @@ export default class Chart3 extends Component {
             />
             <div>Mid term</div>
           </div>
-          <Tools resetChart={this.resetChart} id={this.props.data.id} zoomPlus={this.zoomPlus} zoomMinus={this.zoomMinus} panLeft={this.panLeft} panRight={this.panRight}/>
+          <Tools
+            resetChart={this.resetChart}
+            id={this.props.data.id}
+            zoomPlus={this.zoomPlus}
+            zoomMinus={this.zoomMinus}
+            panLeft={this.panLeft}
+            panRight={this.panRight}
+            zoomMinusActive={this.state.zoomMinusActive}
+            zoomPlusActive={this.state.zoomPlusActive}
+            panLeftActive={this.state.panLeftActive}
+            panRightActive={this.state.panRightActive}
+          />
         </div>
 
-        <VictoryChart
-     
-        // containerComponent={<VictoryVoronoiContainer />}
-        >
+        <VictoryChart>
           <VictoryAxis
             scale="time"
             orientation="bottom"
-            // tickCount={14}
             fixLabelOverlap={true}
             offsetY={50}
             style={{
@@ -145,7 +172,6 @@ export default class Chart3 extends Component {
             orientation="right"
             dependentAxis
             tickFormat={x => `${(x * spxMax).toFixed(2)}`}
-            // tickCount={10}
             fixLabelOverlap={true}
             style={{
               tickLabels: { fontSize: 10, padding: 5 }
@@ -157,10 +183,12 @@ export default class Chart3 extends Component {
             data={this.state.currZoom}
             x={"x"}
             y={"SPX"}
-            labels={d => `spx: ${d["SPX"] * spxMax.toFixed(2)} date: ${d.x}`}
+            labels={d => `spx: ${d["SPX"] * spxMax.toFixed(2)} 
+            date: ${d.x}`}
             labelComponent={
               <VictoryTooltip
-                flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
+                flyoutStyle={{ fill: "black"}}
+                horizontal={true}
               />
             }
             style={{
@@ -176,7 +204,6 @@ export default class Chart3 extends Component {
             dependentAxis
             orientation="left"
             tickFormat={z => `${(z * midMax).toFixed(2)}`}
-            // tickCount={10}
             fixLabelOverlap={true}
             style={{
               tickLabels: { fontSize: 10, padding: 5 }
@@ -189,11 +216,13 @@ export default class Chart3 extends Component {
             x={"x"}
             y={"Long Term"}
             labels={d =>
-              `Long term: ${(d["Long Term"] * midMax).toFixed(2)} date: ${d.x}`
+              `Long term: ${(d["Long Term"] * midMax).toFixed(2)} 
+              date: ${d.x}`
             }
             labelComponent={
               <VictoryTooltip
-                flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
+                flyoutStyle={{ fill: "black" }}
+                horizontal={true}
               />
             }
             style={{
@@ -207,11 +236,13 @@ export default class Chart3 extends Component {
             x={"x"}
             y={"Mid Term"}
             labels={d =>
-              `Mid term: ${(d["Mid Term"] * midMax).toFixed(2)} date: ${d.x}`
+              `Mid term: ${(d["Mid Term"] * midMax).toFixed(2)} 
+              date: ${d.x}`
             }
             labelComponent={
               <VictoryTooltip
-                flyoutStyle={{ fill: "black", fillOpacity: 0.4 }}
+                flyoutStyle={{ fill: "black" }}
+                horizontal={true}
               />
             }
             style={{
