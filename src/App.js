@@ -22,14 +22,14 @@ export default class App extends Component {
     data1: wykres1,
     data2: chartsArr,
     isLoggedIn: false,
-    isNewUser : true,
+    isNewUser: true
   };
 
-  
-  changeNewUser = () => this.setState({isNewUser: true})
+  changeNewUser = () => this.setState({ isNewUser: false, isLoggedIn: true });
+
   toggleLogin = () => {
-    this.setState(prev => ({isLoggedIn: !prev.isLoggedIn}))
-  }
+    this.setState(prev => ({ isLoggedIn: !prev.isLoggedIn }));
+  };
 
   render() {
     const ProtectedRoute = ({ isAllowed, ...props }) =>
@@ -39,11 +39,25 @@ export default class App extends Component {
       <div className="appWrapper">
         <div className="sideAndMain">
           <div className="main">
-            <Header toggleLogin={this.toggleLogin} isLoggedIn={this.state.isLoggedIn}  />
+            <Header
+              toggleLogin={this.toggleLogin}
+              isLoggedIn={this.state.isLoggedIn}
+            />
             <Router>
               <>
                 <Switch>
-                  <Route exact path="/" render={() => <LoginPage changeNewUser={this.changeNewUser} toggleLogin={this.toggleLogin} isLoggedIn={this.state.isLoggedIn} />} />
+                  <Route
+                    exact
+                    path="/"
+                    render={() => (
+                      <LoginPage
+                        changeNewUser={this.changeNewUser}
+                        isNewUser={this.state.isNewUser}
+                        toggleLogin={this.toggleLogin}
+                        isLoggedIn={this.state.isLoggedIn}
+                      />
+                    )}
+                  />
                   <Route exact path="/contact" render={() => <Contact />} />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
@@ -90,32 +104,32 @@ export default class App extends Component {
                   />
 
                   <ProtectedRoute
-                   isAllowed={this.state.isLoggedIn}
+                    isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data1.id}`}
                     render={() => <ChartBig3 data={this.state.data1} />}
                   />
                   <ProtectedRoute
-                   isAllowed={this.state.isLoggedIn}
+                    isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data2[0].id}`}
                     render={() => <ChartBig data={this.state.data2[0]} />}
                   />
                   <ProtectedRoute
-                   isAllowed={this.state.isLoggedIn}
+                    isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data2[1].id}`}
                     render={() => <ChartBig data={this.state.data2[1]} />}
                   />
                   <ProtectedRoute
-                   isAllowed={this.state.isLoggedIn}
+                    isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data2[2].id}`}
                     render={() => <ChartBig data={this.state.data2[2]} />}
                   />
                   <ProtectedRoute
-                   isAllowed={this.state.isLoggedIn}
+                    isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data2[3].id}`}
                     render={() => <ChartBig data={this.state.data2[3]} />}
                   />
                   <ProtectedRoute
-                   isAllowed={this.state.isLoggedIn}
+                    isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data2[4].id}`}
                     render={() => <ChartBig data={this.state.data2[4]} />}
                   />

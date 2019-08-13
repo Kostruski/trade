@@ -4,10 +4,14 @@ import _ from "lodash";
 import {
   VictoryChart,
   VictoryLine,
+  createContainer,
   VictoryVoronoiContainer,
+  VictoryCursorContainer,
   VictoryTooltip,
   VictoryAxis
 } from "victory";
+
+const VictoryCursorVoronoiContainer = createContainer("cursor", "voronoi");
 
 export default class ChartBig extends Component {
   constructor(props) {
@@ -145,7 +149,16 @@ export default class ChartBig extends Component {
           <VictoryChart
           width={this.state.chartWidth}
           height={this.state.chartHeight}
-          containerComponent={<VictoryVoronoiContainer />}>
+          // containerComponent={<VictoryVoronoiContainer />}
+          // containerComponent={
+          // <VictoryCursorContainer
+          //   cursorLabel={d => `${this.props.data.yValue} ${d.y.toFixed(2)}  date: ${d.x}
+          //   `}
+          // />} 
+          containerComponent = {<VictoryCursorVoronoiContainer radius={300}  cursorLabel={d => `${this.props.data.yValue} ${d.y.toFixed(2)}`}/>}
+          
+          >          
+          
             <VictoryAxis
               scale="time"
               orientation="bottom"
@@ -169,14 +182,17 @@ export default class ChartBig extends Component {
 
             <VictoryLine
               data={this.state.currZoom}              
-              labels={d => `${d.y.toFixed(2)}
-              ${d.x} `}
+              labels={d => ` ${this.props.data.yValue} ${d.y.toFixed(2)} 
+              DATE: ${d.x} `}
               labelComponent={
                 <VictoryTooltip
                   flyoutStyle={{ fill: "black"}}
                   dy={-55}
                   width={150}
+                  x={10}
+                  y={10}
                   horizontal={true}
+                  pointerLength={0}
                 />
               }
               style={{
