@@ -34,15 +34,28 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '100%', 
-    marginTop: theme.spacing(1),
-    color: theme.palette.common.white,
-    MuiInputBase: {
-      color: theme.palette.common.white,
-    }
+    marginTop: theme.spacing(1),    
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+
+  textFieldFormLabel: {
+    color: theme.palette.common.white,
+    },
+
+  cssLabel: {
+    color : theme.palette.common.white,   
+    },
+
+  cssOutlinedInput : {
+     color: theme.palette.common.white,   
+   },
+
+  notchedOutline: {
+    borderColor: theme.palette.common.white,  
+    }
+
  
 
 }));
@@ -72,18 +85,43 @@ const LoginPage = (props) => {
             </Typography>
             <form className={classes.form} noValidate>
               <TextField
-                 className={classes.textField}
+               InputLabelProps={{
+               classes: {
+                 root: classes.cssLabel,
+                //  focused: classes.cssFocused,
+               },
+               }}
+               InputProps={{
+                 classes: {
+                  root: classes.cssOutlinedInput,
+                  //  focused: classes.cssFocused,
+                   notchedOutline: classes.notchedOutline,
+                 }            
+               }}
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
                 id="email"
-                label="Emas.il Address"
+                label="Email Address"
                 name="email"
                 autoComplete="email"
                 autoFocus
               />
               <TextField
+               InputLabelProps={{
+               classes: {
+                 root: classes.cssLabel,
+                //  focused: classes.cssFocused,
+               },
+               }}
+               InputProps={{
+                 classes: {
+                  root: classes.cssOutlinedInput,
+                  //  focused: classes.cssFocused,
+                   notchedOutline: classes.notchedOutline,
+                 }            
+               }}
                 variant="outlined"
                 margin="normal"
                 required
@@ -95,7 +133,7 @@ const LoginPage = (props) => {
                 autoComplete="current-password"
               />
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox value="remember" color="primary" className={classes.cssOutlinedInput} />}
                 label="Remember me"
               />
               <Button
