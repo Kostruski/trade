@@ -1,13 +1,13 @@
 import Chart from "./charts/chart.js";
 import React, { Component } from "react";
-import { HashRouter as Router, NavLink, Switch, Route } from "react-router-dom";
+import BarChart from "./charts/barChart.js"
 import Chart3 from "./charts/chart3.js";
 
 export default class Section3 extends Component {
   render() {
     return (
       <div className="sectionWrapper">
-        <Chart data={this.props.data.data2[1]} />
+        <BarChart data={this.props.data.data2[1]} />
 
         <Chart data={this.props.data.data2[2]} />
 
@@ -15,7 +15,7 @@ export default class Section3 extends Component {
 
         <Chart data={this.props.data.data2[0]} />
 
-        <Chart data={this.props.data.data2[3]} />
+        <BarChart data={this.props.data.data2[3]} />
 
         <Chart3 data={this.props.data.data1} />
       </div>

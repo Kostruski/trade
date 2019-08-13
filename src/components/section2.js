@@ -1,6 +1,7 @@
 import Chart from "./charts/chart.js";
 import React, { Component } from "react";
 import Chart3 from "./charts/chart3.js";
+import BarChart from "./charts/barChart.js"
 
 export default class Section2 extends Component {
   render() {
@@ -8,7 +9,7 @@ export default class Section2 extends Component {
       <div className="sectionWrapper">
         <Chart3 data={this.props.data.data1} />
 
-        <Chart data={this.props.data.data2[1]} />
+        <BarChart data={this.props.data.data2[1]} />
 
         <Chart data={this.props.data.data2[2]} />
 
@@ -16,7 +17,7 @@ export default class Section2 extends Component {
 
         <Chart data={this.props.data.data2[0]} />
 
-        <Chart data={this.props.data.data2[3]} />
+        <BarChart data={this.props.data.data2[3]} />
       </div>
     );
   }

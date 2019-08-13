@@ -198,7 +198,7 @@ export default function SignUpForm(props) {
             Sign Up
           </Button>
           <Grid container justify="flex-end">
-            <Grid item>
+            <Grid item onClick={props.props.changeNewUser}>
               <Link href="#" variant="body2">
                 Already have an account? Sign in
               </Link>
