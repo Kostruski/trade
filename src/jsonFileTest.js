@@ -52,19 +52,19 @@ function Chart (
     (this.isLiked = isLiked);
 };
 
+const wykres3line = new Chart("chart3line", "salmon", "Long Term", "wykres chart1", "dodatkowy opis chart 1" ) 
 
+const wykres1 = new Chart("chart1", "green", "Long Term", "wykres chart1", "dodatkowy opis chart 1" ) 
 
-const wykres1 = new Chart("chart1", "green", "linia wykresu chart1", "wykres chart1", "dodatkowy opis chart 1" ) 
+const wykres2 = new Chart("chart2", "tomato", "SPX", "wykres SPX", "dodatkowy opis chart 2" ) 
 
-const wykres2 = new Chart("chart2", "tomato", "SPX", "wykres SPX", "dodatkowy opis chart 1" ) 
+const wykres3 = new Chart("chart3", "pink", "Long Term", "wykres Long Term", "dodatkowy opis chart 3")
 
-const wykres3 = new Chart("chart3", "pink", "Long Term", "wykres Long Term", "dodatkowy opis chart 1")
+const wykres4 = new Chart("chart4", "silver", "Mid Term", "wykres Mid Term", "dodatkowy opis chart 4")
 
-const wykres4 = new Chart("chart4", "green", "Mid Term", "wykres Mid Term", "dodatkowy opis chart 1")
+const wykres5 = new Chart("chart5", "purple", "Mid Term", "wykres Mid Term", "dodatkowy opis chart 5")
 
-const wykres5 = new Chart("chart5", "green", "Mid Term", "wykres Mid Term", "dodatkowy opis chart 1")
-
-const chartsArr = [wykres2, wykres2, wykres3, wykres4, wykres5]
+const chartsArr = [wykres1, wykres2, wykres3, wykres4, wykres5]
 
 const spx = [];
 const long = [];
@@ -120,7 +120,8 @@ const addValuesToChart = (chart, val1) => {
 
 
 
-addValuesToChart3(wykres1, "SPX","Long Term", "Mid Term"  )
+addValuesToChart3(wykres3line, "SPX","Long Term", "Mid Term"  )
+addValuesToChart(wykres1, "Long Term" )
 addValuesToChart(wykres2, "SPX" )
 addValuesToChart(wykres3, "Long Term" )
 addValuesToChart(wykres4, "Mid Term" )
@@ -133,7 +134,7 @@ addValuesToChart(wykres5, "Mid Term" )
 
 
 export {chartsArr};
-export {wykres1};
+export {wykres3line};
 
 
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Menu, MenuItem } from "@material-ui/core";
+import { AppBar, Menu, MenuItem, Card, CardContent } from "@material-ui/core";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -162,7 +162,19 @@ export default function Header(props) {
             open={isProfileOpen}
             onClose={profileClose}
           >
-            <MenuItem>My Account</MenuItem>
+            <Card>
+              <CardContent>
+                <Typography variant="h5" component="h2">
+                  User Info
+                </Typography>
+                <Typography variant="body2" component="p">
+                 Lorem ipsum dolor sit amet 
+                  <br />
+                Days premium left: 50
+                </Typography>
+              </CardContent>
+            </Card>
+            <MenuItem >Buy premium</MenuItem>
             <MenuItem onClick={logOut}>Log out</MenuItem>
           </Menu>
         </AppBar>

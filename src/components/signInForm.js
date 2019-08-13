@@ -153,7 +153,7 @@ const SignInPage = (props) => {
                     Forgot password?
                   </Link>
                 </Grid>
-                <Grid item>
+                <Grid item onClick={props.props.signUp}>
                   <Link href="#" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>

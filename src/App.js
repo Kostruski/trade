@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { chartsArr, wykres1 } from "./jsonFileTest.js";
+import { chartsArr, wykres3line } from "./jsonFileTest.js";
 import ChartBig3 from "./components/charts/chartBig3.js";
 import ChartBig from "./components/charts/chartBig.js";
+import BarChartBig from "./components/charts/barChartBig.js";
 import {
   HashRouter as Router,
   Switch,
@@ -19,13 +20,15 @@ import Contact from "./components/contact.js";
 
 export default class App extends Component {
   state = {
-    data1: wykres1,
+    data1: wykres3line,
     data2: chartsArr,
     isLoggedIn: false,
     isNewUser: true
   };
 
-  changeNewUser = () => this.setState({ isNewUser: false, isLoggedIn: true });
+  changeNewUser = () => this.setState({ isNewUser: false });
+
+  signUp = () => this.setState({ isNewUser: true });
 
   toggleLogin = () => {
     this.setState(prev => ({ isLoggedIn: !prev.isLoggedIn }));
@@ -41,7 +44,7 @@ export default class App extends Component {
           <div className="main">
             <Header
               toggleLogin={this.toggleLogin}
-              isLoggedIn={this.state.isLoggedIn}
+              isLoggedIn={this.state.isLoggedIn}            
             />
             <Router>
               <>
@@ -55,6 +58,7 @@ export default class App extends Component {
                         isNewUser={this.state.isNewUser}
                         toggleLogin={this.toggleLogin}
                         isLoggedIn={this.state.isLoggedIn}
+                        signUp={this.signUp}
                       />
                     )}
                   />
@@ -116,7 +120,7 @@ export default class App extends Component {
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data2[1].id}`}
-                    render={() => <ChartBig data={this.state.data2[1]} />}
+                    render={() => <BarChartBig data={this.state.data2[1]} />}
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
@@ -126,7 +130,7 @@ export default class App extends Component {
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
                     path={`/${this.state.data2[3].id}`}
-                    render={() => <ChartBig data={this.state.data2[3]} />}
+                    render={() => <BarChartBig data={this.state.data2[3]} />}
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
