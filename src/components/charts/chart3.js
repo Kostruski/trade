@@ -170,6 +170,7 @@ export default class Chart3 extends Component {
 
           <VictoryAxis
             orientation="right"
+            domain={{y:[0.5,1]}}
             dependentAxis
             tickFormat={x => `${(x * spxMax).toFixed(2)}`}
             fixLabelOverlap={true}
