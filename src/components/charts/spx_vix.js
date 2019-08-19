@@ -5,21 +5,30 @@ import {
   VictoryChart,
   VictoryLine,
   VictoryTooltip,
-  VictoryAxis
+  VictoryAxis,
+  VictoryBar,
+  VictoryArea
 } from "victory";
 
-const spxMax = 3013.0;
-const longMax = 0.92;
-const midMax = 2.31;
 
-export default class Chart3 extends Component {
+
+export default class Spx_vix extends Component {
   constructor(props) {
-    const initZoom = props.data.values.filter(
-      (el, i) => i > props.data.values.length * 0.9
-    );
+    
+    
+    const data = props.data.map(el => ({
+      x: el["Date"].slice(2, 10),
+      SPX: el["SPX"],
+      MCI: el["Master Composite Index"]
+    }));
+
+    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    // const tickValues = initZoom.map(el => el["x"])
+
+
     super(props);
     this.state = {
-      data: props.data.values,
+      data: data,
       initZoom: initZoom,
       currZoom: initZoom,
       zoomValue: 0,
@@ -113,7 +122,19 @@ export default class Chart3 extends Component {
   };
 
   render() {
-    const data = this.state.data;
+   
+   
+    // const spxMax = _.maxBy(this.state.currZoom, "SPX")["SPX"] tu jest maksymalny zakres widoku 
+    // const mciMax = _.maxBy(this.state.currZoom, "MCI")["MCI"]
+    // const spxMin =  _.minBy(this.state.currZoom, "SPX")["SPX"]
+    // const mciMin = _.minBy(this.state.currZoom, "MCI")["MCI"]
+
+    const spxMax = _.maxBy(this.state.data, "SPX")["SPX"]
+    const mciMax = _.maxBy(this.state.data, "MCI")["MCI"]
+    const spxMin =  _.minBy(this.state.data, "SPX")["SPX"]
+    const mciMin = _.minBy(this.state.data, "MCI")["MCI"]
+   
+    console.log(this.state.currZoom, spxMax, mciMax, spxMin, mciMin)
 
     return (
       <div className="chartBox">
@@ -121,7 +142,7 @@ export default class Chart3 extends Component {
           <div className="colorBox">
             <span
               style={{
-                backgroundColor: `${this.props.data.color}`
+                backgroundColor: "navy"
               }}
             />
             <div>SPX</div>
@@ -132,19 +153,12 @@ export default class Chart3 extends Component {
                 backgroundColor: "pink"
               }}
             />
-            <div>Long term</div>
+            <div>Master Composite Index</div>
           </div>
-          <div className="colorBox">
-            <span
-              style={{
-                backgroundColor: "yellow"
-              }}
-            />
-            <div>Mid term</div>
-          </div>
+
           <Tools
             resetChart={this.resetChart}
-            id={this.props.data.id}
+            id="chartspx_vix"
             zoomPlus={this.zoomPlus}
             zoomMinus={this.zoomMinus}
             panLeft={this.panLeft}
@@ -156,22 +170,66 @@ export default class Chart3 extends Component {
           />
         </div>
 
-        <VictoryChart>
+        <svg viewBox="0 0 450 350">
+          <g>
           <VictoryAxis
             scale="time"
+            standalone={false}
+            tickValues={this.state.currZoom.map(el => el["x"])}
             orientation="bottom"
-            fixLabelOverlap={true}
+            fixLabelOverlap={true}           
             offsetY={50}
             style={{
               tickLabels: { fontSize: 10, padding: 5 }
             }}
           />
 
-          <VictoryAxis
+          <VictoryAxis dependentAxis
             orientation="right"
-            domain={{y:[0.5,1]}}
+            standalone={false}
+            domain={ [mciMin*1.2, mciMax*1.2] }
             dependentAxis
-            tickFormat={x => `${(x * spxMax).toFixed(2)}`}
+            tickFormat={x => `${(x.toFixed(0))}`}
+            fixLabelOverlap={true}
+            style={{
+              tickLabels: { fontSize: 10, padding: 5 }
+            }}
+            crossAxis={false}
+          />
+
+          <VictoryArea
+            data={this.state.currZoom}
+            x={"x"}
+            y={"MCI"}
+            standalone={false}
+            domain={{
+                 y: [mciMin*1.2, mciMax*1.2]
+            }}
+            scale={{x: "time", y: "linear"}}           
+            labels={d => `MCI: ${d["MCI"] * mciMax} 
+            date: ${d.x}`}
+            labelComponent={
+              <VictoryTooltip
+                flyoutStyle={{ fill: "black" }}
+                horizontal={true}
+              />
+            }
+            style={{
+              data: {
+                stroke: `blue`,
+                fill: "dodgerblue",
+                strokeWidth: 1
+              },
+              labels: { fontSize: 7 }
+            }}
+          />
+
+          <VictoryAxis
+            dependentAxis
+            orientation="left"
+            standalone={false}
+            domain={ [spxMin, spxMax] }
+            tickFormat={z => `${z.toFixed(0)}`}
             fixLabelOverlap={true}
             style={{
               tickLabels: { fontSize: 10, padding: 5 }
@@ -183,40 +241,12 @@ export default class Chart3 extends Component {
             data={this.state.currZoom}
             x={"x"}
             y={"SPX"}
-            labels={d => `spx: ${d["SPX"] * spxMax.toFixed(2)} 
-            date: ${d.x}`}
-            labelComponent={
-              <VictoryTooltip
-                flyoutStyle={{ fill: "black"}}
-                horizontal={true}
-              />
-            }
-            style={{
-              data: {
-                stroke: `${this.props.data.color}`,
-                strokeWidth: 1
-              },
-              labels: { fontSize: 7 }
+            standalone={false}
+            domain={{
+                 y: [spxMin, spxMax]
             }}
-          />
-
-          <VictoryAxis
-            dependentAxis
-            orientation="left"
-            tickFormat={z => `${(z * midMax).toFixed(2)}`}
-            fixLabelOverlap={true}
-            style={{
-              tickLabels: { fontSize: 10, padding: 5 }
-            }}
-            crossAxis={false}
-          />
-
-          <VictoryLine
-            data={this.state.currZoom}
-            x={"x"}
-            y={"Long Term"}
             labels={d =>
-              `Long term: ${(d["Long Term"] * midMax).toFixed(2)} 
+              `SPX: ${(d["SPX"] )} 
               date: ${d.x}`
             }
             labelComponent={
@@ -226,31 +256,13 @@ export default class Chart3 extends Component {
               />
             }
             style={{
-              data: { stroke: "pink", strokeWidth: 1 },
+              data: { stroke: "whitesmoke", strokeWidth: 1 },
               labels: { fontSize: 7 }
             }}
           />
 
-          <VictoryLine
-            data={this.state.currZoom}
-            x={"x"}
-            y={"Mid Term"}
-            labels={d =>
-              `Mid term: ${(d["Mid Term"] * midMax).toFixed(2)} 
-              date: ${d.x}`
-            }
-            labelComponent={
-              <VictoryTooltip
-                flyoutStyle={{ fill: "black" }}
-                horizontal={true}
-              />
-            }
-            style={{
-              data: { stroke: "yellow", strokeWidth: 1 },
-              labels: { fontSize: 7 }
-            }}
-          />
-        </VictoryChart>
+        </g>
+        </svg>
       </div>
     );
   }

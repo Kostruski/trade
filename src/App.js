@@ -18,13 +18,28 @@ import Section4 from "./components/section4.js";
 import LoginPage from "./components/loginPage.js";
 import Contact from "./components/contact.js";
 
+const macrofixURL = 'http://104.211.19.171/serverout/macrofx.json' 
+const spxvixURL = 'http://104.211.19.171/serverout/spxvix.json' 
+
+
+
 export default class App extends Component {
   state = {
     data1: wykres3line,
     data2: chartsArr,
-    isLoggedIn: false,
-    isNewUser: true
+    isLoggedIn: true,
+    isNewUser: false,
+    spxvix: null,
+    loading: false
   };
+
+  componentDidMount(){
+   this.setState({loading: true}) 
+   fetch(spxvixURL)
+   .then(response => response.json())
+   .then(json => {this.setState({spxvix : json, loading: false})})
+  }
+
 
   changeNewUser = () => this.setState({ isNewUser: false });
 
@@ -37,9 +52,12 @@ export default class App extends Component {
   render() {
     const ProtectedRoute = ({ isAllowed, ...props }) =>
       isAllowed ? <Route {...props} /> : <Redirect to="/" />;
+   
+  
 
     return (
-      <div className="appWrapper">
+     
+        <div className="appWrapper">
         <div className="sideAndMain">
           <div className="main">
             <Header
@@ -78,8 +96,10 @@ export default class App extends Component {
                     isAllowed={this.state.isLoggedIn}
                     path="/section2"
                     render={() => (
+                      this.state.loading ?
+                      <h1>Wgrywa się</h1> :
                       <Section2
-                        data={this.state}
+                        data={this.state.spxvix}
                         handleClick={this.handleClick}
                       />
                     )}

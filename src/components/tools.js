@@ -48,8 +48,7 @@ const Tools = withRouter(({ history, ...props }) => {
     </NavLink>
   );
  
-  console.log(props.zoomMinusActive)
-
+  
   return (
     <div className="tools">
       <Toolbar>
