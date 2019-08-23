@@ -6,18 +6,18 @@ import {
   VictoryLine,
   VictoryTooltip,
   VictoryAxis,
-  VictoryBar,
+  VictoryArea,
   VictoryScatter
 } from "victory";
 
 
 
-export default class Spx_vixBig extends Component {
+export default class VIXvsMidTermAssetManagersBig extends Component {
   constructor(props) {
     const data = props.data.map(el => ({
       x: el["Date"].slice(2, 10),
-      SPX: el["SPX"],
-      MCI: el["Master Composite Index"]
+      VIX: el["VIX"],
+      midTerm: el["Mid Term"]
     }));
 
     const initZoom = data.filter((el, i) => i > data.length * 0.9);
@@ -56,122 +56,120 @@ export default class Spx_vixBig extends Component {
     window.removeEventListener("resize", () => this.changeChartDimmensions());
   }
 
- zoomMinus = () => {
-   if (!this.state.zoomPlusActive) this.setState({ zoomPlusActive: true });
-   if (this.state.currZoom.length===this.state.data.length) {
-     this.setState({ zoomMinusActive: false });
-     return;
-   }
-   this.setState({ zoomValue: 1 }, () => {
-     this.updateRange();
-   });
- };
+  zoomMinus = () => {
+    if (!this.state.zoomPlusActive) this.setState({ zoomPlusActive: true });
+    if (this.state.currZoom.length === this.state.data.length) {
+      this.setState({ zoomMinusActive: false });
+      return;
+    }
+    this.setState({ zoomValue: 1 }, () => {
+      this.updateRange();
+    });
+  };
 
- zoomPlus = () => {
-   if (!this.state.zoomMinusActive)
-     this.setState({ zoomMinusActive: true });
-   if (this.state.currZoom.length < 30) {
-     this.setState({ zoomPlusActive: false });
-     return;
-   }
-   this.setState({ zoomValue: -1 }, () => {
-     this.updateRange();
-   });
- };
+  zoomPlus = () => {
+    if (!this.state.zoomMinusActive) this.setState({ zoomMinusActive: true });
+    if (this.state.currZoom.length < 30) {
+      this.setState({ zoomPlusActive: false });
+      return;
+    }
+    this.setState({ zoomValue: -1 }, () => {
+      this.updateRange();
+    });
+  };
 
- resetChart = () => {
-   if (this.state.currZoom !== this.state.initZoom)
-     this.setState({
-       currZoom: this.state.initZoom,
-       zoomPlusActive: true,
-       zoomMinusActive: true,
-       panLeftActive: true,
-       panRightActive: true
-     });
- };
+  resetChart = () => {
+    if (this.state.currZoom !== this.state.initZoom)
+      this.setState({
+        currZoom: this.state.initZoom,
+        zoomPlusActive: true,
+        zoomMinusActive: true,
+        panLeftActive: true,
+        panRightActive: true
+      });
+  };
 
- panLeft = () => {
-   if (!this.state.panRightActive) this.setState({ panRightActive: true });
-   const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
-   const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
-   const length = this.state.currZoom.length;
-   if (leftIndex === 0 ) {
-     this.setState({ panLeftActive: false });
-     return;
-   }
-   const zoomed = this.state.data.filter(
-     (el, i) =>
-       i >= leftIndex - Math.round(length / 10) &&
-       i <= rightIndex - Math.round(length / 10)
-   );
-   this.setState({ currZoom: zoomed });
- };
+  panLeft = () => {
+    if (!this.state.panRightActive) this.setState({ panRightActive: true });
+    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+    const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
+    const length = this.state.currZoom.length;
+    if (leftIndex === 0) {
+      this.setState({ panLeftActive: false });
+      return;
+    }
+    const zoomed = this.state.data.filter(
+      (el, i) =>
+        i >= leftIndex - Math.round(length / 10) &&
+        i <= rightIndex - Math.round(length / 10)
+    );
+    this.setState({ currZoom: zoomed });
+  };
 
- panRight = () => {
-   if (!this.state.panLeftActive) this.setState({ panLeftActive: true });
-   const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
-   const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
-   const length = this.state.currZoom.length;
-   if (rightIndex === this.state.data.length - 1 ) {
-     this.setState({ panRightActive: false });
-     return;
-   }
-   const zoomed = this.state.data.filter(
-     (el, i) =>
-       i >= leftIndex + Math.round(length / 10) &&
-       i <= rightIndex + Math.round(length / 10)
-   );
-   this.setState({ currZoom: zoomed });
- };
+  panRight = () => {
+    if (!this.state.panLeftActive) this.setState({ panLeftActive: true });
+    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+    const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
+    const length = this.state.currZoom.length;
+    if (rightIndex === this.state.data.length - 1) {
+      this.setState({ panRightActive: false });
+      return;
+    }
+    const zoomed = this.state.data.filter(
+      (el, i) =>
+        i >= leftIndex + Math.round(length / 10) &&
+        i <= rightIndex + Math.round(length / 10)
+    );
+    this.setState({ currZoom: zoomed });
+  };
 
- updateRange = () => {
-   const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
-   const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
-   let zoomed = []
+  updateRange = () => {
+    const leftIndex = this.state.data.indexOf(_.head(this.state.currZoom));
+    const rightIndex = this.state.data.indexOf(_.last(this.state.currZoom));
+    let zoomed = [];
 
-   if(this.state.currZoom.includes(_.last(this.state.data))) {
+    if (this.state.currZoom.includes(_.last(this.state.data))) {
       zoomed = this.state.data.filter(
-       (el, i) =>
-         i >=
-           leftIndex - (this.state.currZoom.length / 5) * this.state.zoomValue &&
-         i <= rightIndex
-     );
-   }
-   else if (this.state.currZoom.includes(_.head(this.state.data))) {
-     zoomed = this.state.data.filter(
-       (el, i) =>
-         i >=
-           leftIndex  &&
-         i <= rightIndex + (this.state.currZoom.length / 5) * this.state.zoomValue
-     );
-   }
+        (el, i) =>
+          i >=
+            leftIndex -
+              (this.state.currZoom.length / 5) * this.state.zoomValue &&
+          i <= rightIndex
+      );
+    } else if (this.state.currZoom.includes(_.head(this.state.data))) {
+      zoomed = this.state.data.filter(
+        (el, i) =>
+          i >= leftIndex &&
+          i <=
+            rightIndex + (this.state.currZoom.length / 5) * this.state.zoomValue
+      );
+    } else {
+      zoomed = this.state.data.filter(
+        (el, i) =>
+          i >=
+            leftIndex -
+              (this.state.currZoom.length / 10) * this.state.zoomValue &&
+          i <=
+            rightIndex +
+              (this.state.currZoom.length / 10) * this.state.zoomValue
+      );
+    }
 
-   else {
-     zoomed = this.state.data.filter(
-       (el, i) =>
-         i >=
-           leftIndex - (this.state.currZoom.length / 10) * this.state.zoomValue  &&
-         i <= rightIndex + (this.state.currZoom.length / 10) * this.state.zoomValue
-     );
-
-   }
-
-   this.setState({ currZoom: zoomed });
- };
+    this.setState({ currZoom: zoomed });
+  };
 
   render() {
-    const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
-    const mciMax = _.maxBy(this.state.data, "MCI")["MCI"];
-    const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
-    const mciMin = _.minBy(this.state.data, "MCI")["MCI"];
- 
+ const vixMax = _.maxBy(this.state.data, "VIX")["VIX"];
+ const vixMin = _.minBy(this.state.data, "VIX")["VIX"];
+ const midMax = _.maxBy(this.state.currZoom, "midTerm")["midTerm"];
+ const midMin = _.minBy(this.state.currZoom, "midTerm")["midTerm"];
 
     return (
       <div className="chartBoxBigWrapper">
         <div className="chartBox">
-        <Tools
+          <Tools
             resetChart={this.resetChart}
-            id="chartSpx_Vix"
+            id="chartVIXvsMidTermAssetManagers"
             zoomPlus={this.zoomPlus}
             zoomMinus={this.zoomMinus}
             panLeft={this.panLeft}
@@ -181,26 +179,26 @@ export default class Spx_vixBig extends Component {
             panLeftActive={this.state.panLeftActive}
             panRightActive={this.state.panRightActive}
           />
-        <h4>SPX / VIX</h4>
+          <h4>
+          VIX vs. Mid Term Asset Managers
+          </h4>
           <div className="legend">
             <div className="colorBox">
               <span
                 style={{
-                  backgroundColor: "whitesmoke"
+                  backgroundColor: "rgb(255, 102, 204)"
                 }}
               />
-              <div>SPX</div>
+              <div>VIX</div>
             </div>
             <div className="colorBox">
               <span
                 style={{
-                  backgroundColor: "navy"
+                  backgroundColor: "rgb(204, 255, 51)"
                 }}
               />
-              <div>Master Composite Index</div>
+              <div>Mid Term</div>
             </div>
-
-           
           </div>
 
           <svg
@@ -208,7 +206,7 @@ export default class Spx_vixBig extends Component {
             height="100%"
             viewBox={`0 0 ${this.state.chartWidth} ${this.state.chartHeight}`}
           >
-            <g >
+            <g>
               <VictoryAxis
                 padding={padding}
                 width={this.state.chartWidth}
@@ -225,15 +223,15 @@ export default class Spx_vixBig extends Component {
               />
 
               <VictoryAxis
-               padding={padding}
+                padding={padding}
                 dependentAxis
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 orientation="right"
                 standalone={false}
-                domain={[mciMin * 1.2, mciMax * 1.2]}
+                domain={[vixMin * 1.2, vixMax * 1.2]}
                 dependentAxis
-                tickFormat={x => `${x.toFixed(0)}`}
+                tickFormat={x => `${x.toFixed(2)}`}
                 fixLabelOverlap={true}
                 style={{
                   tickLabels: { fontSizeBig, padding: 5 }
@@ -241,23 +239,22 @@ export default class Spx_vixBig extends Component {
                 crossAxis={false}
               />
 
-              <VictoryBar
+              <VictoryArea
                 padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
-                barWidth={12}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"MCI"}
+                y={"midTerm"}
                 standalone={false}
                 domain={{
-                  y: [mciMin * 1.2, mciMax * 1.2]
+                  y: [midMin * 1.2, midMax * 1.2]
                 }}
                 scale={{ x: "time", y: "linear" }}
                 style={{
                   data: {
-                    stroke: `blue`,
-                    fill: "dodgerblue",
+                    stroke: `rgb(204, 255, 51)`,
+                    fill: "rgba(204, 255, 51, 0.5)",
                     strokeWidth: 3
                   }
                 }}
@@ -270,8 +267,8 @@ export default class Spx_vixBig extends Component {
                 dependentAxis
                 orientation="left"
                 standalone={false}
-                domain={[spxMin, spxMax]}
-                tickFormat={z => `${z.toFixed(0)}`}
+                domain={[midMin, midMax]}
+                tickFormat={z => `${z.toFixed(2)}`}
                 fixLabelOverlap={true}
                 style={{
                   tickLabels: { fontSizeBig, padding: 5 },
@@ -286,21 +283,13 @@ export default class Spx_vixBig extends Component {
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"SPX"}
+                y={"VIX"}
                 standalone={false}
                 domain={{
-                  y: [spxMin, spxMax]
+                    y: [vixMin, vixMax]
                 }}
-                labels={data => `SPX: ${data["SPX"]}, date: ${data.x}`}
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black", stroke: "whitesmoke" }}
-                    horizontal={true}
-                  />
-                }
                 style={{
-                  data: { stroke: "whitesmoke", strokeWidth: 3 },
-                  labels: { fontSize: 7 }
+                  data: { stroke: "rgb(255, 102, 204)", strokeWidth: 3 }
                 }}
               />
 
@@ -310,19 +299,20 @@ export default class Spx_vixBig extends Component {
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"MCI"}
+                y={"midTerm"}
                 size={20}
                 standalone={false}
                 domain={{
-                  y: [mciMin * 1.2, mciMax * 1.2]
+                    y: [midMin * 1.2, midMax * 1.2]
                 }}
                 scale={{ x: "time", y: "linear" }}
-                labels={d => `MCI: ${d["MCI"].toFixed(2)}, date: ${d.x}`}
+                labels={d =>
+                  `Mid Term: ${d["midTerm"].toFixed(2)}, date: ${d.x}`
+                }
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "black" }}
-                    orientation={d => (d["MCI"] > 0 ? "top" : "bottom")}
-                    pointerWidth={0}
+                    pointerLength={0}
                   />
                 }
                 style={{
@@ -341,19 +331,18 @@ export default class Spx_vixBig extends Component {
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"SPX"}
+                y={"VIX"}
                 size={20}
                 standalone={false}
                 domain={{
-                  y: [spxMin, spxMax]
+                    y: [vixMin, vixMax]
                 }}
                 scale={{ x: "time", y: "linear" }}
-                labels={d => `SPX: ${d["SPX"]}, date: ${d.x}`}
+                labels={d => `VIX: ${d["VIX"].toFixed(2)}, date: ${d.x}`}
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "black" }}
-                    orientation={"bottom"}
-                    pointerWidth={0}
+                    pointerLength={0}
                   />
                 }
                 style={{

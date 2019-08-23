@@ -6,18 +6,20 @@ import {
   VictoryLine,
   VictoryTooltip,
   VictoryAxis,
+  VictoryArea,
+  VictoryScatter,
   VictoryBar,
-  VictoryScatter
 } from "victory";
 
 
 
-export default class Spx_vixBig extends Component {
+export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component {
   constructor(props) {
     const data = props.data.map(el => ({
       x: el["Date"].slice(2, 10),
       SPX: el["SPX"],
-      MCI: el["Master Composite Index"]
+      gamma: el["Gamma"],
+      SPXsignal: el["SPX Signal"]
     }));
 
     const initZoom = data.filter((el, i) => i > data.length * 0.9);
@@ -160,30 +162,31 @@ export default class Spx_vixBig extends Component {
  };
 
   render() {
-    const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
-    const mciMax = _.maxBy(this.state.data, "MCI")["MCI"];
-    const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
-    const mciMin = _.minBy(this.state.data, "MCI")["MCI"];
- 
+   const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
+   const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
+   const gammaMax = _.maxBy(this.state.data, "gamma")["gamma"];
+   const gammaMin = _.minBy(this.state.data, "gamma")["gamma"];
+   const SPXsignalMax = _.maxBy(this.state.data, "SPXsignal")["SPXsignal"];
+   const SPXsignalMin = _.minBy(this.state.data, "SPXsignal")["SPXsignal"]; 
 
     return (
       <div className="chartBoxBigWrapper">
         <div className="chartBox">
         <Tools
-            resetChart={this.resetChart}
-            id="chartSpx_Vix"
-            zoomPlus={this.zoomPlus}
-            zoomMinus={this.zoomMinus}
-            panLeft={this.panLeft}
-            panRight={this.panRight}
-            zoomMinusActive={this.state.zoomMinusActive}
-            zoomPlusActive={this.state.zoomPlusActive}
-            panLeftActive={this.state.panLeftActive}
-            panRightActive={this.state.panRightActive}
-          />
-        <h4>SPX / VIX</h4>
+              resetChart={this.resetChart}
+              id="chartGammaExtremeActivityofLargeSpeculators"
+              zoomPlus={this.zoomPlus}
+              zoomMinus={this.zoomMinus}
+              panLeft={this.panLeft}
+              panRight={this.panRight}
+              zoomMinusActive={this.state.zoomMinusActive}
+              zoomPlusActive={this.state.zoomPlusActive}
+              panLeftActive={this.state.panLeftActive}
+              panRightActive={this.state.panRightActive}
+            />
+         
           <div className="legend">
-            <div className="colorBox">
+             <div className="colorBox">
               <span
                 style={{
                   backgroundColor: "whitesmoke"
@@ -194,13 +197,20 @@ export default class Spx_vixBig extends Component {
             <div className="colorBox">
               <span
                 style={{
-                  backgroundColor: "navy"
+                  backgroundColor: "pink"
                 }}
               />
-              <div>Master Composite Index</div>
+              <div>Gamma</div>
             </div>
-
-           
+            <div className="colorBox">
+              <span
+                style={{
+                  backgroundColor: "cyan"
+                }}
+              />
+              <div>SPX Signal</div>
+            </div>
+            <h4>Gamma - Extreme Activity of Large Speculators</h4>           
           </div>
 
           <svg
@@ -208,7 +218,7 @@ export default class Spx_vixBig extends Component {
             height="100%"
             viewBox={`0 0 ${this.state.chartWidth} ${this.state.chartHeight}`}
           >
-            <g >
+            <g>
               <VictoryAxis
                 padding={padding}
                 width={this.state.chartWidth}
@@ -225,13 +235,13 @@ export default class Spx_vixBig extends Component {
               />
 
               <VictoryAxis
-               padding={padding}
-                dependentAxis
+                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
-                orientation="right"
+                dependentAxis
+                orientation="left"
                 standalone={false}
-                domain={[mciMin * 1.2, mciMax * 1.2]}
+                domain={[Math.min(gammaMin, SPXsignalMin) , Math.max(gammaMax, SPXsignalMax)]}
                 dependentAxis
                 tickFormat={x => `${x.toFixed(0)}`}
                 fixLabelOverlap={true}
@@ -245,19 +255,41 @@ export default class Spx_vixBig extends Component {
                 padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
-                barWidth={12}
                 data={this.state.currZoom}
+                interpolation="step"
                 x={"x"}
-                y={"MCI"}
+                y={"gamma"}
                 standalone={false}
                 domain={{
-                  y: [mciMin * 1.2, mciMax * 1.2]
+                  y: [gammaMin*1.1 , gammaMax*1.1 ]
                 }}
                 scale={{ x: "time", y: "linear" }}
                 style={{
                   data: {
-                    stroke: `blue`,
-                    fill: "dodgerblue",
+                    stroke: `pink`,
+                    fill: "rgba(255,139,127,0.4)",
+                    strokeWidth: 3
+                  }
+                }}
+              />
+
+              <VictoryArea
+                padding={padding}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
+                interpolation="step"
+                data={this.state.currZoom}
+                x={"x"}
+                y={"SPXsignal"}
+                standalone={false}
+               domain={{
+                 y: [gammaMin*1.1 , gammaMax*1.1 ]
+               }}
+                scale={{ x: "time", y: "linear" }}
+                style={{
+                  data: {
+                   stroke: `cyan`,
+                   fill: "rgb(124,251,255, 0.4)",
                     strokeWidth: 3
                   }
                 }}
@@ -268,7 +300,7 @@ export default class Spx_vixBig extends Component {
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 dependentAxis
-                orientation="left"
+                orientation="right"
                 standalone={false}
                 domain={[spxMin, spxMax]}
                 tickFormat={z => `${z.toFixed(0)}`}
@@ -291,16 +323,8 @@ export default class Spx_vixBig extends Component {
                 domain={{
                   y: [spxMin, spxMax]
                 }}
-                labels={data => `SPX: ${data["SPX"]}, date: ${data.x}`}
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black", stroke: "whitesmoke" }}
-                    horizontal={true}
-                  />
-                }
                 style={{
-                  data: { stroke: "whitesmoke", strokeWidth: 3 },
-                  labels: { fontSize: 7 }
+                  data: { stroke: "whitesmoke", strokeWidth: 3 }
                 }}
               />
 
@@ -308,20 +332,23 @@ export default class Spx_vixBig extends Component {
                 padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"MCI"}
+                y={"SPX"}
                 size={20}
                 standalone={false}
                 domain={{
-                  y: [mciMin * 1.2, mciMax * 1.2]
+                  y: [spxMin, spxMax]
                 }}
                 scale={{ x: "time", y: "linear" }}
-                labels={d => `MCI: ${d["MCI"].toFixed(2)}, date: ${d.x}`}
+                labels={d => `SPX: ${d["SPX"].toFixed(0)}, date: ${d.x}`}
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "black" }}
-                    orientation={d => (d["MCI"] > 0 ? "top" : "bottom")}
+                    orientation={"bottom"
+                    }
                     pointerWidth={0}
                   />
                 }
@@ -341,18 +368,49 @@ export default class Spx_vixBig extends Component {
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"SPX"}
+                y={"gamma"}
                 size={20}
                 standalone={false}
-                domain={{
-                  y: [spxMin, spxMax]
-                }}
+               domain={{
+                 y: [gammaMin*1.1 , gammaMax*1.1 ]
+               }}
                 scale={{ x: "time", y: "linear" }}
-                labels={d => `SPX: ${d["SPX"]}, date: ${d.x}`}
+                labels={d => `GAMMA: ${d["gamma"].toFixed(0)}, date: ${d.x}`}
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "black" }}
-                    orientation={"bottom"}
+                    orientation={d => (d["gamma"] > 0 ? "bottom" : "top")}
+                    pointerWidth={0}
+                  />
+                }
+                style={{
+                  data: {
+                    stroke: "rgba(255, 255, 255, 0)",
+                    fill: "rgba(255, 255, 255, 0)",
+                    strokeWidth: 0
+                  },
+                  labels: { tooltipFontSize }
+                }}
+              />
+
+              <VictoryScatter
+                padding={padding}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
+                data={this.state.currZoom}
+                x={"x"}
+                y={"SPXsignal"}
+                size={20}
+                standalone={false}
+                domain={{
+                    y: [gammaMin*1.1 , gammaMax*1.1 ]
+                  }}
+                scale={{ x: "time", y: "linear" }}
+                labels={d => `SPX Signal: ${d["SPXsignal"].toFixed(0)}, date: ${d.x}`}
+                labelComponent={
+                  <VictoryTooltip
+                    flyoutStyle={{ fill: "black" }}
+                    orientation={d => (d["SPXsignal"] > 0 ? "bottom" : "top")}
                     pointerWidth={0}
                   />
                 }

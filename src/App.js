@@ -1,14 +1,4 @@
 import React, { Component } from "react";
-import { chartsArr, wykres3line } from "./jsonFileTest.js";
-import ChartBig3 from "./components/charts/chartBig3.js";
-import ChartBig from "./components/charts/chartBig.js";
-import BarChartBig from "./components/charts/barChartBig.js";
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
 import "./App.scss";
 import Header from "./components/header";
 import Section1 from "./components/section1.js";
@@ -17,29 +7,53 @@ import Section3 from "./components/section3.js";
 import Section4 from "./components/section4.js";
 import LoginPage from "./components/loginPage.js";
 import Contact from "./components/contact.js";
+import Spx_vixBig from "./components/charts/spx_vixBig.js";
+import AssetManagersLong_MidBig from "./components/charts/assetManagersLong_MidBig.js";
+import MasterStrategyPerformanceBig from "./components/charts/masterStrategyPerformanceBig.js";
+import GammaExtremeActivityofLargeSpeculatorsBig from "./components/charts/gammaExtremeActivityofLargeSpeculatorsBig.js"
+import Gamma_VolatilityBig from "./components/charts/gamma_VolatilityBig.js"
+import VIXvsMidTermAssetManagersBig from "./components/charts/vixVsMidTermAssetManagersBig.js"
+import Loader from "./components/loader.js"
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
 
-const macrofixURL = 'http://104.211.19.171/serverout/macrofx.json' 
-const spxvixURL = 'http://104.211.19.171/serverout/spxvix.json' 
-
-
+const macrofixURL = "http://104.211.19.171/serverout/macrofx.json";
+const spxvixURL = "http://104.211.19.171/serverout/spxvix.json";
 
 export default class App extends Component {
   state = {
-    data1: wykres3line,
-    data2: chartsArr,
     isLoggedIn: true,
     isNewUser: false,
     spxvix: null,
-    loading: false
+    macrofix: null,
+   
   };
 
-  componentDidMount(){
-   this.setState({loading: true}) 
-   fetch(spxvixURL)
-   .then(response => response.json())
-   .then(json => {this.setState({spxvix : json, loading: false})})
-  }
+  componentDidMount() {
 
+ 
+    fetch(spxvixURL)
+      .then(response => response.json())
+      .then(json => {
+        this.setState({ spxvix: json });
+      });
+
+      this.setState({ loading: true });
+      fetch(macrofixURL)
+        .then(response => response.json())
+        .then(json => {
+          this.setState({ macrofix: json });
+        });
+
+
+
+
+
+  }
 
   changeNewUser = () => this.setState({ isNewUser: false });
 
@@ -52,17 +66,14 @@ export default class App extends Component {
   render() {
     const ProtectedRoute = ({ isAllowed, ...props }) =>
       isAllowed ? <Route {...props} /> : <Redirect to="/" />;
-   
-  
 
     return (
-     
-        <div className="appWrapper">
+      <div className="appWrapper">
         <div className="sideAndMain">
           <div className="main">
             <Header
               toggleLogin={this.toggleLogin}
-              isLoggedIn={this.state.isLoggedIn}            
+              isLoggedIn={this.state.isLoggedIn}
             />
             <Router>
               <>
@@ -95,25 +106,31 @@ export default class App extends Component {
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
                     path="/section2"
-                    render={() => (
-                      this.state.loading ?
-                      <h1>Wgrywa się</h1> :
-                      <Section2
-                        data={this.state.spxvix}
-                        handleClick={this.handleClick}
-                      />
-                    )}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <Section2
+                          data={this.state.spxvix}
+                          handleClick={this.handleClick}
+                        />
+                      ) : (
+                        <Loader />
+                      )
+                    }
                   />
 
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
                     path="/section3"
-                    render={() => (
-                      <Section3
-                        data={this.state}
-                        handleClick={this.handleClick}
-                      />
-                    )}
+                    render={() =>
+                      this.state.macrofix ? (
+                       <Section3
+                         data={this.state. macrofix}
+                         handleClick={this.handleClick}
+                       />
+                      ) : (
+                        <Loader />                       
+                      )
+                    }
                   />
 
                   <ProtectedRoute
@@ -129,33 +146,77 @@ export default class App extends Component {
 
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
-                    path={`/${this.state.data1.id}`}
-                    render={() => <ChartBig3 data={this.state.data1} />}
+                    path={"/chartSpx_Vix"}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <Spx_vixBig data={this.state.spxvix} />
+                      ) : (
+                        <Loader />
+                      )
+                    }
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
-                    path={`/${this.state.data2[0].id}`}
-                    render={() => <ChartBig data={this.state.data2[0]} />}
+                    path={`/chartasSetManagersLong_Mid`}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <AssetManagersLong_MidBig
+                          data={this.state.spxvix}
+                        />
+                      ) : (
+                        <Loader />
+                      )
+                    }
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
-                    path={`/${this.state.data2[1].id}`}
-                    render={() => <BarChartBig data={this.state.data2[1]} />}
+                    path={`/chartMasterStrategyPerformance`}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <MasterStrategyPerformanceBig
+                          data={this.state.spxvix}
+                        />
+                      ) : (
+                        <Loader />
+                      )
+                    }
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
-                    path={`/${this.state.data2[2].id}`}
-                    render={() => <ChartBig data={this.state.data2[2]} />}
+                    path={`/chartGammaExtremeActivityofLargeSpeculators`}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <GammaExtremeActivityofLargeSpeculatorsBig
+                          data={this.state.spxvix}
+                        />
+                      ) : (
+                        <Loader />
+                      )
+                    }
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
-                    path={`/${this.state.data2[3].id}`}
-                    render={() => <BarChartBig data={this.state.data2[3]} />}
+                    path={`/chartGamma_Volatility`}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <Gamma_VolatilityBig data={this.state.spxvix} />
+                      ) : (
+                        <Loader />
+                      )
+                    }
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
-                    path={`/${this.state.data2[4].id}`}
-                    render={() => <ChartBig data={this.state.data2[4]} />}
+                    path={`/chartVIXvsMidTermAssetManagers`}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <VIXvsMidTermAssetManagersBig
+                          data={this.state.spxvix}
+                        />
+                      ) : (
+                        <Loader />
+                      )
+                    }
                   />
                 </Switch>
               </>

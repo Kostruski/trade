@@ -6,18 +6,19 @@ import {
   VictoryLine,
   VictoryTooltip,
   VictoryAxis,
-  VictoryBar,
+  VictoryArea,
   VictoryScatter
 } from "victory";
 
 
 
-export default class Spx_vixBig extends Component {
+export default class AssetManagersLong_MidBig extends Component {
   constructor(props) {
     const data = props.data.map(el => ({
       x: el["Date"].slice(2, 10),
       SPX: el["SPX"],
-      MCI: el["Master Composite Index"]
+      Long: el["Long Term"],
+      Mid: el["Mid Term"]
     }));
 
     const initZoom = data.filter((el, i) => i > data.length * 0.9);
@@ -161,29 +162,30 @@ export default class Spx_vixBig extends Component {
 
   render() {
     const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
-    const mciMax = _.maxBy(this.state.data, "MCI")["MCI"];
     const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
-    const mciMin = _.minBy(this.state.data, "MCI")["MCI"];
- 
+    const longMax = _.maxBy(this.state.currZoom, "Long")["Long"];
+    const longMin = _.minBy(this.state.currZoom, "Long")["Long"];
+    const midMax = _.maxBy(this.state.currZoom, "Mid")["Mid"];
+    const midMin = _.minBy(this.state.currZoom, "Mid")["Mid"];
 
     return (
       <div className="chartBoxBigWrapper">
         <div className="chartBox">
         <Tools
-            resetChart={this.resetChart}
-            id="chartSpx_Vix"
-            zoomPlus={this.zoomPlus}
-            zoomMinus={this.zoomMinus}
-            panLeft={this.panLeft}
-            panRight={this.panRight}
-            zoomMinusActive={this.state.zoomMinusActive}
-            zoomPlusActive={this.state.zoomPlusActive}
-            panLeftActive={this.state.panLeftActive}
-            panRightActive={this.state.panRightActive}
-          />
-        <h4>SPX / VIX</h4>
+              resetChart={this.resetChart}
+              id="chartAssetManagersLong_Mid"
+              zoomPlus={this.zoomPlus}
+              zoomMinus={this.zoomMinus}
+              panLeft={this.panLeft}
+              panRight={this.panRight}
+              zoomMinusActive={this.state.zoomMinusActive}
+              zoomPlusActive={this.state.zoomPlusActive}
+              panLeftActive={this.state.panLeftActive}
+              panRightActive={this.state.panRightActive}
+            />
+         
           <div className="legend">
-            <div className="colorBox">
+             <div className="colorBox">
               <span
                 style={{
                   backgroundColor: "whitesmoke"
@@ -194,13 +196,20 @@ export default class Spx_vixBig extends Component {
             <div className="colorBox">
               <span
                 style={{
-                  backgroundColor: "navy"
+                  backgroundColor: "red"
                 }}
               />
-              <div>Master Composite Index</div>
+              <div>Long Term</div>
             </div>
-
-           
+            <div className="colorBox">
+              <span
+                style={{
+                  backgroundColor: "gold"
+                }}
+              />
+              <div>Mid Term</div>
+            </div>
+            <h4>Asset Managers Long / Mid</h4>           
           </div>
 
           <svg
@@ -208,7 +217,7 @@ export default class Spx_vixBig extends Component {
             height="100%"
             viewBox={`0 0 ${this.state.chartWidth} ${this.state.chartHeight}`}
           >
-            <g >
+            <g>
               <VictoryAxis
                 padding={padding}
                 width={this.state.chartWidth}
@@ -225,15 +234,15 @@ export default class Spx_vixBig extends Component {
               />
 
               <VictoryAxis
-               padding={padding}
-                dependentAxis
+                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
-                orientation="right"
-                standalone={false}
-                domain={[mciMin * 1.2, mciMax * 1.2]}
                 dependentAxis
-                tickFormat={x => `${x.toFixed(0)}`}
+                orientation="left"
+                standalone={false}
+                domain={[Math.min(longMin, midMin), Math.max(longMax, midMax)]}
+                dependentAxis
+                tickFormat={x => `${x.toFixed(2)}`}
                 fixLabelOverlap={true}
                 style={{
                   tickLabels: { fontSizeBig, padding: 5 }
@@ -241,24 +250,46 @@ export default class Spx_vixBig extends Component {
                 crossAxis={false}
               />
 
-              <VictoryBar
-                padding={padding}
+              <VictoryArea
+              padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
-                barWidth={12}
                 data={this.state.currZoom}
+                interpolation="step"
                 x={"x"}
-                y={"MCI"}
+                y={"Long"}
                 standalone={false}
                 domain={{
-                  y: [mciMin * 1.2, mciMax * 1.2]
+                  y: [midMin * 1.1, midMax * 1.1]
                 }}
                 scale={{ x: "time", y: "linear" }}
                 style={{
                   data: {
-                    stroke: `blue`,
-                    fill: "dodgerblue",
+                    stroke: `red`,
+                    fill: "rgba(255,51,0,0.4)",
                     strokeWidth: 3
+                  }
+                }}
+              />
+
+              <VictoryArea
+              padding={padding}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
+                interpolation="step"
+                data={this.state.currZoom}
+                x={"x"}
+                y={"Mid"}
+                standalone={false}
+                domain={{
+                  y: [midMin * 1.1, midMax * 1.1]
+                }}
+                scale={{ x: "time", y: "linear" }}
+                style={{
+                  data: {
+                    stroke: `yellow`,
+                    fill: "rgba(255,255,0,0.4)",
+                    strokeWidth: 1
                   }
                 }}
               />
@@ -268,7 +299,7 @@ export default class Spx_vixBig extends Component {
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 dependentAxis
-                orientation="left"
+                orientation="right"
                 standalone={false}
                 domain={[spxMin, spxMax]}
                 tickFormat={z => `${z.toFixed(0)}`}
@@ -281,7 +312,7 @@ export default class Spx_vixBig extends Component {
               />
 
               <VictoryLine
-                padding={padding}
+              padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
@@ -291,52 +322,15 @@ export default class Spx_vixBig extends Component {
                 domain={{
                   y: [spxMin, spxMax]
                 }}
-                labels={data => `SPX: ${data["SPX"]}, date: ${data.x}`}
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black", stroke: "whitesmoke" }}
-                    horizontal={true}
-                  />
-                }
                 style={{
-                  data: { stroke: "whitesmoke", strokeWidth: 3 },
-                  labels: { fontSize: 7 }
+                  data: { stroke: "whitesmoke", strokeWidth: 3 }
                 }}
               />
 
               <VictoryScatter
-                padding={padding}
+              padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
-                data={this.state.currZoom}
-                x={"x"}
-                y={"MCI"}
-                size={20}
-                standalone={false}
-                domain={{
-                  y: [mciMin * 1.2, mciMax * 1.2]
-                }}
-                scale={{ x: "time", y: "linear" }}
-                labels={d => `MCI: ${d["MCI"].toFixed(2)}, date: ${d.x}`}
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black" }}
-                    orientation={d => (d["MCI"] > 0 ? "top" : "bottom")}
-                    pointerWidth={0}
-                  />
-                }
-                style={{
-                  data: {
-                    stroke: "rgba(255, 255, 255, 0)",
-                    fill: "rgba(255, 255, 255, 0)",
-                    strokeWidth: 0
-                  },
-                  labels: { tooltipFontSize }
-                }}
-              />
-
-              <VictoryScatter
-                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
@@ -352,7 +346,74 @@ export default class Spx_vixBig extends Component {
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "black" }}
-                    orientation={"bottom"}
+                    orientation={"bottom"
+                    }
+                    pointerWidth={0}
+                  />
+                }
+                style={{
+                  data: {
+                    stroke: "rgba(255, 255, 255, 0)",
+                    fill: "rgba(255, 255, 255, 0)",
+                    strokeWidth: 0
+                  },
+                  labels: { tooltipFontSize }
+                }}
+              />
+
+              <VictoryScatter
+              padding={padding}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
+                data={this.state.currZoom}
+                x={"x"}
+                y={"Long"}
+                size={20}
+                standalone={false}
+                domain={{
+                  y: [midMin * 1.1, midMax * 1.1]
+                }}
+                scale={{ x: "time", y: "linear" }}
+                labels={d => `LONG: ${d["Long"].toFixed(2)}, date: ${d.x}`}
+                labelComponent={
+                  <VictoryTooltip
+                    flyoutStyle={{ fill: "black" }}
+                    orientation={d => (d["Long"] > 0 ? "bottom" : "top")}
+                    pointerWidth={0}
+                  />
+                }
+                style={{
+                  data: {
+                    stroke: "rgba(255, 255, 255, 0)",
+                    fill: "rgba(255, 255, 255, 0)",
+                    strokeWidth: 0
+                  },
+                  labels: { tooltipFontSize }
+                }}
+              />
+
+              <VictoryScatter
+              padding={padding}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight}
+                data={this.state.currZoom}
+                x={"x"}
+                y={"Mid"}
+                size={20}
+                standalone={false}
+                domain={{
+                  y: [midMin * 1.1, midMax * 1.1]
+                }}
+                scale={{ x: "time", y: "linear" }}
+                labels={d => `MID: ${d["Mid"].toFixed(2)}, date: ${d.x}`}
+                labelComponent={
+                  <VictoryTooltip
+                    flyoutStyle={{ fill: "black" }}
+                    orientation={d => (d["Mid"] > 0 ? "bottom" : "top")}
                     pointerWidth={0}
                   />
                 }

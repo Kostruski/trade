@@ -5,8 +5,6 @@ import {
   VictoryChart,
   VictoryLine,
   createContainer,
-  VictoryVoronoiContainer,
-  VictoryCursorContainer,
   VictoryTooltip,
   VictoryAxis
 } from "victory";

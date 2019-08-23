@@ -13,10 +13,10 @@ const useStyles = makeStyles(theme => ({
     
     },
 
-    disabled: {
-      backgroundColor: "red"
-    },
-
+   root: {
+     minHeight: "50px",
+     justifyContent: "center"
+   },
    
 
   icon: {
@@ -51,7 +51,7 @@ const Tools = withRouter(({ history, ...props }) => {
   
   return (
     <div className="tools">
-      <Toolbar>
+      <Toolbar className={classes.root} >
         <IconButton onClick={props.panLeft} className={classes.menuBut} disabled={!props.panLeftActive}>
           <NavigateBefore className={classes.icon} />
         </IconButton>
