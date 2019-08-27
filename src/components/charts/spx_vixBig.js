@@ -181,7 +181,7 @@ export default class Spx_vixBig extends Component {
             panLeftActive={this.state.panLeftActive}
             panRightActive={this.state.panRightActive}
           />
-        <h4>SPX / VIX</h4>
+        <h4>Master Composite Index</h4>
           <div className="legend">
             <div className="colorBox">
               <span

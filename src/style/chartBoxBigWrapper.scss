@@ -36,18 +36,16 @@
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
-  z-index: -200;
+  z-index: 200;
 
-//   background-color: #192231;
-  // position: absolute;
-  // top: 81px;
+
 
   .colorBox {
 
       display: flex;
       align-items: center;
       color: white;
-    //   padding: 5px;
+
 
 
       span {
@@ -67,13 +65,7 @@
 
 } 
 
-.VictoryContainer    
-{
-padding-left: 10px;
-padding-right: 10px;
-padding-top: 50px;
-touch-action: auto!important;
-}
+
 
 .MuiIconButton-root.Mui-disabled {
   opacity: 0.3

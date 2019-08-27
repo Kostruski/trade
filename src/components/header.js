@@ -99,7 +99,7 @@ export default function Header(props) {
               component={Link}
               to={"/section1"}
             >
-              Section 1
+              Intraday ES/SPY
             </Button>
             <Button
               className={classes.menuButton}
@@ -107,7 +107,7 @@ export default function Header(props) {
               to={"/section2"}
               color="inherit"
             >
-              Section 2
+              SPX/VIX
             </Button>
             <Button
               className={classes.menuButton}
@@ -115,7 +115,7 @@ export default function Header(props) {
               component={Link}
               to={"/section3"}
             >
-              Section 3
+              Macro/Fx
             </Button>
             <Button
               className={classes.menuButton}
@@ -123,7 +123,7 @@ export default function Header(props) {
               component={Link}
               to={"/section4"}
             >
-              Section 4
+              Cycles
             </Button>
             <Button
               className={classes.menuButton}

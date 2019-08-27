@@ -139,7 +139,7 @@ export default class Spx_vix extends Component {
 
     return (
       <div className="chartBox">
-        <h4>SPX / VIX</h4>
+        <h4>Master Composite Index</h4>
         <div className="legend">
           <div className="colorBox">
             <span

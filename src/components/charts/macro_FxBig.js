@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Tools from "../tools.js";
 import _ from "lodash";
 import LegendItem from "../legendItem.js"
-import CurrSingleChart from "../charts/currSingleChart.js"
+import CurrSingleChartBig from "./currSingleChartBig.js"
 import { VictoryLine, VictoryBar, VictoryAxis, VictoryArea, VictoryChart } from "victory";
 import {
   fontSizeSmall,
@@ -25,7 +25,7 @@ const updateDomain = (zoomed) => {
 
 
 
-export default class Macro_Fx extends Component {
+export default class Macro_FxBig extends Component {
   
     constructor(props) {
         const propsKeys = Object.keys(_.last(props.data)).filter(el => el==="Date" || el.length===3)
@@ -53,8 +53,29 @@ export default class Macro_Fx extends Component {
             zoomMinusActive: true,
             zoomPlusActive: true,
             panLeftActive: true,
-            panRightActive: true
+            panRightActive: true,
+            chartWidth: 450,
+            chartHeight: 300
         }
+    }
+
+    changeChartDimmensions = () => {
+      const tempWidth = window.innerWidth - 60;
+      const tempHeight = window.innerHeight - 100;
+      if (
+        Math.abs(this.state.chartWidth - tempWidth) ||
+        Math.abs(this.state.chartHeight - tempHeight) > 10
+      )
+        this.setState({ chartWidth: tempWidth, chartHeight: tempHeight });
+    };
+
+    componentWillMount() {
+      this.changeChartDimmensions();
+      window.addEventListener("resize", () => this.changeChartDimmensions());
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener("resize", () => this.changeChartDimmensions());
     }
 
     zoomMinus = () => {
@@ -163,8 +184,9 @@ export default class Macro_Fx extends Component {
 
    render() {    
      return (
+        <div className="chartBoxBigWrapper">
        <div className="chartBox currenciesChart">
-         <h4>Macro Scores</h4>
+        
          <div className="legend">
          <Tools
            resetChart={this.resetChart}
@@ -179,12 +201,15 @@ export default class Macro_Fx extends Component {
            panRightActive={this.state.panRightActive}
            />
           </div>
+          <h4>Macro Scores</h4>
           <div className="chartContainer">
         
          <VictoryChart
            domain={{y:[this.state.currMin , this.state.currMax]}}
            standalone={true}
-           padding={paddingSmall}           
+           padding={paddingSmall}  
+           width={this.state.chartWidth}   
+           height={this.state.chartHeight}      
          >
              <VictoryAxis
                padding={paddingSmall}   
@@ -214,7 +239,7 @@ export default class Macro_Fx extends Component {
              />
 
              {this.state.propsKeys.filter(el => el !== "Date").map((obj, i) =>{
-             return (<CurrSingleChart
+             return (<CurrSingleChartBig
              key={i}
              index={i}
              name={obj}
@@ -231,12 +256,15 @@ export default class Macro_Fx extends Component {
            return (<LegendItem
            key={i}
            index={i}
-           name={obj}                 
+           name={obj}
+           width={this.state.chartWidth}   
+           height={this.state.chartHeight}                  
            />)
            })
            }
         </div>
         </div>
+       </div>
        </div>
      );
    }

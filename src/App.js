@@ -13,6 +13,7 @@ import MasterStrategyPerformanceBig from "./components/charts/masterStrategyPerf
 import GammaExtremeActivityofLargeSpeculatorsBig from "./components/charts/gammaExtremeActivityofLargeSpeculatorsBig.js"
 import Gamma_VolatilityBig from "./components/charts/gamma_VolatilityBig.js"
 import VIXvsMidTermAssetManagersBig from "./components/charts/vixVsMidTermAssetManagersBig.js"
+import Macro_FxBig from "./components/charts/macro_FxBig.js"
 import Loader from "./components/loader.js"
 import {
   HashRouter as Router,
@@ -21,8 +22,9 @@ import {
   Redirect
 } from "react-router-dom";
 
-const macrofixURL = "http://104.211.19.171/serverout/macrofx.json";
-const spxvixURL = "http://104.211.19.171/serverout/spxvix.json";
+
+const macrofixURL = "http://104.211.19.171/serverout/macrofx";
+const spxvixURL = "http://104.211.19.171/serverout/spxvix";
 
 export default class App extends Component {
   state = {
@@ -212,6 +214,19 @@ export default class App extends Component {
                       this.state.spxvix ? (
                         <VIXvsMidTermAssetManagersBig
                           data={this.state.spxvix}
+                        />
+                      ) : (
+                        <Loader />
+                      )
+                    }
+                  />
+                  <ProtectedRoute
+                    isAllowed={this.state.isLoggedIn}
+                    path={`/chartMacro_Fx`}
+                    render={() =>
+                      this.state.spxvix ? (
+                        <Macro_FxBig
+                          data={this.state.macrofix}
                         />
                       ) : (
                         <Loader />

@@ -75,6 +75,35 @@ body {
    justify-content: center;
  }
 
+ .legendItemBox {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   padding: 2px;
+   padding-left: 5px;
+   padding-right: 5px;
+   font-size: 7px;
+   font-size: 12px;
+   @media (max-width: 600px) {
+     font-size: 7px;
+   }
+   span {
+     margin-right: 5px;
+   }
+ }
+
+ .chartContainer {
+   display: flex;
+   flex-direction: row;
+ }
+
+ .legendItems {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+   align-content: center;
+ }
+
 
 
  
