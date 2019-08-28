@@ -221,7 +221,7 @@ updateRange = () => {
                 fixLabelOverlap={true}
                 offsetY={50}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
               />
 
@@ -237,7 +237,7 @@ updateRange = () => {
                 tickFormat={x => `${x.toFixed(0)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
                 crossAxis={false}
               />
@@ -274,7 +274,7 @@ updateRange = () => {
                 tickFormat={z => `${z.toFixed(0)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 },
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 },
                   grid: { strokeWidth: 0 }
                 }}
                 crossAxis={false}
@@ -322,7 +322,7 @@ updateRange = () => {
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
 
@@ -352,7 +352,7 @@ updateRange = () => {
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
             </g>

@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import Tools from "../tools.js";
 import _ from "lodash";
-import { VictoryLine, VictoryBar, VictoryAxis, VictoryArea } from "victory";
+import { VictoryLine, VictoryBar, VictoryAxis, VictoryArea, VictoryLabel } from "victory";
 import {fontSizeSmall, paddingSmall, timeAsixOffsetSmall} from "../../style/chartsStyle.js"
 
-export default class Spx_vix extends Component {
+
+export default class SpxVolreset extends Component {
   constructor(props) {
     const data = props.data.map(el => ({
-      x: el["Date"].slice(2, 10),
+      x: el["Date"].slice(11, 19),
       SPX: el["SPX"],
-      MCI: el["Master Composite Index"]
+      Volreset: el["Volreset"]    
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
     this.state = {
@@ -25,6 +26,12 @@ export default class Spx_vix extends Component {
       panLeftActive: true,
       panRightActive: true
     };
+  }
+
+  componentDidUpdate(prev) {
+    if(this.props.data !== prev.data)
+    this.setState({...this.state, data:this.props.data}, () => {console.log(this.state.data)})
+   
   }
 
  zoomMinus = () => {
@@ -124,22 +131,23 @@ export default class Spx_vix extends Component {
            leftIndex - (this.state.currZoom.length / 10) * this.state.zoomValue  &&
          i <= rightIndex + (this.state.currZoom.length / 10) * this.state.zoomValue
      );
-
    }
-
    this.setState({ currZoom: zoomed });
  };
 
 
   render() {
-    const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
-    const mciMax = _.maxBy(this.state.data, "MCI")["MCI"];
-    const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
-    const mciMin = _.minBy(this.state.data, "MCI")["MCI"];
+    const spxMax = _.maxBy(this.state.currZoom, "SPX")["SPX"];
+    const spxMin = _.minBy(this.state.currZoom, "SPX")["SPX"];
+    const volresetMax = _.maxBy(this.state.currZoom, "Volreset")["Volreset"];
+    const volresetMin = _.minBy(this.state.currZoom, "Volreset")["Volreset"];
+    console.log(this.state.currZoom)
+ 
+ 
 
     return (
       <div className="chartBox">
-        <h4>Master Composite Index</h4>
+        <h4>SPX Volreset</h4>
         <div className="legend">
           <div className="colorBox">
             <span
@@ -152,15 +160,15 @@ export default class Spx_vix extends Component {
           <div className="colorBox">
             <span
               style={{
-                backgroundColor: "navy"
+                backgroundColor: "red"
               }}
             />
-            <div>Master Composite Index</div>
+            <div>Volreset</div>
           </div>
 
           <Tools
             resetChart={this.resetChart}
-            id="chartSpx_Vix"
+            id="chartSpxVolrest"
             zoomPlus={this.zoomPlus}
             zoomMinus={this.zoomMinus}
             panLeft={this.panLeft}
@@ -185,41 +193,36 @@ export default class Spx_vix extends Component {
               style={{
                 tickLabels: { fontSize: fontSizeSmall, padding: 5 }
               }}
-            />
+            />         
 
             <VictoryAxis
-              padding={paddingSmall}
+              padding={{top: 155, left: 40, right: 40, bottom: -120}}
               dependentAxis
-              orientation="right"
+              height={150}
+              orientation="left"
               standalone={false}
-              domain={[mciMin * 1.2, mciMax * 1.2]}
-              dependentAxis
-              tickFormat={x => `${x.toFixed(0)}`}
+              domain={[volresetMin, volresetMax]}
+              tickFormat={z => `${z.toFixed(0)}`}
               fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSize: fontSizeSmall, padding: 5 }
+                tickLabels: { fontSize: fontSizeSmall, padding: 5 },
+                grid: { strokeWidth: 1 }
               }}
               crossAxis={false}
             />
-
-            <VictoryBar
-              padding={paddingSmall}
-              interpolation="monotoneX"
+            <VictoryLine
+              padding={{top: 155, left: 40, right: 40, bottom: -120}}
               data={this.state.currZoom}
-              barWidth={5}
               x={"x"}
-              y={"MCI"}
+              y={"Volreset"}
+              height={150}
+              width={450}
               standalone={false}
               domain={{
-                y: [mciMin * 1.2, mciMax * 1.2]
+                y: [volresetMin, volresetMax]
               }}
-              scale={{ x: "time", y: "linear" }}
               style={{
-                data: {
-                  stroke: `blue`,
-                  fill: "dodgerblue",
-                  strokeWidth: 1
-                }
+                data: { stroke: "red", strokeWidth: 1 }
               }}
             />
 
@@ -227,22 +230,24 @@ export default class Spx_vix extends Component {
               padding={paddingSmall}
               dependentAxis
               orientation="left"
+              height={150}
               standalone={false}
               domain={[spxMin, spxMax]}
               tickFormat={z => `${z.toFixed(0)}`}
               fixLabelOverlap={true}
               style={{
                 tickLabels: { fontSize: fontSizeSmall, padding: 5 },
-                grid: { strokeWidth: 0 }
+                grid: { strokeWidth: 1}
               }}
               crossAxis={false}
             />
-
             <VictoryLine
               padding={paddingSmall}
               data={this.state.currZoom}
               x={"x"}
               y={"SPX"}
+              height={150}
+              width={450}
               standalone={false}
               domain={{
                 y: [spxMin, spxMax]
@@ -251,6 +256,7 @@ export default class Spx_vix extends Component {
                 data: { stroke: "whitesmoke", strokeWidth: 1 }
               }}
             />
+          
           </g>
         </svg>
       </div>

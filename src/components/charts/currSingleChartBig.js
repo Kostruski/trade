@@ -48,7 +48,7 @@ export default function CurrSingleChartBig(props) {
               fill: "rgba(255, 255, 255, 0)",
               strokeWidth: 0
             },
-            labels: { tooltipFontSize }
+            labels: { fontSize: tooltipFontSize }
           }}
         />
         </>

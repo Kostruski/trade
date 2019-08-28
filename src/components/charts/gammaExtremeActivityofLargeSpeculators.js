@@ -196,7 +196,7 @@ export default class GammaExtremeActivityofLargeSpeculators extends Component {
               fixLabelOverlap={true}
               offsetY={timeAsixOffsetSmall}
               style={{
-                tickLabels: { fontSizeSmall, padding: 5 }
+                tickLabels: { fontSize: fontSizeSmall, padding: 5 }
               }}
             />
 
@@ -210,7 +210,7 @@ export default class GammaExtremeActivityofLargeSpeculators extends Component {
               tickFormat={x => `${x.toFixed(0)}`}
               fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSizeSmall, padding: 5 }
+                tickLabels: { fontSize: fontSizeSmall, padding: 5 }
               }}
               crossAxis={false}
             />
@@ -264,7 +264,7 @@ export default class GammaExtremeActivityofLargeSpeculators extends Component {
               tickFormat={z => `${z.toFixed(0)}`}
               fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSizeSmall, padding: 5 },
+                tickLabels: { fontSize: fontSizeSmall, padding: 5 },
                 grid: { strokeWidth: 0 }
               }}
               crossAxis={false}

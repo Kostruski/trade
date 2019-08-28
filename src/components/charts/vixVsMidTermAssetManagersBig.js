@@ -167,6 +167,9 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
     return (
       <div className="chartBoxBigWrapper">
         <div className="chartBox">
+        <h4>
+          VIX vs. Mid Term Asset Managers
+          </h4>
           <Tools
             resetChart={this.resetChart}
             id="chartVIXvsMidTermAssetManagers"
@@ -179,9 +182,7 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
             panLeftActive={this.state.panLeftActive}
             panRightActive={this.state.panRightActive}
           />
-          <h4>
-          VIX vs. Mid Term Asset Managers
-          </h4>
+         
           <div className="legend">
             <div className="colorBox">
               <span
@@ -218,7 +219,7 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
                 fixLabelOverlap={true}
                 offsetY={50}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
               />
 
@@ -234,7 +235,7 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
                 tickFormat={x => `${x.toFixed(2)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
                 crossAxis={false}
               />
@@ -271,7 +272,7 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
                 tickFormat={z => `${z.toFixed(2)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 },
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 },
                   grid: { strokeWidth: 0 }
                 }}
                 crossAxis={false}
@@ -321,7 +322,7 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
 
@@ -351,7 +352,7 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
             </g>

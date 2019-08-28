@@ -188,7 +188,7 @@ export default class VIXvsMidTermAssetManagers extends Component {
               fixLabelOverlap={true}
               offsetY={timeAsixOffsetSmall}
               style={{
-                tickLabels: { fontSizeSmall, padding: 5 }
+                tickLabels: { fontSize: fontSizeSmall, padding: 5 }
               }}
             />
 
@@ -202,7 +202,7 @@ export default class VIXvsMidTermAssetManagers extends Component {
               tickFormat={x => `${x.toFixed(2)}`}
               fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSizeSmall, padding: 5 }
+                tickLabels: { fontSize: fontSizeSmall, padding: 5 }
               }}
               crossAxis={false}
             />
@@ -236,7 +236,7 @@ export default class VIXvsMidTermAssetManagers extends Component {
               tickFormat={z => `${z.toFixed(2)}`}
               fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSizeSmall, padding: 5 },
+                tickLabels: { fontSize: fontSizeSmall, padding: 5 },
                 grid: { strokeWidth: 0 }
               }}
               crossAxis={false}

@@ -195,7 +195,7 @@ export default class Macro_Fx extends Component {
                fixLabelOverlap={true}
                offsetY={timeAsixOffsetSmall}
                style={{
-                 tickLabels: { fontSizeSmall, padding: 5 }
+                 tickLabels: { fontSize: fontSizeSmall, padding: 5 }
                }}
              />
 
@@ -208,7 +208,7 @@ export default class Macro_Fx extends Component {
                tickFormat={x => `${x.toFixed(0)}`}
                fixLabelOverlap={true}
                style={{
-                 tickLabels: { fontSizeSmall, padding: 5 }
+                 tickLabels: { fontSize: fontSizeSmall, padding: 5 }
                }}
                crossAxis={false}
              />
@@ -224,6 +224,7 @@ export default class Macro_Fx extends Component {
              />)
              })
              }
+
         
         </VictoryChart>
         <div className="legendItems">

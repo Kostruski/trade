@@ -230,7 +230,7 @@ export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component
                 fixLabelOverlap={true}
                 offsetY={50}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
               />
 
@@ -246,7 +246,7 @@ export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component
                 tickFormat={x => `${x.toFixed(0)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
                 crossAxis={false}
               />
@@ -306,7 +306,7 @@ export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component
                 tickFormat={z => `${z.toFixed(0)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 },
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 },
                   grid: { strokeWidth: 0 }
                 }}
                 crossAxis={false}
@@ -330,8 +330,6 @@ export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component
 
               <VictoryScatter
                 padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
@@ -358,7 +356,7 @@ export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
 
@@ -389,7 +387,7 @@ export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
 
@@ -420,7 +418,7 @@ export default class GammaExtremeActivityofLargeSpeculatorsBig extends Component
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
             </g>

@@ -229,7 +229,7 @@ export default class AssetManagersLong_MidBig extends Component {
                 fixLabelOverlap={true}
                 offsetY={50}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
               />
 
@@ -245,7 +245,7 @@ export default class AssetManagersLong_MidBig extends Component {
                 tickFormat={x => `${x.toFixed(2)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 }
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
                 crossAxis={false}
               />
@@ -305,7 +305,7 @@ export default class AssetManagersLong_MidBig extends Component {
                 tickFormat={z => `${z.toFixed(0)}`}
                 fixLabelOverlap={true}
                 style={{
-                  tickLabels: { fontSizeBig, padding: 5 },
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 },
                   grid: { strokeWidth: 0 }
                 }}
                 crossAxis={false}
@@ -357,7 +357,7 @@ export default class AssetManagersLong_MidBig extends Component {
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
 
@@ -390,7 +390,7 @@ export default class AssetManagersLong_MidBig extends Component {
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
 
@@ -423,7 +423,7 @@ export default class AssetManagersLong_MidBig extends Component {
                     fill: "rgba(255, 255, 255, 0)",
                     strokeWidth: 0
                   },
-                  labels: { tooltipFontSize }
+                  labels: { fontSize: tooltipFontSize }
                 }}
               />
             </g>

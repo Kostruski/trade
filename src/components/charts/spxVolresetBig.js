@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import Tools from "../tools.js";
 import _ from "lodash";
-import { VictoryLine, VictoryBar, VictoryAxis, VictoryArea } from "victory";
-import {fontSizeSmall, paddingSmall, timeAsixOffsetSmall} from "../../style/chartsStyle.js"
+import { VictoryLine, VictoryBar, VictoryAxis, VictoryScatter, VictoryTooltip  } from "victory";
+import {fontSizeBig, paddingSmall, timeAsixOffsetSmall, tooltipFontSize} from "../../style/chartsStyle.js"
 
-export default class Spx_vix extends Component {
+
+export default class SpxVolresetBig extends Component {
   constructor(props) {
     const data = props.data.map(el => ({
-      x: el["Date"].slice(2, 10),
+      x: el["Date"].slice(11, 19),
       SPX: el["SPX"],
-      MCI: el["Master Composite Index"]
+      Volreset: el["Volreset"]    
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
     this.state = {
@@ -23,8 +24,29 @@ export default class Spx_vix extends Component {
       zoomMinusActive: true,
       zoomPlusActive: true,
       panLeftActive: true,
-      panRightActive: true
+      panRightActive: true,
+      chartWidth: 450,
+      chartHeight: 300
     };
+  }
+
+  changeChartDimmensions = () => {
+    const tempWidth = window.innerWidth - 60;
+    const tempHeight = window.innerHeight - 100;
+    if (
+      Math.abs(this.state.chartWidth - tempWidth) ||
+      Math.abs(this.state.chartHeight - tempHeight) > 10
+    )
+      this.setState({ chartWidth: tempWidth, chartHeight: tempHeight });
+  };
+
+  componentWillMount() {
+    this.changeChartDimmensions();
+    window.addEventListener("resize", () => this.changeChartDimmensions());
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", () => this.changeChartDimmensions());
   }
 
  zoomMinus = () => {
@@ -124,22 +146,25 @@ export default class Spx_vix extends Component {
            leftIndex - (this.state.currZoom.length / 10) * this.state.zoomValue  &&
          i <= rightIndex + (this.state.currZoom.length / 10) * this.state.zoomValue
      );
-
    }
-
    this.setState({ currZoom: zoomed });
  };
 
 
   render() {
-    const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
-    const mciMax = _.maxBy(this.state.data, "MCI")["MCI"];
-    const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
-    const mciMin = _.minBy(this.state.data, "MCI")["MCI"];
+    const spxMax = _.maxBy(this.state.currZoom, "SPX")["SPX"];
+    const spxMin = _.minBy(this.state.currZoom, "SPX")["SPX"];
+    const volresetMax = _.maxBy(this.state.currZoom, "Volreset")["Volreset"];
+    const volresetMin = _.minBy(this.state.currZoom, "Volreset")["Volreset"];
+    const paddingTop = this.state.chartHeight/2+5
+    const paddingBottom = -1*this.state.chartHeight/2+30
+   
+    
 
     return (
+      <div className="chartBoxBigWrapper">
       <div className="chartBox">
-        <h4>Master Composite Index</h4>
+        <h4>SPX Volreset</h4>
         <div className="legend">
           <div className="colorBox">
             <span
@@ -152,15 +177,15 @@ export default class Spx_vix extends Component {
           <div className="colorBox">
             <span
               style={{
-                backgroundColor: "navy"
+                backgroundColor: "red"
               }}
             />
-            <div>Master Composite Index</div>
+            <div>Volreset</div>
           </div>
 
           <Tools
             resetChart={this.resetChart}
-            id="chartSpx_Vix"
+            id="chartSpxVolrest"
             zoomPlus={this.zoomPlus}
             zoomMinus={this.zoomMinus}
             panLeft={this.panLeft}
@@ -172,9 +197,14 @@ export default class Spx_vix extends Component {
           />
         </div>
 
-        <svg viewBox="0 0 450 300" >
+        <svg 
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${this.state.chartWidth} ${this.state.chartHeight}`} >
           <g>
             <VictoryAxis
+              width={this.state.chartWidth}
+              height={this.state.chartHeight}
               padding={paddingSmall}
               scale="time"
               standalone={false}
@@ -183,48 +213,76 @@ export default class Spx_vix extends Component {
               fixLabelOverlap={true}
               offsetY={timeAsixOffsetSmall}
               style={{
-                tickLabels: { fontSize: fontSizeSmall, padding: 5 }
+                tickLabels: { fontSize: fontSizeBig, padding: 5 }
               }}
-            />
+            />         
 
             <VictoryAxis
-              padding={paddingSmall}
+             padding={{top: paddingTop, left: 40, right: 40, bottom: paddingBottom}}
+              width={this.state.chartWidth}
+              height={this.state.chartHeight/2}
               dependentAxis
-              orientation="right"
+              orientation="left"
               standalone={false}
-              domain={[mciMin * 1.2, mciMax * 1.2]}
-              dependentAxis
-              tickFormat={x => `${x.toFixed(0)}`}
+              domain={[volresetMin, volresetMax]}
+              tickFormat={z => `${z.toFixed(0)}`}
               fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSize: fontSizeSmall, padding: 5 }
+                tickLabels: { fontSize: fontSizeBig, padding: 5 },
+                grid: { strokeWidth: 1 }
               }}
               crossAxis={false}
             />
-
-            <VictoryBar
-              padding={paddingSmall}
-              interpolation="monotoneX"
+            <VictoryLine
+               padding={{top: paddingTop, left: 40, right: 40, bottom: paddingBottom}}
               data={this.state.currZoom}
-              barWidth={5}
+              width={this.state.chartWidth}
+              height={this.state.chartHeight/2}
               x={"x"}
-              y={"MCI"}
+              y={"Volreset"}
               standalone={false}
               domain={{
-                y: [mciMin * 1.2, mciMax * 1.2]
+                y: [volresetMin, volresetMax]
               }}
-              scale={{ x: "time", y: "linear" }}
+              style={{
+                data: { stroke: "red", strokeWidth: 3 }
+              }}
+            />
+            <VictoryScatter
+               padding={{top: paddingTop, left: 40, right: 40, bottom: paddingBottom}}
+              data={this.state.currZoom}
+              width={this.state.chartWidth}
+              height={this.state.chartHeight/2}
+              x={"x"}
+              y={"Volreset"}
+              standalone={false}
+              domain={{
+                y: [volresetMin, volresetMax]
+              }}
+              
+              labels={d =>
+                `Volreset: ${d["Volreset"].toFixed(2)}, date: ${d.x}`
+              }
               style={{
                 data: {
-                  stroke: `blue`,
-                  fill: "dodgerblue",
-                  strokeWidth: 1
-                }
+                  stroke: "rgba(255, 255, 255, 0)",
+                  fill: "rgba(255, 255, 255, 0)",
+                  strokeWidth: 0
+                },
+                labels: { fontSize: tooltipFontSize }
               }}
+              labelComponent={
+                <VictoryTooltip
+                  flyoutStyle={{ fill: "black" }}
+                  pointerLength={0}
+                  
+                  />} 
             />
 
             <VictoryAxis
               padding={paddingSmall}
+              width={this.state.chartWidth}
+              height={this.state.chartHeight/2}
               dependentAxis
               orientation="left"
               standalone={false}
@@ -232,15 +290,16 @@ export default class Spx_vix extends Component {
               tickFormat={z => `${z.toFixed(0)}`}
               fixLabelOverlap={true}
               style={{
-                tickLabels: { fontSize: fontSizeSmall, padding: 5 },
-                grid: { strokeWidth: 0 }
+                tickLabels: { fontSize: fontSizeBig, padding: 5 },
+                grid: { strokeWidth: 1}
               }}
               crossAxis={false}
             />
-
             <VictoryLine
               padding={paddingSmall}
               data={this.state.currZoom}
+              width={this.state.chartWidth}
+              height={this.state.chartHeight/2}
               x={"x"}
               y={"SPX"}
               standalone={false}
@@ -248,11 +307,44 @@ export default class Spx_vix extends Component {
                 y: [spxMin, spxMax]
               }}
               style={{
-                data: { stroke: "whitesmoke", strokeWidth: 1 }
+                data: { stroke: "whitesmoke", strokeWidth: 3 }
               }}
             />
+            <VictoryScatter
+              padding={paddingSmall}
+              data={this.state.currZoom}
+              width={this.state.chartWidth}
+              height={this.state.chartHeight/2}
+              x={"x"}
+              y={"SPX"}
+              size={20}
+              standalone={false}
+              domain={{
+                y: [spxMin, spxMax]
+              }}
+              
+              labels={d =>
+                `SPX: ${d["SPX"].toFixed(0)}, date: ${d.x}`
+              }
+              style={{
+                data: {
+                  stroke: "rgba(255, 255, 255, 0)",
+                  fill: "rgba(255, 255, 255, 0)",
+                  strokeWidth: 0
+                },
+                labels: { fontSize: tooltipFontSize }
+              }}
+              labelComponent={
+                <VictoryTooltip
+                  flyoutStyle={{ fill: "black" }}
+                  pointerLength={0}
+                 
+                />}
+            />
+          
           </g>
         </svg>
+      </div>
       </div>
     );
   }
