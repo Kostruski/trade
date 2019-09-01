@@ -6,21 +6,23 @@ import {
   VictoryLine,
   VictoryTooltip,
   VictoryAxis,
-  VictoryArea,
-  VictoryScatter
+  VictoryBar,
+  VictoryScatter,
+  VictoryArea
 } from "victory";
 
 
 
-export default class AssetManagersLong_MidBig extends Component {
+export default class MacroCycleBig extends Component {
   constructor(props) {
-    const data = props.data.map(el => ({
-      x: el["Date"].slice(2, 10),
-      SPX: el["SPX"],
-      Long: el["Long Term"],
-      Mid: el["Mid Term"]
-    }));
 
+    const data1 = props.data.map(el => _.pick(el, ["Date", "EURUSD", "Macro Cycle"]))
+
+    const data = data1.map(el => ({
+      x: el["Date"].slice(2, 10),
+      EURUSD: el["EURUSD"],
+      macro: el["Macro Cycle"]
+    }));
     const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
@@ -161,55 +163,47 @@ export default class AssetManagersLong_MidBig extends Component {
  };
 
   render() {
-    const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
-    const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
-    const longMax = _.maxBy(this.state.currZoom, "Long")["Long"];
-    const longMin = _.minBy(this.state.currZoom, "Long")["Long"];
-    const midMax = _.maxBy(this.state.currZoom, "Mid")["Mid"];
-    const midMin = _.minBy(this.state.currZoom, "Mid")["Mid"];
+  const eurusdMax = _.maxBy(this.state.currZoom, "EURUSD")["EURUSD"];
+  const eurusdMin = _.minBy(this.state.currZoom, "EURUSD")["EURUSD"];
+  const macroMax = _.maxBy(this.state.currZoom, "macro")["macro"]; 
+  const macroMin = _.minBy(this.state.currZoom, "macro")["macro"];
+ 
 
     return (
       <div className="chartBoxBigWrapper">
         <div className="chartBox">
         <Tools
-              resetChart={this.resetChart}
-              id="chartAssetManagersLong_Mid"
-              zoomPlus={this.zoomPlus}
-              zoomMinus={this.zoomMinus}
-              panLeft={this.panLeft}
-              panRight={this.panRight}
-              zoomMinusActive={this.state.zoomMinusActive}
-              zoomPlusActive={this.state.zoomPlusActive}
-              panLeftActive={this.state.panLeftActive}
-              panRightActive={this.state.panRightActive}
-            />
-         
+            resetChart={this.resetChart}
+            id="chartMacroCycle"
+            zoomPlus={this.zoomPlus}
+            zoomMinus={this.zoomMinus}
+            panLeft={this.panLeft}
+            panRight={this.panRight}
+            zoomMinusActive={this.state.zoomMinusActive}
+            zoomPlusActive={this.state.zoomPlusActive}
+            panLeftActive={this.state.panLeftActive}
+            panRightActive={this.state.panRightActive}
+          />
+        <h4>Macro Cycle</h4>
           <div className="legend">
-             <div className="colorBox">
+            <div className="colorBox">
               <span
                 style={{
                   backgroundColor: "whitesmoke"
                 }}
               />
-              <div>SPX</div>
+              <div>EUR USD</div>
             </div>
             <div className="colorBox">
               <span
                 style={{
-                  backgroundColor: "red"
+                  backgroundColor: "navy"
                 }}
               />
-              <div>Long Term</div>
+              <div>Macro Cycle</div>
             </div>
-            <div className="colorBox">
-              <span
-                style={{
-                  backgroundColor: "gold"
-                }}
-              />
-              <div>Mid Term</div>
-            </div>
-            <h4>Asset Managers Long / Mid</h4>           
+
+           
           </div>
 
           <svg
@@ -217,7 +211,7 @@ export default class AssetManagersLong_MidBig extends Component {
             height="100%"
             viewBox={`0 0 ${this.state.chartWidth} ${this.state.chartHeight}`}
           >
-            <g>
+            <g >
               <VictoryAxis
                 padding={padding}
                 width={this.state.chartWidth}
@@ -227,20 +221,20 @@ export default class AssetManagersLong_MidBig extends Component {
                 tickValues={this.state.currZoom.map(el => el["x"])}
                 orientation="bottom"
                 fixLabelOverlap={true}
-                offsetY={50}
+                // offsetY={50}
                 style={{
                   tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
               />
 
               <VictoryAxis
-                padding={padding}
+               padding={padding}
+                dependentAxis
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
-                dependentAxis
-                orientation="left"
+                orientation="right"
                 standalone={false}
-                domain={[Math.min(longMin, midMin), Math.max(longMax, midMax)]}
+                domain={[macroMin * 1.2, macroMax * 1.2]}
                 dependentAxis
                 tickFormat={x => `${x.toFixed(2)}`}
                 fixLabelOverlap={true}
@@ -251,45 +245,24 @@ export default class AssetManagersLong_MidBig extends Component {
               />
 
               <VictoryArea
-              padding={padding}
+                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
+                interpolation={"step"}
+                barWidth={12}
                 data={this.state.currZoom}
-                interpolation="step"
                 x={"x"}
-                y={"Long"}
+                y={"macro"}
                 standalone={false}
                 domain={{
-                  y: [midMin * 1.1, midMax * 1.1]
+                  y: [macroMin * 1.2, macroMax * 1.2]
                 }}
                 scale={{ x: "time", y: "linear" }}
                 style={{
                   data: {
-                    stroke: `red`,
-                    fill: "rgba(255,51,0,0.4)",
+                    stroke: `blue`,
+                    fill: "dodgerblue",
                     strokeWidth: 3
-                  }
-                }}
-              />
-
-              <VictoryArea
-              padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
-                interpolation="step"
-                data={this.state.currZoom}
-                x={"x"}
-                y={"Mid"}
-                standalone={false}
-                domain={{
-                  y: [midMin * 1.1, midMax * 1.1]
-                }}
-                scale={{ x: "time", y: "linear" }}
-                style={{
-                  data: {
-                    stroke: `yellow`,
-                    fill: "rgba(255,255,0,0.4)",
-                    strokeWidth: 1
                   }
                 }}
               />
@@ -299,10 +272,10 @@ export default class AssetManagersLong_MidBig extends Component {
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 dependentAxis
-                orientation="right"
+                orientation="left"
                 standalone={false}
-                domain={[spxMin, spxMax]}
-                tickFormat={z => `${z.toFixed(0)}`}
+                domain={[eurusdMin, eurusdMax]}
+                tickFormat={z => `${z.toFixed(2)}`}
                 fixLabelOverlap={true}
                 style={{
                   tickLabels: { fontSize: fontSizeBig, padding: 5 },
@@ -312,43 +285,40 @@ export default class AssetManagersLong_MidBig extends Component {
               />
 
               <VictoryLine
-              padding={padding}
+                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"SPX"}
+                y={"EURUSD"}
                 standalone={false}
                 domain={{
-                  y: [spxMin, spxMax]
-                }}
+                  y: [eurusdMin, eurusdMax]
+                }}              
                 style={{
-                  data: { stroke: "whitesmoke", strokeWidth: 3 }
+                  data: { stroke: "whitesmoke", strokeWidth: 3 },
+            
                 }}
               />
 
               <VictoryScatter
-              padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
+                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"SPX"}
+                y={"macro"}
                 size={20}
                 standalone={false}
                 domain={{
-                  y: [spxMin, spxMax]
+                  y: [macroMin * 1.2, macroMax * 1.2]
                 }}
                 scale={{ x: "time", y: "linear" }}
-                labels={d => `SPX: ${d["SPX"]}, date: ${d.x}`}
+                labels={d => `Macro: ${d["macro"].toFixed(2)}, date: ${d.x}`}
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "black" }}
-                    orientation={"bottom"
-                    }
-                    pointerWidth={0}
+                     pointerLength={0}
                   />
                 }
                 style={{
@@ -362,58 +332,23 @@ export default class AssetManagersLong_MidBig extends Component {
               />
 
               <VictoryScatter
-              padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
-                data={this.state.currZoom}
-                x={"x"}
-                y={"Long"}
-                size={20}
-                standalone={false}
-                domain={{
-                  y: [midMin * 1.1, midMax * 1.1]
-                }}
-                scale={{ x: "time", y: "linear" }}
-                labels={d => `LONG: ${d["Long"].toFixed(2)}, date: ${d.x}`}
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black" }}
-                    orientation={d => (d["Long"] > 0 ? "bottom" : "top")}
-                    pointerWidth={0}
-                  />
-                }
-                style={{
-                  data: {
-                    stroke: "rgba(255, 255, 255, 0)",
-                    fill: "rgba(255, 255, 255, 0)",
-                    strokeWidth: 0
-                  },
-                  labels: { fontSize: tooltipFontSize }
-                }}
-              />
-
-              <VictoryScatter
-              padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
+                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
                 data={this.state.currZoom}
                 x={"x"}
-                y={"Mid"}
+                y={"EURUSD"}
                 size={20}
                 standalone={false}
                 domain={{
-                  y: [midMin * 1.1, midMax * 1.1]
+                  y: [eurusdMin, eurusdMax]
                 }}
                 scale={{ x: "time", y: "linear" }}
-                labels={d => `MID: ${d["Mid"].toFixed(2)}, date: ${d.x}`}
+                labels={d => `EUR USD: ${d["EURUSD"].toFixed(2)}, date: ${d.x}`}
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "black" }}
-                    orientation={d => (d["Mid"] > 0 ? "bottom" : "top")}
+                    orientation={"bottom"}
                     pointerWidth={0}
                   />
                 }

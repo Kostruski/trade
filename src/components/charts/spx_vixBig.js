@@ -7,7 +7,8 @@ import {
   VictoryTooltip,
   VictoryAxis,
   VictoryBar,
-  VictoryScatter
+  VictoryScatter,
+  VictoryArea
 } from "victory";
 
 
@@ -20,7 +21,7 @@ export default class Spx_vixBig extends Component {
       MCI: el["Master Composite Index"]
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
     this.state = {
@@ -218,7 +219,7 @@ export default class Spx_vixBig extends Component {
                 tickValues={this.state.currZoom.map(el => el["x"])}
                 orientation="bottom"
                 fixLabelOverlap={true}
-                offsetY={50}
+                // offsetY={50}
                 style={{
                   tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
@@ -241,10 +242,11 @@ export default class Spx_vixBig extends Component {
                 crossAxis={false}
               />
 
-              <VictoryBar
+              <VictoryArea
                 padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
+                interpolation={"step"}
                 barWidth={12}
                 data={this.state.currZoom}
                 x={"x"}
@@ -291,16 +293,10 @@ export default class Spx_vixBig extends Component {
                 domain={{
                   y: [spxMin, spxMax]
                 }}
-                labels={data => `SPX: ${data["SPX"]}, date: ${data.x}`}
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black", stroke: "whitesmoke" }}
-                    horizontal={true}
-                  />
-                }
+                
                 style={{
                   data: { stroke: "whitesmoke", strokeWidth: 3 },
-                  labels: { fontSize: 7 }
+               
                 }}
               />
 

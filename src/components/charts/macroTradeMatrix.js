@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import Tools from "../tools.js";
 import _ from "lodash";
 import LegendItem from "../legendItem.js"
-import CurrSingleChartBig from "./currSingleChartBig.js"
+import CurrSingleChart from "./currSingleChart.js"
 import { VictoryLine, VictoryBar, VictoryAxis, VictoryArea, VictoryChart } from "victory";
 import {
-  fontSizeBig,
-  padding,
+  fontSizeSmall,
+  paddingSmall,
   timeAsixOffsetSmall
 } from "../../style/chartsStyle.js";
 
@@ -25,10 +25,10 @@ const updateDomain = (zoomed) => {
 
 
 
-export default class Macro_FxBig extends Component {
+export default class MacroTradeMatrix extends Component {
   
     constructor(props) {
-        const propsKeys = Object.keys(_.last(props.data)).filter(el => el==="Date" || el.length===3)
+        const propsKeys = Object.keys(_.last(props.data)).filter(el => el==="Date" || el.length===4)
         const data = props.data.map(el => _.pick(el, propsKeys))
         const initZoom = data.filter((el, i) => i > props.data.length - 120);  
         let currMax = 0
@@ -53,29 +53,8 @@ export default class Macro_FxBig extends Component {
             zoomMinusActive: true,
             zoomPlusActive: true,
             panLeftActive: true,
-            panRightActive: true,
-            chartWidth: 450,
-            chartHeight: 300
+            panRightActive: true
         }
-    }
-
-    changeChartDimmensions = () => {
-      const tempWidth = window.innerWidth - 60;
-      const tempHeight = window.innerHeight - 100;
-      if (
-        Math.abs(this.state.chartWidth - tempWidth) ||
-        Math.abs(this.state.chartHeight - tempHeight) > 10
-      )
-        this.setState({ chartWidth: tempWidth, chartHeight: tempHeight });
-    };
-
-    componentWillMount() {
-      this.changeChartDimmensions();
-      window.addEventListener("resize", () => this.changeChartDimmensions());
-    }
-
-    componentWillUnmount() {
-      window.removeEventListener("resize", () => this.changeChartDimmensions());
     }
 
     zoomMinus = () => {
@@ -182,15 +161,15 @@ export default class Macro_FxBig extends Component {
 
 
 
-   render() {    
+   render() {   
+   
      return (
-        <div className="chartBoxBigWrapper">
        <div className="chartBox currenciesChart">
-        
+         <h4>Macro Trade Matrix</h4>
          <div className="legend">
          <Tools
            resetChart={this.resetChart}
-           id="chartMacro_Fx"
+           id="chartMacroTradeMatrix"
            zoomPlus={this.zoomPlus}
            zoomMinus={this.zoomMinus}
            panLeft={this.panLeft}
@@ -201,18 +180,15 @@ export default class Macro_FxBig extends Component {
            panRightActive={this.state.panRightActive}
            />
           </div>
-          <h4>Macro Scores</h4>
           <div className="chartContainer">
         
          <VictoryChart
            domain={{y:[this.state.currMin , this.state.currMax]}}
            standalone={true}
-           padding={padding}  
-           width={this.state.chartWidth}   
-           height={this.state.chartHeight}      
+           padding={paddingSmall}           
          >
              <VictoryAxis
-               padding={padding}   
+               padding={paddingSmall}   
                standalone={false}
                scale="time"
                tickValues={this.state.currZoom.map(el => el["Date"].slice(2, 10))}
@@ -220,12 +196,12 @@ export default class Macro_FxBig extends Component {
                fixLabelOverlap={true}
                offsetY={timeAsixOffsetSmall}
                style={{
-                 tickLabels: { fontSize: fontSizeBig, padding: 5 }
+                 tickLabels: { fontSize: fontSizeSmall, padding: 5 }
                }}
              />
 
              <VictoryAxis
-               padding={padding}   
+               padding={paddingSmall}   
                dependentAxis
                orientation="right"
                standalone={false}
@@ -233,13 +209,13 @@ export default class Macro_FxBig extends Component {
                tickFormat={x => `${x.toFixed(0)}`}
                fixLabelOverlap={true}
                style={{
-                 tickLabels: { fontSize: fontSizeBig, padding: 5 }
+                 tickLabels: { fontSize: fontSizeSmall, padding: 5 }
                }}
                crossAxis={false}
              />
 
              {this.state.propsKeys.filter(el => el !== "Date").map((obj, i) =>{
-             return (<CurrSingleChartBig
+             return (<CurrSingleChart
              key={i}
              index={i}
              name={obj}
@@ -249,6 +225,7 @@ export default class Macro_FxBig extends Component {
              />)
              })
              }
+
         
         </VictoryChart>
         <div className="legendItems">
@@ -256,15 +233,12 @@ export default class Macro_FxBig extends Component {
            return (<LegendItem
            key={i}
            index={i}
-           name={obj}
-           width={this.state.chartWidth}   
-           height={this.state.chartHeight}                  
+           name={obj}                 
            />)
            })
            }
         </div>
         </div>
-       </div>
        </div>
      );
    }

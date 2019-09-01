@@ -16,7 +16,7 @@ export default class MasterStrategyPerformance extends Component {
       masterEquity: el["Master Equity"]
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
     this.state = {

@@ -1,23 +1,26 @@
 import React, { Component } from "react";
 import Tools from "../tools.js";
 import _ from "lodash";
-import {padding, fontSizeBig, tooltipFontSize} from "../../style/chartsStyle.js"
 import {
   VictoryLine,
-  VictoryTooltip,
+  VictoryBar,
   VictoryAxis,
-  VictoryArea,
-  VictoryScatter
+  VictoryScatter,
+  VictoryTooltip
 } from "victory";
+import {
+  fontSizeBig,
+  paddingSmall,
+  timeAsixOffsetSmall,
+  tooltipFontSize
+} from "../../style/chartsStyle.js";
 
-
-
-export default class VIXvsMidTermAssetManagersBig extends Component {
+export default class SpxVolresetBig extends Component {
   constructor(props) {
     const data = props.data.map(el => ({
-      x: el["Date"].slice(2, 10),
-      VIX: el["VIX"],
-      midTerm: el["Mid Term"]
+      x: el["Date"].slice(11, 19),
+      SPX: el["SPX"],
+      Volreset: el["Volreset"]
     }));
 
     const initZoom = data.filter((el, i) => i > data.length - 120);
@@ -154,52 +157,51 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
               (this.state.currZoom.length / 10) * this.state.zoomValue
       );
     }
-
     this.setState({ currZoom: zoomed });
   };
 
   render() {
- const vixMax = _.maxBy(this.state.data, "VIX")["VIX"];
- const vixMin = _.minBy(this.state.data, "VIX")["VIX"];
- const midMax = _.maxBy(this.state.currZoom, "midTerm")["midTerm"];
- const midMin = _.minBy(this.state.currZoom, "midTerm")["midTerm"];
+    const spxMax = _.maxBy(this.state.currZoom, "SPX")["SPX"];
+    const spxMin = _.minBy(this.state.currZoom, "SPX")["SPX"];
+    const volresetMax = _.maxBy(this.state.currZoom, "Volreset")["Volreset"];
+    const volresetMin = _.minBy(this.state.currZoom, "Volreset")["Volreset"];
+    const paddingTop = this.state.chartHeight / 2 + 5;
+    const paddingBottom = (-1 * this.state.chartHeight) / 2 + 30;
 
     return (
       <div className="chartBoxBigWrapper">
         <div className="chartBox">
-        <h4>
-          VIX vs. Mid Term Asset Managers
-          </h4>
-          <Tools
-            resetChart={this.resetChart}
-            id="chartVIXvsMidTermAssetManagers"
-            zoomPlus={this.zoomPlus}
-            zoomMinus={this.zoomMinus}
-            panLeft={this.panLeft}
-            panRight={this.panRight}
-            zoomMinusActive={this.state.zoomMinusActive}
-            zoomPlusActive={this.state.zoomPlusActive}
-            panLeftActive={this.state.panLeftActive}
-            panRightActive={this.state.panRightActive}
-          />
-         
+          <h4>SPX Volreset</h4>
           <div className="legend">
             <div className="colorBox">
               <span
                 style={{
-                  backgroundColor: "rgb(255, 102, 204)"
+                  backgroundColor: "whitesmoke"
                 }}
               />
-              <div>VIX</div>
+              <div>SPX</div>
             </div>
             <div className="colorBox">
               <span
                 style={{
-                  backgroundColor: "rgb(204, 255, 51)"
+                  backgroundColor: "red"
                 }}
               />
-              <div>Mid Term</div>
+              <div>Volreset</div>
             </div>
+
+            <Tools
+              resetChart={this.resetChart}
+              id="chartSpxVolrest"
+              zoomPlus={this.zoomPlus}
+              zoomMinus={this.zoomMinus}
+              panLeft={this.panLeft}
+              panRight={this.panRight}
+              zoomMinusActive={this.state.zoomMinusActive}
+              zoomPlusActive={this.state.zoomPlusActive}
+              panLeftActive={this.state.panLeftActive}
+              panRightActive={this.state.panRightActive}
+            />
           </div>
 
           <svg
@@ -209,111 +211,80 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
           >
             <g>
               <VictoryAxis
-                padding={padding}
                 width={this.state.chartWidth}
                 height={this.state.chartHeight}
+                padding={paddingSmall}
                 scale="time"
                 standalone={false}
                 tickValues={this.state.currZoom.map(el => el["x"])}
                 orientation="bottom"
                 fixLabelOverlap={true}
+                // offsetY={timeAsixOffsetSmall}
                 style={{
                   tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}
               />
 
               <VictoryAxis
-                padding={padding}
-                dependentAxis
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
-                orientation="right"
-                standalone={false}
-                domain={[vixMin * 1.2, vixMax * 1.2]}
-                dependentAxis
-                tickFormat={x => `${x.toFixed(2)}`}
-                fixLabelOverlap={true}
-                style={{
-                  tickLabels: { fontSize: fontSizeBig, padding: 5 }
+                padding={{
+                  top: paddingTop,
+                  left: 40,
+                  right: 40,
+                  bottom: paddingBottom
                 }}
-                crossAxis={false}
-              />
-
-              <VictoryArea
-                padding={padding}
                 width={this.state.chartWidth}
-                height={this.state.chartHeight}
-                data={this.state.currZoom}
-                x={"x"}
-                y={"midTerm"}
-                standalone={false}
-                domain={{
-                  y: [midMin * 1.2, midMax * 1.2]
-                }}
-                scale={{ x: "time", y: "linear" }}
-                style={{
-                  data: {
-                    stroke: `rgb(204, 255, 51)`,
-                    fill: "rgba(204, 255, 51, 0.5)",
-                    strokeWidth: 3
-                  }
-                }}
-              />
-
-              <VictoryAxis
-                padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
+                height={this.state.chartHeight / 2}
                 dependentAxis
                 orientation="left"
                 standalone={false}
-                domain={[midMin, midMax]}
-                tickFormat={z => `${z.toFixed(2)}`}
+                domain={[volresetMin, volresetMax]}
+                tickFormat={z => `${z.toFixed(0)}`}
                 fixLabelOverlap={true}
                 style={{
                   tickLabels: { fontSize: fontSizeBig, padding: 5 },
-                  grid: { strokeWidth: 0 }
+                  grid: { strokeWidth: 1 }
                 }}
                 crossAxis={false}
               />
-
               <VictoryLine
-                padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
+                padding={{
+                  top: paddingTop,
+                  left: 40,
+                  right: 40,
+                  bottom: paddingBottom
+                }}
                 data={this.state.currZoom}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight / 2}
                 x={"x"}
-                y={"VIX"}
+                y={"Volreset"}
                 standalone={false}
                 domain={{
-                    y: [vixMin, vixMax]
+                  y: [volresetMin, volresetMax]
                 }}
                 style={{
-                  data: { stroke: "rgb(255, 102, 204)", strokeWidth: 3 }
+                  data: { stroke: "red", strokeWidth: 3 }
                 }}
               />
-
               <VictoryScatter
-                padding={padding}
-                width={this.state.chartWidth}
-                height={this.state.chartHeight}
+                padding={{
+                  top: paddingTop,
+                  left: 40,
+                  right: 40,
+                  bottom: paddingBottom
+                }}
                 data={this.state.currZoom}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight / 2}
                 x={"x"}
-                y={"midTerm"}
-                size={20}
+                y={"Volreset"}
                 standalone={false}
                 domain={{
-                    y: [midMin * 1.2, midMax * 1.2]
+                  y: [volresetMin, volresetMax]
                 }}
-                scale={{ x: "time", y: "linear" }}
+                size={20}
                 labels={d =>
-                  `Mid Term: ${d["midTerm"].toFixed(2)}, date: ${d.x}`
-                }
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black" }}
-                    pointerLength={0}
-                  />
+                  `Volreset: ${d["Volreset"].toFixed(0)}, date: ${d.x}`
                 }
                 style={{
                   data: {
@@ -323,28 +294,58 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
                   },
                   labels: { fontSize: tooltipFontSize }
                 }}
+                labelComponent={
+                  <VictoryTooltip
+                    flyoutStyle={{ fill: "black" }}
+                    pointerLength={0}
+                  />
+                }
               />
 
-              <VictoryScatter
-                padding={padding}
+              <VictoryAxis
+                padding={paddingSmall}
                 width={this.state.chartWidth}
-                height={this.state.chartHeight}
+                height={this.state.chartHeight / 2}
+                dependentAxis
+                orientation="left"
+                standalone={false}
+                domain={[spxMin, spxMax]}
+                tickFormat={z => `${z.toFixed(0)}`}
+                fixLabelOverlap={true}
+                style={{
+                  tickLabels: { fontSize: fontSizeBig, padding: 5 },
+                  grid: { strokeWidth: 1 }
+                }}
+                crossAxis={false}
+              />
+              <VictoryLine
+                padding={paddingSmall}
                 data={this.state.currZoom}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight / 2}
                 x={"x"}
-                y={"VIX"}
+                y={"SPX"}
+                standalone={false}
+                domain={{
+                  y: [spxMin, spxMax]
+                }}
+                style={{
+                  data: { stroke: "whitesmoke", strokeWidth: 3 }
+                }}
+              />
+              <VictoryScatter
+                padding={paddingSmall}
+                data={this.state.currZoom}
+                width={this.state.chartWidth}
+                height={this.state.chartHeight / 2}
+                x={"x"}
+                y={"SPX"}
                 size={20}
                 standalone={false}
                 domain={{
-                    y: [vixMin, vixMax]
+                  y: [spxMin, spxMax]
                 }}
-                scale={{ x: "time", y: "linear" }}
-                labels={d => `VIX: ${d["VIX"].toFixed(2)}, date: ${d.x}`}
-                labelComponent={
-                  <VictoryTooltip
-                    flyoutStyle={{ fill: "black" }}
-                    pointerLength={0}
-                  />
-                }
+                labels={d => `SPX: ${d["SPX"].toFixed(0)}, date: ${d.x}`}
                 style={{
                   data: {
                     stroke: "rgba(255, 255, 255, 0)",
@@ -353,6 +354,12 @@ export default class VIXvsMidTermAssetManagersBig extends Component {
                   },
                   labels: { fontSize: tooltipFontSize }
                 }}
+                labelComponent={
+                  <VictoryTooltip
+                    flyoutStyle={{ fill: "black" }}
+                    pointerLength={0}
+                  />
+                }
               />
             </g>
           </svg>

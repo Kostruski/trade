@@ -12,8 +12,10 @@ export default class assetManagersLong_Mid extends Component {
       Long: el["Long Term"],
       Mid: el["Mid Term"]
     }));
-
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+   
+    console.log("assetManagers constructor")
+     
+    const initZoom = data.filter((el, i) => i > data.length -120);
 
     super(props);
     this.state = {
@@ -26,6 +28,10 @@ export default class assetManagersLong_Mid extends Component {
       panLeftActive: true,
       panRightActive: true
     };
+  }
+
+  componentDidMount(){
+    console.log("assetManagers component did mount")
   }
 
 zoomMinus = () => {

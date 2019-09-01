@@ -20,7 +20,7 @@ export default class MasterStrategyPerformanceBig extends Component {
       masterEquity: el["Master Equity"]
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
     this.state = {
@@ -219,7 +219,6 @@ updateRange = () => {
                 tickValues={this.state.currZoom.map(el => el["x"])}
                 orientation="bottom"
                 fixLabelOverlap={true}
-                offsetY={50}
                 style={{
                   tickLabels: { fontSize: fontSizeBig, padding: 5 }
                 }}

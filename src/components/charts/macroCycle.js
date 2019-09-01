@@ -1,44 +1,34 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import Tools from "../tools.js";
 import _ from "lodash";
 import { VictoryLine, VictoryBar, VictoryAxis, VictoryArea } from "victory";
 import {fontSizeSmall, paddingSmall, timeAsixOffsetSmall} from "../../style/chartsStyle.js"
 
-export default class Spx_vix extends Component {
-
+export default class MacroCycle extends PureComponent {
   constructor(props) {
-    const data = props.data.map(el => ({
+   
+    const data1 = props.data.map(el => _.pick(el, ["Date", "EURUSD", "Macro Cycle"]))
+
+    const data = data1.map(el => ({
       x: el["Date"].slice(2, 10),
-      SPX: el["SPX"],
-      MCI: el["Master Composite Index"]
+      EURUSD: el["EURUSD"],
+      macro: el["Macro Cycle"]
     }));
 
-    console.log("spx_vix constructor")
-
-    
+    const initZoom = data.filter((el, i) => i > data.length -120);
 
     super(props);
     this.state = {
       data: data,
-      initZoom: null,
-      currZoom: null,
+      initZoom: initZoom,
+      currZoom: initZoom,
       zoomValue: 0,
       zoomMinusActive: true,
       zoomPlusActive: true,
       panLeftActive: true,
-      panRightActive: true 
-    }
+      panRightActive: true
+    };
   }
-
-  componentDidMount() {
-    const initZoom = this.state.data.filter((el, i) => i > this.state.data.length - 120);
-    if(!this.state.initZoom) {
-      this.setState({initZoom:initZoom, currZoom:initZoom})
-      console.log("spx_vix component did mount")
-    }}
-   
-  
-
 
  zoomMinus = () => {
    if (!this.state.zoomPlusActive) this.setState({ zoomPlusActive: true });
@@ -145,15 +135,14 @@ export default class Spx_vix extends Component {
 
 
   render() {
-    const spxMax = _.maxBy(this.state.data, "SPX")["SPX"];
-    const mciMax = _.maxBy(this.state.data, "MCI")["MCI"];
-    const spxMin = _.minBy(this.state.data, "SPX")["SPX"];
-    const mciMin = _.minBy(this.state.data, "MCI")["MCI"];
-    const currentZoom = this.state.currZoom ? this.state.currZoom : this.state.data
+    const eurusdMax = _.maxBy(this.state.currZoom, "EURUSD")["EURUSD"];
+    const eurusdMin = _.minBy(this.state.currZoom, "EURUSD")["EURUSD"];
+    const macroMax = _.maxBy(this.state.currZoom, "macro")["macro"]; 
+    const macroMin = _.minBy(this.state.currZoom, "macro")["macro"];
 
     return (
       <div className="chartBox">
-        <h4>Master Composite Index</h4>
+        <h4>Macro Cycle</h4>
         <div className="legend">
           <div className="colorBox">
             <span
@@ -161,7 +150,7 @@ export default class Spx_vix extends Component {
                 backgroundColor: "whitesmoke"
               }}
             />
-            <div>SPX</div>
+            <div>EUR USD</div>
           </div>
           <div className="colorBox">
             <span
@@ -169,12 +158,12 @@ export default class Spx_vix extends Component {
                 backgroundColor: "navy"
               }}
             />
-            <div>Master Composite Index</div>
+            <div>Macro Cycle</div>
           </div>
 
           <Tools
             resetChart={this.resetChart}
-            id="chartSpx_Vix"
+            id="chartMacroCycle"
             zoomPlus={this.zoomPlus}
             zoomMinus={this.zoomMinus}
             panLeft={this.panLeft}
@@ -192,7 +181,7 @@ export default class Spx_vix extends Component {
               padding={paddingSmall}
               scale="time"
               standalone={false}
-              tickValues={currentZoom.map(el => el["x"])}
+              tickValues={this.state.currZoom.map(el => el["x"])}
               orientation="bottom"
               fixLabelOverlap={true}
               offsetY={timeAsixOffsetSmall}
@@ -206,9 +195,9 @@ export default class Spx_vix extends Component {
               dependentAxis
               orientation="right"
               standalone={false}
-              domain={[mciMin * 1.2, mciMax * 1.2]}
+              domain={[macroMin * 1.2, macroMax * 1.2]}
               dependentAxis
-              tickFormat={x => `${x.toFixed(0)}`}
+              tickFormat={x => `${x.toFixed(2)}`}
               fixLabelOverlap={true}
               style={{
                 tickLabels: { fontSize: fontSizeSmall, padding: 5 }
@@ -219,13 +208,13 @@ export default class Spx_vix extends Component {
             <VictoryArea
               padding={paddingSmall}
               interpolation={"step"}
-              data={currentZoom}
+              data={this.state.currZoom}
               barWidth={5}
               x={"x"}
-              y={"MCI"}
+              y={"macro"}
               standalone={false}
               domain={{
-                y: [mciMin * 1.2, mciMax * 1.2]
+                y: [macroMin * 1.2, macroMax * 1.2]
               }}
               scale={{ x: "time", y: "linear" }}
               style={{
@@ -242,8 +231,8 @@ export default class Spx_vix extends Component {
               dependentAxis
               orientation="left"
               standalone={false}
-              domain={[spxMin, spxMax]}
-              tickFormat={z => `${z.toFixed(0)}`}
+              domain={[eurusdMin, eurusdMax]}
+              tickFormat={z => `${z.toFixed(2)}`}
               fixLabelOverlap={true}
               style={{
                 tickLabels: { fontSize: fontSizeSmall, padding: 5 },
@@ -254,12 +243,12 @@ export default class Spx_vix extends Component {
 
             <VictoryLine
               padding={paddingSmall}
-              data={currentZoom}
+              data={this.state.currZoom}
               x={"x"}
-              y={"SPX"}
+              y={"EURUSD"}
               standalone={false}
               domain={{
-                y: [spxMin, spxMax]
+                y: [eurusdMin, eurusdMax]
               }}
               style={{
                 data: { stroke: "whitesmoke", strokeWidth: 1 }

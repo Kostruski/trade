@@ -18,7 +18,7 @@ export default class VIXvsMidTermAssetManagers extends Component {
       midTerm: el["Mid Term"]
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length -120);
 
     super(props);
     this.state = {

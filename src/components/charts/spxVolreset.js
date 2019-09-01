@@ -6,13 +6,14 @@ import {fontSizeSmall, paddingSmall, timeAsixOffsetSmall} from "../../style/char
 
 
 export default class SpxVolreset extends Component {
-  constructor(props) {
+   constructor(props) {
     const data = props.data.map(el => ({
       x: el["Date"].slice(11, 19),
-      SPX: el["SPX"],
+      SPX: el["SPY"],
       Volreset: el["Volreset"]    
     }));
-
+   
+    console.log("konstruktor")
     const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
@@ -28,11 +29,6 @@ export default class SpxVolreset extends Component {
     };
   }
 
-  componentDidUpdate(prev) {
-    if(this.props.data !== prev.data)
-    this.setState({...this.state, data:this.props.data}, () => {console.log(this.state.data)})
-   
-  }
 
  zoomMinus = () => {
    if (!this.state.zoomPlusActive) this.setState({ zoomPlusActive: true });
@@ -137,11 +133,12 @@ export default class SpxVolreset extends Component {
 
 
   render() {
+    
     const spxMax = _.maxBy(this.state.currZoom, "SPX")["SPX"];
     const spxMin = _.minBy(this.state.currZoom, "SPX")["SPX"];
     const volresetMax = _.maxBy(this.state.currZoom, "Volreset")["Volreset"];
     const volresetMin = _.minBy(this.state.currZoom, "Volreset")["Volreset"];
-    console.log(this.state.currZoom)
+
  
  
 
@@ -168,6 +165,7 @@ export default class SpxVolreset extends Component {
 
           <Tools
             resetChart={this.resetChart}
+            data={this.props.data}
             id="chartSpxVolrest"
             zoomPlus={this.zoomPlus}
             zoomMinus={this.zoomMinus}

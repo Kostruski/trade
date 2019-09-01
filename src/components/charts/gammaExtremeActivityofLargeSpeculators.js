@@ -13,7 +13,7 @@ export default class GammaExtremeActivityofLargeSpeculators extends Component {
       SPXsignal: el["SPX Signal"]
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length - 120);
 
     super(props);
     this.state = {

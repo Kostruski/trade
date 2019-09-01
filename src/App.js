@@ -14,7 +14,10 @@ import GammaExtremeActivityofLargeSpeculatorsBig from "./components/charts/gamma
 import Gamma_VolatilityBig from "./components/charts/gamma_VolatilityBig.js";
 import VIXvsMidTermAssetManagersBig from "./components/charts/vixVsMidTermAssetManagersBig.js";
 import Macro_FxBig from "./components/charts/macro_FxBig.js";
-import SpxVolresetBig from "./components/charts/spxVolresetBig"
+import SpxVolresetBig from "./components/charts/spxVolresetBig";
+import MacroTradeMatrixBig from "./components/charts/macroTradeMatrixBig"
+import DefaultFxPortfolioBig from "./components/charts/defaultFxPortfolioBig"
+import MacroCyclesBig from "./components/charts/macroCycleBig"
 import Loader from "./components/loader.js";
 import {
   HashRouter as Router,
@@ -26,6 +29,8 @@ import {
 const macrofixURL = "http://104.211.19.171/serverout/macrofx";
 const spxvixURL = "http://104.211.19.171/serverout/spxvix";
 const realTime1 = "http://104.211.19.171/serverout/realtime1";
+const portfolio =    "http://104.211.19.171/serverout/portfoliofx";  
+
 
 export default class App extends Component {
   state = {
@@ -33,43 +38,58 @@ export default class App extends Component {
     isNewUser: false,
     spxvix: null,
     macrofix: null,
-    realTime1: null
+    realTime1: null,
+    protfolio: null
+  };
+
+  interval = () => {
+    let counter = 0;
+    const x = setInterval(() => {
+      fetch(realTime1)
+        .then(response => response.json())
+        .then(json => {
+          this.setState({ realTime1: json });
+        });
+      console.log(counter)
+      counter++;
+      if (counter === 10) clearInterval(x);
+
+    }, 1000);
   };
 
   componentDidMount() {
     fetch(spxvixURL)
       .then(response => response.json())
       .then(json => {
-        this.setState({ spxvix: json });
+        this.setState({ ...this.state, spxvix: json });
       });
 
     fetch(macrofixURL)
       .then(response => response.json())
       .then(json => {
-        this.setState({ macrofix: json });
+        this.setState({ ...this.state, macrofix: json });
       });
 
-      fetch(realTime1)
+
+      fetch(portfolio)
       .then(response => response.json())
       .then(json => {
-        this.setState({ realTime1: json });
+        this.setState({...this.state, portfolio: json });
       });
 
-    const interval = () => {
-      let counter = 0;
-      const x = setInterval(() => {
-        fetch(realTime1)
-          .then(response => response.json())
-          .then(json => {
-            this.setState({ realTime1: json });
-          });
-        counter++;
-        if (counter === 100) clearInterval(x);
-      
-      }, 30000);
-    };
+    //   fetch(realTime1)
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     this.setState({...this.state, realTime1: json });
+    //   });
 
-    interval();
+    
+
+    // this.interval();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
   }
 
   changeNewUser = () => this.setState({ isNewUser: false });
@@ -112,16 +132,7 @@ export default class App extends Component {
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
                     path="/section1"
-                    render={() =>
-                      this.state.realTime1 ? (
-                        <Section1
-                          data={this.state.realTime1}
-                         
-                        />
-                      ) : (
-                        <Loader />
-                      )
-                    }
+                    render={() =>( <Section1 /> ) }
                   />
 
                   <ProtectedRoute
@@ -143,10 +154,10 @@ export default class App extends Component {
                     isAllowed={this.state.isLoggedIn}
                     path="/section3"
                     render={() =>
-                      this.state.macrofix ? (
+                      this.state.macrofix && this.state.portfolio ? (
                         <Section3
                           data={this.state.macrofix}
-                         
+                          portfolio={this.state.portfolio}
                         />
                       ) : (
                         <Loader />
@@ -241,7 +252,7 @@ export default class App extends Component {
                     isAllowed={this.state.isLoggedIn}
                     path={`/chartMacro_Fx`}
                     render={() =>
-                      this.state.spxvix ? (
+                      this.state.macrofix ? (
                         <Macro_FxBig data={this.state.macrofix} />
                       ) : (
                         <Loader />
@@ -250,10 +261,40 @@ export default class App extends Component {
                   />
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
-                    path={`/chartSpxVolrest`}
+                    path={`/chartMacroTradeMatrix`}
                     render={() =>
-                      this.state.spxvix ? (
-                        <SpxVolresetBig data={this.state.realTime1} />
+                      this.state.macrofix ? (
+                        <MacroTradeMatrixBig data={this.state.macrofix} />
+                      ) : (
+                        <Loader />
+                      )
+                    }
+                  />
+                  <ProtectedRoute
+                    isAllowed={this.state.isLoggedIn}
+                    path={`/chartMacroCycle`}
+                    render={() =>
+                      this.state.macrofix ? (
+                        <MacroCyclesBig data={this.state.macrofix} />
+                      ) : (
+                        <Loader />
+                      )
+                    }
+                  />
+                  <ProtectedRoute
+                    isAllowed={this.state.isLoggedIn}
+                    path={`/chartSpxVolrest`}
+                    render={() => (
+                        <SpxVolresetBig  />
+                      ) 
+                    }
+                  />
+                  <ProtectedRoute
+                    isAllowed={this.state.isLoggedIn}
+                    path={`/chartDefaultFxPortfolio`}
+                    render={() =>
+                      this.state.realTime1 ? (
+                        <DefaultFxPortfolioBig data={this.state.portfolio} />
                       ) : (
                         <Loader />
                       )

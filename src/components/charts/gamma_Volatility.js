@@ -13,7 +13,7 @@ export default class Gamma_Volatility extends Component {
       VXXsignal: el["VXX Signal"]
     }));
 
-    const initZoom = data.filter((el, i) => i > data.length * 0.9);
+    const initZoom = data.filter((el, i) => i > data.length -120 );
 
     super(props);
     this.state = {

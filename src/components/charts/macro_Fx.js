@@ -30,7 +30,7 @@ export default class Macro_Fx extends Component {
     constructor(props) {
         const propsKeys = Object.keys(_.last(props.data)).filter(el => el==="Date" || el.length===3)
         const data = props.data.map(el => _.pick(el, propsKeys))
-        const initZoom = data.filter((el, i) => i > props.data.length * 0.8);  
+        const initZoom = data.filter((el, i) => i > props.data.length -120);  
         let currMax = 0
         let currMin = 0
         initZoom.forEach(el => {
