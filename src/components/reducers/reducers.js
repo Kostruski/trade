@@ -1,8 +1,12 @@
+
+
+
 const initialState = {
   spxvix: [],
   macrofix: [],
   realTime1: [],
-  protfolio: []
+  portfolio: [],
+  loading: false,
 };
 function reducer(state = initialState, action) {
   const newState = { ...state };
@@ -11,26 +15,32 @@ function reducer(state = initialState, action) {
     case "SPXVIV":
       return {
         ...state,
-        spxvix: [...state.spxvix, ...action.spxvix]
+        spxvix: action.value
       };
       break;
     case "MACROFIX":
       return {
         ...state,
-        macrofix: [...state.macrofix, ...action.macrofix]
+        macrofix: action.value
       };
       break;
     case "REALTIME1":
       return {
         ...state,
-        realTime1: [...state.realTime1, ...action.realTime1]
+        realTime1: action.value
       };
       break;
     case "PORTFOLIO":
       return {
         ...state,
-        portfolio: [...state.portfolio, ...action.portfolio]
+        portfolio: action.value
       };
+      break;
+    case "LOADING" :
+    return {
+      ...state,
+      loading: action.value
+    }
   }
 
   return newState;

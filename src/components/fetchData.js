@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import _ from "lodash";
 import {connect} from "react-redux"
 
 const macrofixURL = "http://104.211.19.171/serverout/macrofx";
 const spxvixURL = "http://104.211.19.171/serverout/spxvix";
-const realTime1 = "http://104.211.19.171/serverout/realtime1";
+const realTime1 = "http://104.211.19.171/realtime1";
 const portfolio =    "http://104.211.19.171/serverout/portfoliofx"; 
+const placeHolder = 'https://jsonplaceholder.typicode.com/todos/1'
 
 class FetchData extends Component {
 
@@ -17,50 +19,88 @@ class FetchData extends Component {
       protfolio: null
     };
 
-    interval = () => {
+    intervalRealTime1 = () => {
       let counter = 0;
       const x = setInterval(() => {
+       
         fetch(realTime1)
           .then(response => response.json())
+          .catch(error => alert('Conncetion error:', error))
           .then(json => {
-            this.setState({ realTime1: json });
-          });
+           
+            if(_.last(json).date !== _.last(this.props.realTime1).date)                     
+            this.props.realTime1Update(json)
+            
+          });       
+       
+        counter++
         console.log(counter)
-        counter++;
-        if (counter === 10) clearInterval(x);
+        if (counter === 5) clearInterval(x);
+       
 
-      }, 1000);
+      }, 10000);
     };
 
+    intervalFetchData = () => {
+    
+      setInterval(() => {
+
+        fetch(spxvixURL)
+          .then(response => response.json())
+          .catch(error => alert('Conncetion error:', error))
+          .then(json => {
+           if(_.last(json).date !== _.last(this.props.realTime1).date)                     
+           this.props.spxvixUpdate(json)
+          });
+
+        fetch(macrofixURL)
+          .then(response => response.json())
+          .catch(error => alert('Conncetion error:', error))
+          .then(json => {
+            if(_.last(json).date !== _.last(this.props.macrofix).date)                     
+            this.props.macrofixUpdate(json)
+          });
+
+          fetch(portfolio)
+          .then(response => response.json())
+          .catch(error => alert('Conncetion error:', error))
+          .then(json => {
+           if(_.last(json) !== _.last(this.props.portfolio))                     
+           this.props.portfolioUpdate(json)
+          });
+
+
+      }, 10800000) // 3 godziny
+    
+     
+
+      
+
+    }
+
     componentDidMount() {
-      fetch(spxvixURL)
+
+      fetch(realTime1)
         .then(response => response.json())
+        .catch(error => alert('Conncetion error:', error))
         .then(json => {
-          this.setState({ ...this.state, spxvix: json });
-        });
-
-      fetch(macrofixURL)
-        .then(response => response.json())
-        .then(json => {
-          this.setState({ ...this.state, macrofix: json });
-        });
-
-
-        fetch(portfolio)
-        .then(response => response.json())
-        .then(json => {
-          this.setState({...this.state, portfolio: json });
-        });
-
-        fetch(realTime1)
-        .then(response => response.json())
-        .then(json => {
-          this.setState({...this.state, realTime1: json });
-        });
+              
+          this.props.realTime1Update(json)
+        });  
+      
+      
+      this.intervalRealTime1();
 
 
 
-      this.interval();
+     
+
+
+
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.intervalRealTime1)
     }
 
     
@@ -69,21 +109,35 @@ class FetchData extends Component {
 
 
     render() {
+
+      console.log(this.props)
+
         return (
-            <div>
-                
-            </div>
+            <>
+           
+            </>
         )
     }
+}
+
+const mapStateToProps = (state) => 
+ { return {
+   realTime1: state.realTime1,
+   spxvix: state.spxvix,
+   macrofix: state.macrofix,
+   portfolio: state.portfolio,
+   loading: state.loading
+ }
 }
 
 const mapDispatchToProps = (dispatch) => {
 
   return {
-    spxvix: (value) => dispatch({type: 'SPXVIX', value: value}),
-    macrofix: (value) => dispatch({type: 'MACROFIX', value: value}),
-    realTime1: (value) => dispatch({type: 'REALTIME1', value: value}),
-    portfolio: (value) => dispatch({type: 'PORTFOLIO', value: value}),
+    spxvixUpdate: (value) => dispatch({type: 'SPXVIX', value: value}),
+    macrofixUpdate: (value) => dispatch({type: 'MACROFIX', value: value}),
+    realTime1Update: (value) => dispatch({type: 'REALTIME1', value: value}),
+    portfolioUpdate: (value) => dispatch({type: 'PORTFOLIO', value: value}),
+    loading: (value) => dispatch({type: "LOADING", value: value})
   }
 }
 

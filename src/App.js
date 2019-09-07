@@ -19,6 +19,7 @@ import MacroTradeMatrixBig from "./components/charts/macroTradeMatrixBig"
 import DefaultFxPortfolioBig from "./components/charts/defaultFxPortfolioBig"
 import MacroCyclesBig from "./components/charts/macroCycleBig"
 import Loader from "./components/loader.js";
+import FetchData from "./components/fetchData"
 import {
   HashRouter as Router,
   Switch,
@@ -33,49 +34,49 @@ const portfolio =    "http://104.211.19.171/serverout/portfoliofx";
 
 
 export default class App extends Component {
-  state = {
-    isLoggedIn: true,
-    isNewUser: false,
-    spxvix: null,
-    macrofix: null,
-    realTime1: null,
-    protfolio: null
-  };
+  // state = {
+  //   isLoggedIn: true,
+  //   isNewUser: false,
+  //   spxvix: null,
+  //   macrofix: null,
+  //   realTime1: null,
+  //   protfolio: null
+  // };
 
-  interval = () => {
-    let counter = 0;
-    const x = setInterval(() => {
-      fetch(realTime1)
-        .then(response => response.json())
-        .then(json => {
-          this.setState({ realTime1: json });
-        });
-      console.log(counter)
-      counter++;
-      if (counter === 10) clearInterval(x);
+  // interval = () => {
+  //   let counter = 0;
+  //   const x = setInterval(() => {
+  //     fetch(realTime1)
+  //       .then(response => response.json())
+  //       .then(json => {
+  //         this.setState({ realTime1: json });
+  //       });
+  //     console.log(counter)
+  //     counter++;
+  //     if (counter === 10) clearInterval(x);
 
-    }, 1000);
-  };
+  //   }, 1000);
+  // };
 
-  componentDidMount() {
-    fetch(spxvixURL)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({ ...this.state, spxvix: json });
-      });
+  // componentDidMount() {
+  //   fetch(spxvixURL)
+  //     .then(response => response.json())
+  //     .then(json => {
+  //       this.setState({ ...this.state, spxvix: json });
+  //     });
 
-    fetch(macrofixURL)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({ ...this.state, macrofix: json });
-      });
+  //   fetch(macrofixURL)
+  //     .then(response => response.json())
+  //     .then(json => {
+  //       this.setState({ ...this.state, macrofix: json });
+  //     });
 
 
-      fetch(portfolio)
-      .then(response => response.json())
-      .then(json => {
-        this.setState({...this.state, portfolio: json });
-      });
+  //     fetch(portfolio)
+  //     .then(response => response.json())
+  //     .then(json => {
+  //       this.setState({...this.state, portfolio: json });
+  //     });
 
     //   fetch(realTime1)
     //   .then(response => response.json())
@@ -86,31 +87,34 @@ export default class App extends Component {
     
 
     // this.interval();
-  }
+  
 
-  componentWillUnmount() {
-    clearInterval(this.interval)
-  }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval)
+  // }
 
-  changeNewUser = () => this.setState({ isNewUser: false });
+  // changeNewUser = () => this.setState({ isNewUser: false });
 
-  signUp = () => this.setState({ isNewUser: true });
+  // signUp = () => this.setState({ isNewUser: true });
 
-  toggleLogin = () => {
-    this.setState(prev => ({ isLoggedIn: !prev.isLoggedIn }));
-  };
+  // toggleLogin = () => {
+  //   this.setState(prev => ({ isLoggedIn: !prev.isLoggedIn }));
+  // };
 
   render() {
-    const ProtectedRoute = ({ isAllowed, ...props }) =>
-      isAllowed ? <Route {...props} /> : <Redirect to="/" />;
+    
+    // const ProtectedRoute = ({ isAllowed, ...props }) =>
+    //   isAllowed ? <Route {...props} /> : <Redirect to="/" />;
 
     return (
+     
+
+
+
       <div className="appWrapper">
         <div className="sideAndMain">
           <div className="main">
-            <Header
-              toggleLogin={this.toggleLogin}
-              isLoggedIn={this.state.isLoggedIn}
+            <Header   
             />
             <Router>
               <>
@@ -119,23 +123,17 @@ export default class App extends Component {
                     exact
                     path="/"
                     render={() => (
-                      <LoginPage
-                        changeNewUser={this.changeNewUser}
-                        isNewUser={this.state.isNewUser}
-                        toggleLogin={this.toggleLogin}
-                        isLoggedIn={this.state.isLoggedIn}
-                        signUp={this.signUp}
-                      />
+                      <Section1 />
                     )}
                   />
                   <Route exact path="/contact" render={() => <Contact />} />
-                  <ProtectedRoute
-                    isAllowed={this.state.isLoggedIn}
+                  <Route
+                
                     path="/section1"
                     render={() =>( <Section1 /> ) }
                   />
 
-                  <ProtectedRoute
+                  {/* <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
                     path="/section2"
                     render={() =>
@@ -299,16 +297,18 @@ export default class App extends Component {
                         <Loader />
                       )
                     }
-                  />
+                  /> */}
                 </Switch>
               </>
             </Router>
           </div>
         </div>
       </div>
-    );
+     );
   }
 }
+
+
 
 
 

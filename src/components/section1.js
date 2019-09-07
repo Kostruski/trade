@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import SpxVolreset from "./charts/spxVolreset";
 import Loader from "./loader.js";
 import SpxVolresetBig from "./charts/spxVolresetBig";
+import _ from "lodash";
+import { connect } from "react-redux";
 
 import {
   HashRouter as Router,
@@ -9,55 +11,75 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-import Contact from "./contact";
 
-const realTime1 = "http://104.211.19.171/serverout/realtime1";
+const realTime1 = "http://104.211.19.171/realtime1";
 
-export default class Section1 extends Component {
-  state = {
-    data: null,
-    isBigScreen: false,
-  };
-  
+class Section1 extends Component {
 
-  interval = () => {
+  intervalRealTime1 = () => {
     let counter = 0;
-
     const x = setInterval(() => {
       fetch(realTime1)
         .then(response => response.json())
+        .catch(error => alert("Conncetion error:", error))
         .then(json => {
-          this.setState({ data: json }, () => console.log("zapytanie"));
+          if (_.last(json).date !== _.last(this.props.realTime1).date)
+            this.props.realTime1Update(json);
         });
+
       counter++;
-      if (counter === 100) clearInterval(x);
-    }, 1000);
+      console.log(counter);
+      if (counter === 5) clearInterval(x);
+    }, 10000);
   };
 
   componentDidMount() {
-    this.interval();
+   
+    this.props.loadingUpdate(true)
+    fetch(realTime1)
+      .then(response => response.json())
+      .catch(error => (alert("Conncetion error:", error), this.props.loadingUpdate(false)))
+      .then(json => {
+        this.props.loadingUpdate(false)
+
+        if (
+          this.props.realTime1.length === 0
+        )
+          this.props.realTime1Update(json);
+      });
+    this.intervalRealTime1();
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.intervalRealTime1);
   }
 
- 
-  render()  
-  
-  {
-    const sectionView = this.state.data ?  <SpxVolreset data={this.state.data} /> : <Loader />
-   
-  
-    return  (
-     
-      <div className="sectionWrapper">   
-
-        {sectionView}
-
+  render() {
+    console.log(this.props.realTime1)
+    return this.props.loading || this.props.realTime1.length===0 ?
+     (
+      <Loader />
+    ) : (
+      <div className="sectionWrapper">
+        <SpxVolreset data={this.props.realTime1} />
       </div>
-
-    
-    ) 
+    );
   }
 }
+
+const mapStateToProps = (state) => 
+ { return {
+   realTime1: state.realTime1,
+   loading: state.loading
+ }
+}
+
+const mapDispatchToProps = (dispatch) => {
+
+  return {
+    realTime1Update: (value) => dispatch({type: 'REALTIME1', value: value}),
+    loadingUpdate: (value) => dispatch({type: "LOADING", value: value})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Section1)
