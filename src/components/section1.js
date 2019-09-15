@@ -21,7 +21,7 @@ class Section1 extends Component {
     const x = setInterval(() => {
       fetch(realTime1)
         .then(response => response.json())
-        .catch(error => alert("Conncetion error:", error))
+        .catch(error => alert("Connection error:", error))
         .then(json => {
           if (_.last(json).date !== _.last(this.props.realTime1).date)
             this.props.realTime1Update(json);
@@ -61,7 +61,7 @@ class Section1 extends Component {
       <Loader />
     ) : (
       <div className="sectionWrapper">
-        <SpxVolreset data={this.props.realTime1} />
+        {/* <SpxVolreset data={this.props.realTime1} /> */}
       </div>
     );
   }

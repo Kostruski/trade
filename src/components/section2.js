@@ -1,5 +1,10 @@
-
 import React, { Component } from "react";
+import SpxVolreset from "./charts/spxVolreset";
+import Loader from "./loader.js";
+
+import _ from "lodash";
+import { connect } from "react-redux";
+
 
 
 import Spx_vix from "./charts/spx_vix.js";
@@ -9,7 +14,47 @@ import GammaExtremeActivityofLargeSpeculators from "./charts/gammaExtremeActivit
 import Gamma_Volatility from "./charts/gamma_Volatility.js"
 import VIXvsMidTermAssetManagers from "./charts/vixVsMidTermAssetManagers.js"
 
-export default class Section2 extends Component {
+const spxvixURL = "http://104.211.19.171/serverout/spxvix";
+
+class Section2 extends Component {
+
+  intervalFetchData = () => {
+
+  setInterval(() => {
+
+    fetch(spxvixURL)
+      .then(response => response.json())
+      .catch(error => alert('Connection error:', error))
+      .then(json => {
+       if(_.last(json).date !== _.last(this.props.spxvix).date)                     
+       this.props.spxvixUpdate(json)
+      });
+
+
+  }, 10800000) // 3 godziny
+
+  }
+
+  
+
+
+
+ componentDidMount() {
+
+  fetch(spxvixURL)
+  .then(response => response.json())
+  .catch(error => alert('Conncetion error:', error))
+  .then(json => {
+   if(_.last(json).date !== _.last(this.props.spxvix).date)                     
+   this.props.spxvixUpdate(json)
+  });  
+
+  this.intervalFetchData()
+
+
+ };
+
+
   render() {
     return this.props.data ? (
       <div className="sectionWrapper">
@@ -23,3 +68,20 @@ export default class Section2 extends Component {
     ) : null;
   }
 }
+
+const mapStateToProps = (state) => 
+ { return {
+   spxvix: state.spxvix,
+   loading: state.loading
+ }
+}
+
+const mapDispatchToProps = (dispatch) => {
+
+  return {
+    spxvixUpdate: (value) => dispatch({type: 'SPXVIX', value: value}),
+    loadingUpdate: (value) => dispatch({type: "LOADING", value: value})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Section2)

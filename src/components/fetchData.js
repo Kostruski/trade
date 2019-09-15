@@ -49,7 +49,7 @@ class FetchData extends Component {
           .then(response => response.json())
           .catch(error => alert('Conncetion error:', error))
           .then(json => {
-           if(_.last(json).date !== _.last(this.props.realTime1).date)                     
+           if(_.last(json).date !== _.last(this.props.spxvix).date)                     
            this.props.spxvixUpdate(json)
           });
 

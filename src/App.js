@@ -133,20 +133,13 @@ export default class App extends Component {
                     render={() =>( <Section1 /> ) }
                   />
 
-                  {/* <ProtectedRoute
-                    isAllowed={this.state.isLoggedIn}
-                    path="/section2"
-                    render={() =>
-                      this.state.spxvix ? (
-                        <Section2
-                          data={this.state.spxvix}
-                          
-                        />
-                      ) : (
-                        <Loader />
-                      )
-                    }
+                  <Route              
+                   exact path="/section2"
+                    render={() => <Section2 />
+                      }
                   />
+
+                   {/*
 
                   <ProtectedRoute
                     isAllowed={this.state.isLoggedIn}
